@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-//@EnableBatchProcessing
+@EnableBatchProcessing
 //@EnableScheduling
 @SpringBootApplication
 public class BatchApplication extends SpringBootServletInitializer {

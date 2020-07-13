@@ -14,8 +14,11 @@ import java.util.List;
 @Slf4j
 public class NamedBaseballAllMatchWriter implements ItemWriter< List<BaseballModel>> {
 
-    @Autowired
-    private BaseballMapper baseballMapper;
+    private final BaseballMapper baseballMapper;
+
+    public NamedBaseballAllMatchWriter(BaseballMapper baseballMapper) {
+        this.baseballMapper = baseballMapper;
+    }
 
     @Override
     public void write(List<? extends List<BaseballModel>> list) throws Exception {

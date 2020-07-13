@@ -1,5 +1,6 @@
 package com.batch.job.jobconfig;
 
+import com.batch.job.listener.JobCompletionNotificationListener;
 import com.batch.job.task.processor.DummyProcessor;
 import com.batch.job.task.processor.NamedBaseballAllMatchProcessor;
 import com.batch.job.task.reader.DummyReader;
@@ -14,6 +15,7 @@ import org.springframework.batch.core.configuration.annotation.EnableBatchProces
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.batch.core.launch.JobOperator;
 import org.springframework.batch.core.launch.support.SimpleJobLauncher;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -37,8 +40,12 @@ public class NamedBaseballCrawlingJobConfig {
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
 
-//    @Autowired
-//    private JobLauncher jobLauncher;
+    @Autowired
+    private JobLauncher jobLauncher;
+    @Autowired
+    private JobOperator simpleJobOperator;
+    @Autowired
+    private JobCompletionNotificationListener notificationListener;
     @Autowired
     private DummyReader dummyReader;
     @Autowired
@@ -48,15 +55,19 @@ public class NamedBaseballCrawlingJobConfig {
 
 
 //    @Scheduled(cron = "* * * * * ?")
-//    @RequestMapping(value = "jobs/baseballAllMatch")
-//    public String runJob() throws Exception{
-//        jobLauncher.run(namedBaseBallCrawlingJob(),new JobParameters());
-//        return "success";
-//     }
+    @RequestMapping(value = "jobs/baseballAllMatch")
+    public void runJob() throws Exception{
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+        String _jobParameters = "now=" + sdf.format(new Date());
+
+        simpleJobOperator.start("namedBaseBallCrawlingJob", _jobParameters);
+     }
 
     @Bean
     public Job namedBaseBallCrawlingJob(){
         return jobBuilderFactory.get("namedBaseBallCrawlingJob")
+                .preventRestart()
+                .listener(notificationListener)
                 .start(namedBaseBallCrawlingStep())
                 .build();
     }
