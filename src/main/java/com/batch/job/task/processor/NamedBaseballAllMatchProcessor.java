@@ -86,7 +86,7 @@ public class NamedBaseballAllMatchProcessor implements ItemProcessor<String, Lis
                     aTeamModel.setLeague(matchObject.getJSONObject("league").getString("displayName"));
                     bTeamModel.setLeague(matchObject.getJSONObject("league").getString("displayName"));
 
-                    if(aTeamModel.getLeague().equals("KBO") || aTeamModel.getLeague().equals("NPB") || aTeamModel.getLeague().equals("MLB") || aTeamModel.getLeague().equals("퓨처스") ){
+                    if(!aTeamModel.getLeague().equals("KBO") && !aTeamModel.getLeague().equals("NPB") && !aTeamModel.getLeague().equals("MLB") && !aTeamModel.getLeague().equals("퓨처스") ){
                         continue;
                     }
 

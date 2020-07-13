@@ -17,6 +17,6 @@
         <typeAlias alias="string" type="java.lang.String"/>
         <typeAlias alias="date" type="java.util.Date"/>
         <typeAlias alias="hashMap" type="java.util.HashMap"/>
-        <package name="com.example.model"/>
+        <package name="com.batch.model"/>
     </typeAliases>
 </configuration>

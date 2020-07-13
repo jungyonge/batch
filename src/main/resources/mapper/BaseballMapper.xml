@@ -13,15 +13,15 @@
                      MATCH_TIME,
                      A_TEAM,
                      B_TEAM)
-        VALUES      ( # {gameId},
-                      # {league},
-                      # {ground},
-                      # {stadium},
-                      # {date},
-                      # {dayOfWeek},
-                      # {time},
-                      # {aTeam},
-                      # {bTeam} ) ;
+        VALUES      ( #{gameId},
+                      #{league},
+                      #{ground},
+                      #{stadium},
+                      #{date},
+                      #{dayOfWeek},
+                      #{time},
+                      #{aTeam},
+                      #{bTeam} ) ;
     </insert>
 
 </mapper>

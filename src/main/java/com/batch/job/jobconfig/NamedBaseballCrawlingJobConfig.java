@@ -10,6 +10,7 @@ import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.*;
+import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.launch.JobLauncher;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import java.util.Date;
 import java.util.List;
 
+@EnableBatchProcessing
 @Slf4j
 @RequiredArgsConstructor
 @Configuration
@@ -35,8 +37,8 @@ public class NamedBaseballCrawlingJobConfig {
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
 
-    @Autowired
-    private JobLauncher jobLauncher;
+//    @Autowired
+//    private JobLauncher jobLauncher;
     @Autowired
     private DummyReader dummyReader;
     @Autowired
@@ -46,11 +48,11 @@ public class NamedBaseballCrawlingJobConfig {
 
 
 //    @Scheduled(cron = "* * * * * ?")
-    @RequestMapping(value = "jobs/baseballAllMatch")
-    public String runJob() throws Exception{
-        jobLauncher.run(namedBaseBallCrawlingJob(),new JobParameters());
-        return "success";
-     }
+//    @RequestMapping(value = "jobs/baseballAllMatch")
+//    public String runJob() throws Exception{
+//        jobLauncher.run(namedBaseBallCrawlingJob(),new JobParameters());
+//        return "success";
+//     }
 
     @Bean
     public Job namedBaseBallCrawlingJob(){

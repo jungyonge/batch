@@ -107,6 +107,7 @@
                 <directory>/Users/imc053/IdeaProjects/batch/src/main/resources</directory>
                 <includes>
                     <include>**/application*.yml</include>
+                    <include>**/mapper/*.xml</include>
                 </includes>
             </resource>
         </resources>
