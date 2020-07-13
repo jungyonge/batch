@@ -11,10 +11,15 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 public class DummyReader  implements ItemReader<String> {
+    private boolean batchJobState = false;
 
     @Override
     public String read() throws Exception, UnexpectedInputException, ParseException, NonTransientResourceException {
         log.info("reader");
-        return "1";
+        if(!batchJobState){
+            batchJobState=true;
+            return "1";
+        }
+        return null;
     }
 }
