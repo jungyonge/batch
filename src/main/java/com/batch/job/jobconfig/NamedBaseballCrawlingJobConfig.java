@@ -68,7 +68,8 @@ public class NamedBaseballCrawlingJobConfig {
         return jobBuilderFactory.get("namedBaseBallCrawlingJob")
                 .preventRestart()
                 .listener(notificationListener)
-                .start(namedBaseBallCrawlingStep())
+                .flow(namedBaseBallCrawlingStep())
+                .end()
                 .build();
     }
 
