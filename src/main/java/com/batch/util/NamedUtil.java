@@ -20,6 +20,10 @@ public class NamedUtil {
     private final static String BASEBALL_PATH = "/named/v1/sports/baseball/games/?";
     private final static String BASKETBALL_PATH = "/named/v1/sports/basketball/games/?";
 
+    private final static String BASEBALL_PITCHER_PATH = "/named/v1/sports/games/";
+    private final static String BASE_PITCHER_PARAM= "?broadcast=true&odds=true&scores=true&specials=true&lineups=true&seasonTeamLeagueRankingStat=true&broadcastDesc=true&v=";
+
+
     private final static String BASEPARAM= "broadcast=true&broadcastLatest=true&odds=true&scores=true&specials=true&seasonTeamStat=true&startDate=";
 
     private final static String API_KEY = "1rar2zCZvKjp";
@@ -118,6 +122,41 @@ public class NamedUtil {
 
     }
 
+    public String getPitcherApiResponse(String matchDate, String gameId) throws IOException{
+        //matchDate yyyyMMdd
+        String unixTime = String.valueOf(System.currentTimeMillis() / 1000);
+
+        StringBuilder responseText = new StringBuilder(1024);
+        URLConnection con;
+        con = new URL(BASEURL + BASEBALL_PITCHER_PATH + gameId + BASE_PITCHER_PARAM + unixTime).openConnection();
+
+        con.setRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36");
+        con.setRequestProperty("Accept-Language", "ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7");
+        con.setRequestProperty("origin","https://sports.picksmatch.com");
+        con.setRequestProperty("oki-api-key", API_KEY);
+        con.setRequestProperty("oki-api-name", API_NAME);
+
+
+        con.setUseCaches(false);
+
+        con.setReadTimeout(1000 * 30);
+        con.setConnectTimeout(1000 * 30);
+
+        con.connect();
+
+        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+
+        String inputLine;
+        while ((inputLine = in.readLine()) != null){
+            responseText.append(inputLine);
+        }
+
+        in.close();
+
+        return responseText.toString();
+    }
+
+
     public String getDayoOfWeek(int dayNum) {
         String dayOfWeek = "";
 
@@ -152,7 +191,7 @@ public class NamedUtil {
         NamedUtil namedUtil = new NamedUtil();
         try {
 //            String result = namedUtil.getOldApiResponse("20200701","");
-            String result = namedUtil.getNewApiResponse("2020-07-01","");
+            String result = namedUtil.getPitcherApiResponse("2020-07-01","10564548");
 
             log.info(result);
         } catch (IOException e) {

@@ -28,7 +28,6 @@ public class NamedBaseballAllMatchWriter implements ItemWriter< List<BaseballMod
             for(BaseballModel baseballModel : baseballModels){
                 baseballMapper.insertBaseballMatch(baseballModel);
             }
-
         }
     }
 }
