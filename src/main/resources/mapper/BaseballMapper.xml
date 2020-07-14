@@ -24,4 +24,11 @@
                       #{bTeam} ) ;
     </insert>
 
+    <select id="checkGameIdCount" parameterType="com.batch.model.BaseballModel" resultType="int">
+       SELECT COUNT(1)
+           FROM sport.baseball_data
+        WHERE GAME_ID = #{gameId};
+    </select>
+
+
 </mapper>

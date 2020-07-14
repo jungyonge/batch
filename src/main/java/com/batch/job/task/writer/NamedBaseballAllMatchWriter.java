@@ -26,7 +26,10 @@ public class NamedBaseballAllMatchWriter implements ItemWriter< List<BaseballMod
 
         for(List<BaseballModel> baseballModels : list){
             for(BaseballModel baseballModel : baseballModels){
-                baseballMapper.insertBaseballMatch(baseballModel);
+                int cnt = baseballMapper.checkGameIdCount(baseballModel);
+                if(cnt < 3){
+                    baseballMapper.insertBaseballMatch(baseballModel);
+                }
             }
         }
     }

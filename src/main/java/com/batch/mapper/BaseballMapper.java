@@ -8,4 +8,6 @@ public interface BaseballMapper {
 
     public int insertBaseballMatch(BaseballModel baseballModel);
 
+    public int checkGameIdCount(BaseballModel baseballModel);
+
 }
