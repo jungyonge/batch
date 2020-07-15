@@ -25,7 +25,7 @@ import java.util.List;
 public class NamedBaseballAllMatchProcessor implements ItemProcessor<String, List<BaseballModel>> {
 
     private String initSeasonDate;
-    private String finishSeasonDate;
+    private String finishSeasonDate = "2020-12-14";
     private String baseBall_Url = "https://api.picksmatch.com/v1.0/sports/baseball/games?date=";
     @Autowired
     private NamedUtil namedUtil;
@@ -40,7 +40,7 @@ public class NamedBaseballAllMatchProcessor implements ItemProcessor<String, Lis
     public List<BaseballModel> allBaseballMatch() throws IOException, ParseException, JSONException {
 
 
-        int date1 = 0;
+        int addDate = 0;
 
         List<BaseballModel> baseballModelList = new ArrayList<>();
 
@@ -48,13 +48,13 @@ public class NamedBaseballAllMatchProcessor implements ItemProcessor<String, Lis
             Calendar cal = Calendar.getInstance();
             cal.setTime(new Date());
 
-            cal.set(2020, 5, 01);
+            cal.set(2020, 4, 01);
             DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
-            cal.add(Calendar.DATE, date1);
+            cal.add(Calendar.DATE, addDate);
             String matchDate = df.format(cal.getTime());
-            if(df.format(cal.getTime()).equals("2020-08-14")){
-                System.out.println("시즌끝");
+            if(df.format(cal.getTime()).equals(finishSeasonDate)){
+                log.info("설정한 시즌 마김 기한까지 파싱 완료 : " + finishSeasonDate);
                 break;
             }
 
@@ -76,7 +76,6 @@ public class NamedBaseballAllMatchProcessor implements ItemProcessor<String, Lis
                     BaseballModel bTeamModel = new BaseballModel();
 
                     JSONObject matchObject = jsonArray.getJSONObject(i);
-
 
                     aTeamModel.setGameId(String.valueOf(matchObject.getInt("id")));
                     bTeamModel.setGameId(String.valueOf(matchObject.getInt("id")));
@@ -145,7 +144,7 @@ public class NamedBaseballAllMatchProcessor implements ItemProcessor<String, Lis
             } catch (Exception e) {
                 throw e;
             }
-            date1++;
+            addDate++;
 
         }
         return baseballModelList;

@@ -30,5 +30,75 @@
         WHERE GAME_ID = #{gameId};
     </select>
 
+    <update id="updateBaseballStat" parameterType="com.batch.model.BaseballModel">
+        <![CDATA[
+
+        UPDATE sport.baseball_data
+        SET
+            LEAGUE      =#{league},
+            GROUND      =#{ground},
+            STADIUM     =#{stadium},
+            MATCH_DATE      =#{date},
+            DAY_OF_WEEK     =#{dayOfWeek},
+            MATCH_TIME      =#{time},
+            A_TEAM_REST_DAY = IFNULL((SELECT  DATEDIFF(#{date} ,(SELECT MATCH_DATE FROM (SELECT MATCH_DATE FROM  sport.baseball_data A WHERE A_TEAM = #{aTeam} AND LEAGUE = #{league} AND A_TEAM_PITCHER = #{aTeamPitcher} AND MATCH_DATE <  #{date} ORDER BY idx DESC LIMIT 1) A ))) -1,0),
+            A_TEAM_PITCHER      =#{aTeamPitcher},
+            A_TEAM      =#{aTeam},
+            A_TEAM_TOTAL_POINT      =  #{aTeamTotalPoint},
+            B_TEAM_TOTAL_POINT      =  #{bTeamTotalPoint},
+            B_TEAM      =#{bTeam},
+            B_TEAM_PITCHER      =#{bTeamPitcher},
+            B_TEAM_REST_DAY =    IFNULL((SELECT  DATEDIFF(#{date} ,(SELECT MATCH_DATE FROM (SELECT MATCH_DATE FROM  sport.baseball_data B WHERE B_TEAM = #{bTeam}  AND LEAGUE = #{league} AND B_TEAM_PITCHER = #{bTeamPitcher} AND MATCH_DATE <  #{date} ORDER BY idx DESC LIMIT 1) A ))) -1,0),
+            HANDI_CAP       =      #{handiCap},
+            HANDI_CAP_RESULT        =#{handiCapResult},
+            ODD     =#{odd},
+            POINT_LINE      =#{pointLine},
+            POINT_LINE_RESULT       =#{pointLineResult},
+            A_TEAM_THIRD_POINT     =#{aTeamThirdPoint},
+            B_TEAM_THIRD_POINT        =#{bTeamThirdPoint},
+            THIRD_HANDI_CAP        =#{thirdHandiCap},
+            THIRD_HANDI_CAP_RESULT     =#{thirdHandiCapResult},
+            THIRD_POINT_LINE       =#{thirdPointLine},
+            THIRD_POINT_LINE_RESULT        =#{thirdPointLineResult},
+            A_TEAM_FOURTH_POINT     =#{aTeamFourthPoint},
+            B_TEAM_FOURTH_POINT        =#{bTeamFourthPoint},
+            FOURTH_HANDI_CAP        =#{fourthHandiCap},
+            FOURTH_HANDI_CAP_RESULT     =#{fourthHandiCapResult},
+            FOURTH_POINT_LINE       =#{fourthPointLine},
+            FOURTH_POINT_LINE_RESULT        =#{fourthPointLineResult},
+            A_TEAM_FIFTH_POINT      =#{aTeamFifthPoint},
+            B_TEAM_FIFTH_POINT      =#{bTeamFifthPoint},
+            FIFTH_HANDI_CAP     =#{fifthHandiCap},
+            FIFTH_HANDI_CAP_RESULT      =#{fifthHandiCapResult},
+            FIFTH_POINT_LINE        =#{fifthPointLine},
+            FIFTH_POINT_LINE_RESULT       =#{fifthPointLineResult},
+            FIRST_STRIKEOUT     =#{firstStrikeOut},
+            FIRST_HOMERUN       =#{firstHomerun},
+            FRIST_BASEONBALL        =#{firstBaseOnBall},
+            FRIST_POINT     =#{firstScore},
+            SECEND_POINT        =#{secondScore},
+            THRID_POINT     =#{thirdScore},
+            FOURTH_POINT        =#{fourthScore},
+            FIFTH_POINT     =#{fifthScore},
+            SIXTH_POINT     =#{sixthScore},
+            SEVENTH_POINT       =#{seventhScore},
+            EIGHTH_POINT        =#{eighthScore},
+            NINTH_POINT     =#{ninthScore},
+            EXTEND_POINT     =#{extendScore},
+            EXTEND_YN       =#{extendYn}
+
+        WHERE
+            GAME_ID   =     #{gameId} AND
+            LEAGUE   =     #{league} AND
+            GROUND   =     #{ground} AND
+            MATCH_DATE   =  #{date} AND
+            A_TEAM   =     #{aTeam} AND
+            B_TEAM   =     #{bTeam} AND
+            UPDATE_YN = 1
+
+        ]]>
+
+    </update>
+
 
 </mapper>

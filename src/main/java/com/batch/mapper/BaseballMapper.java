@@ -12,4 +12,5 @@ public interface BaseballMapper {
 
     public int checkGameIdCount(BaseballModel baseballModel);
 
+    public void updateBaseballStat(BaseballModel baseballModel);
 }
