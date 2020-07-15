@@ -29,6 +29,9 @@ public class NamedUtil {
     private final static String API_KEY = "1rar2zCZvKjp";
     private final static String API_NAME = "named_score";
 
+
+    //구 야구 api
+    //URL 없지만 api 되는 중
     public String getOldApiResponse(String matchDate, String gameId) throws IOException{
         //matchDate yyyyMMdd
 
@@ -61,7 +64,8 @@ public class NamedUtil {
 
         return responseText.toString();
     }
-
+    //named 전체 경기 리스트 가지고오는 api
+    //http://named.com/main/sub/#/scorecenter/inplay
     public String postOldApiResponse(String matchDate, String gameId) throws IOException {
         //matchDate yyyy-M-d
 
@@ -97,12 +101,15 @@ public class NamedUtil {
         return responseText.toString();
     }
 
-    public String getNewApiResponse(String matchDate, String gameId) throws IOException {
+    //신규 야구 api
+    //http://named.com/main/sub/#/scorecenter/baseball/home
+    public String getNewApiResponse(String url, String gameId) throws IOException {
         //matchDate yyyy-MM-dd
         StringBuilder responseText = new StringBuilder(1024);
 
         URLConnection con;
-        con = new URL("https://api.picksmatch.com/v1.0/sports/baseball/games?date=" + matchDate + "&status=ALL").openConnection();
+//        con = new URL("https://api.picksmatch.com/v1.0/sports/baseball/games?date=" + matchDate + "&status=ALL").openConnection();
+        con = new URL(url).openConnection();
 
         con.setRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36");
         con.setRequestProperty("Accept-Language", "ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7");
@@ -122,6 +129,8 @@ public class NamedUtil {
 
     }
 
+    //야구 전광판 api
+    //http://named.com/main/sub/#/scorecenter/baseball/broadcast/10559593
     public String getPitcherApiResponse(String matchDate, String gameId) throws IOException{
         //matchDate yyyyMMdd
         String unixTime = String.valueOf(System.currentTimeMillis() / 1000);
