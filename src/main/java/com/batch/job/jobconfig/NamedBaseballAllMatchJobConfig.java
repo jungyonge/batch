@@ -35,47 +35,51 @@ import java.util.List;
 @RequiredArgsConstructor
 @Configuration
 @Controller
-public class NamedBaseballCrawlingJobConfig {
+public class NamedBaseballAllMatchJobConfig {
 
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
 
-    @Autowired
-    private JobLauncher jobLauncher;
-    @Autowired
     private JobOperator simpleJobOperator;
-    @Autowired
     private JobCompletionNotificationListener notificationListener;
-    @Autowired
     private DummyReader dummyReader;
-    @Autowired
     private NamedBaseballAllMatchProcessor namedBaseballAllMatchProcessor;
-    @Autowired
     private NamedBaseballAllMatchWriter namedBaseballAllMatchWriter;
 
+    @Autowired
+    public NamedBaseballAllMatchJobConfig(JobBuilderFactory jobBuilderFactory, StepBuilderFactory stepBuilderFactory, JobOperator simpleJobOperator, JobCompletionNotificationListener notificationListener, DummyReader dummyReader, NamedBaseballAllMatchProcessor namedBaseballAllMatchProcessor, NamedBaseballAllMatchWriter namedBaseballAllMatchWriter) {
+        this.jobBuilderFactory = jobBuilderFactory;
+        this.stepBuilderFactory = stepBuilderFactory;
+        this.simpleJobOperator = simpleJobOperator;
+        this.notificationListener = notificationListener;
+        this.dummyReader = dummyReader;
+        this.namedBaseballAllMatchProcessor = namedBaseballAllMatchProcessor;
+        this.namedBaseballAllMatchWriter = namedBaseballAllMatchWriter;
+    }
 
-//    @Scheduled(cron = "* * * * * ?")
+
+    //    @Scheduled(cron = "* * * * * ?")
     @RequestMapping(value = "jobs/baseballAllMatch")
     public void runJob() throws Exception{
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
         String _jobParameters = "now=" + sdf.format(new Date());
 
-        simpleJobOperator.start("namedBaseBallCrawlingJob", _jobParameters);
+        simpleJobOperator.start("namedBaseBallAllMatchJob", _jobParameters);
      }
 
     @Bean
-    public Job namedBaseBallCrawlingJob(){
-        return jobBuilderFactory.get("namedBaseBallCrawlingJob")
+    public Job namedBaseBallAllMatchJob(){
+        return jobBuilderFactory.get("namedBaseBallAllMatchJob")
                 .preventRestart()
                 .listener(notificationListener)
-                .flow(namedBaseBallCrawlingStep())
+                .flow(namedBaseBallAllMatchStep())
                 .end()
                 .build();
     }
 
     @Bean
-    public Step namedBaseBallCrawlingStep(){
-        return stepBuilderFactory.get("namedBaseBallCrawlingStep")
+    public Step namedBaseBallAllMatchStep(){
+        return stepBuilderFactory.get("namedBaseBallAllMatchStep")
                 .<String, List<BaseballModel>> chunk(1)
                 .reader(dummyReader)
                 .processor(namedBaseballAllMatchProcessor)
