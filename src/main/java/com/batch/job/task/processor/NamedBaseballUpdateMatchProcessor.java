@@ -39,7 +39,7 @@ public class NamedBaseballUpdateMatchProcessor implements ItemProcessor<String, 
         return updateBaseballMatch();
     }
 
-    public List<BaseballModel> updateBaseballMatch() throws IOException, ParseException, JSONException {
+    public List<BaseballModel> updateBaseballMatch() throws Exception {
 
         long unixTime = System.currentTimeMillis() / 1000;
 
@@ -127,12 +127,13 @@ public class NamedBaseballUpdateMatchProcessor implements ItemProcessor<String, 
 
                 }
             } catch (Exception e) {
-                throw e;
+                log.error(String.valueOf(e));
             }
             addDate++;
 
         }
         log.info(String.valueOf(baseballModelList.size()));
+
         return baseballModelList;
     }
 
@@ -184,7 +185,7 @@ public class NamedBaseballUpdateMatchProcessor implements ItemProcessor<String, 
 //                    }
     }
 
-    private void parsePitcherAndOdd( JSONObject matchObject , BaseballModel aTeamModel , BaseballModel bTeamModel) throws JSONException, ParseException {
+    private void parsePitcherAndOdd( JSONObject matchObject , BaseballModel aTeamModel , BaseballModel bTeamModel) throws JSONException {
 
         JSONObject homeTeam = matchObject.getJSONObject("teams").getJSONObject("home");
         JSONObject awayTeam = matchObject.getJSONObject("teams").getJSONObject("away");
@@ -348,7 +349,7 @@ public class NamedBaseballUpdateMatchProcessor implements ItemProcessor<String, 
 
     }
 
-    private void parseScore( JSONObject matchObject , BaseballModel aTeamModel , BaseballModel bTeamModel) throws JSONException, ParseException{
+    private void parseScore( JSONObject matchObject , BaseballModel aTeamModel , BaseballModel bTeamModel) throws JSONException{
         JSONArray homeTeamScore = matchObject.getJSONObject("teams").getJSONObject("home").getJSONArray("periodData");
         JSONArray awayTeamScore = matchObject.getJSONObject("teams").getJSONObject("away").getJSONArray("periodData");
 
@@ -432,7 +433,7 @@ public class NamedBaseballUpdateMatchProcessor implements ItemProcessor<String, 
 
     }
 
-    private void parseInningHandiUnover( JSONObject matchObject , BaseballModel aTeamModel , BaseballModel bTeamModel) throws JSONException, ParseException{
+    private void parseInningHandiUnover( JSONObject matchObject , BaseballModel aTeamModel , BaseballModel bTeamModel) throws Exception{
         if (aTeamModel.getHandiCap() == 0) {
             aTeamModel.setHandiCapResult("적특");
             bTeamModel.setHandiCapResult("적특");
@@ -588,7 +589,7 @@ public class NamedBaseballUpdateMatchProcessor implements ItemProcessor<String, 
 
     }
 
-    private void parseSpecial( JSONObject matchObject , BaseballModel aTeamModel , BaseballModel bTeamModel) throws JSONException, ParseException {
+    private void parseSpecial( JSONObject matchObject , BaseballModel aTeamModel , BaseballModel bTeamModel) throws JSONException {
         boolean checkFirstBaseOnBall = matchObject.getJSONObject("special").isNull("firstBaseOnBall");
         boolean checkFirstHomerun = matchObject.getJSONObject("special").isNull("firstHomerun");
         boolean checkFirstStrikeOut = matchObject.getJSONObject("special").isNull("firstStrikeOut");
