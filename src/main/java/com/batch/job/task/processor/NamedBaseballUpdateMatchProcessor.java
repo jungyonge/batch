@@ -641,7 +641,7 @@ public class NamedBaseballUpdateMatchProcessor implements ItemProcessor<String, 
 
     }
 
-        private boolean validationData(BaseballModel item){
+    private boolean validationData(BaseballModel item){
 
         if(item.getATeam().isEmpty()){
             return Boolean.TRUE;

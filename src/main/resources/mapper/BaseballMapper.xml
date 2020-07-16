@@ -100,5 +100,67 @@
 
     </update>
 
+    <select id="selectBaseballStat"  resultType="hashMap">
+            SELECT IDX,
+                   GAME_ID,
+                   LEAGUE,
+                   GROUND,
+                   STADIUM,
+                   MATCH_DATE,
+                   DAY_OF_WEEK,
+                   MATCH_TIME,
+                   A_TEAM_REST_DAY,
+                   A_TEAM_PITCHER,
+                   A_TEAM_PITCHER_HAND,
+                   A_TEAM,
+                   A_TEAM_TOTAL_POINT,
+                   B_TEAM_TOTAL_POINT,
+                   B_TEAM,
+                   B_TEAM_PITCHER,
+                   B_TEAM_PITCHER_HAND,
+                   B_TEAM_REST_DAY,
+                   HANDI_CAP,
+                   HANDI_CAP_RESULT,
+                   ODD,
+                   POINT_LINE,
+                   POINT_LINE_RESULT,
+                   A_TEAM_THIRD_POINT,
+                   B_TEAM_THIRD_POINT,
+                   THIRD_HANDI_CAP,
+                   THIRD_HANDI_CAP_RESULT,
+                   THIRD_POINT_LINE,
+                   THIRD_POINT_LINE_RESULT,
+                   A_TEAM_FOURTH_POINT,
+                   B_TEAM_FOURTH_POINT,
+                   FOURTH_HANDI_CAP,
+                   FOURTH_HANDI_CAP_RESULT,
+                   FOURTH_POINT_LINE,
+                   FOURTH_POINT_LINE_RESULT,
+                   A_TEAM_FIFTH_POINT,
+                   B_TEAM_FIFTH_POINT,
+                   FIFTH_HANDI_CAP,
+                   FIFTH_HANDI_CAP_RESULT,
+                   FIFTH_POINT_LINE,
+                   FIFTH_POINT_LINE_RESULT,
+                   FIRST_STRIKEOUT,
+                   FIRST_HOMERUN,
+                   FRIST_BASEONBALL,
+                   FRIST_POINT,
+                   SECEND_POINT,
+                   THRID_POINT,
+                   FOURTH_POINT,
+                   FIFTH_POINT,
+                   SIXTH_POINT,
+                   SEVENTH_POINT,
+                   EIGHTH_POINT,
+                   NINTH_POINT,
+                   EXTEND_POINT,
+                   EXTEND_YN
+            FROM   sport.baseball_data
+            WHERE  A_TEAM_TOTAL_POINT != 99
+            ORDER  BY MATCH_DATE,
+                      GAME_ID;
+    </select>
+
 
 </mapper>
