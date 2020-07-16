@@ -20,7 +20,6 @@ public class NamedBaseballUpdateMatchWriter implements ItemWriter< List<Baseball
 
     @Override
     public void write(List<? extends List<BaseballModel>> list) throws Exception {
-        log.info("write");
 
         for(List<BaseballModel> baseballModels : list){
             for(BaseballModel baseballModel : baseballModels){

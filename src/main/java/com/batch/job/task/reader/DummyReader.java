@@ -22,7 +22,7 @@ public class DummyReader  implements ItemReader<String> {
 
     @Override
     public String read() throws Exception, UnexpectedInputException, ParseException, NonTransientResourceException {
-        log.info("reader");
+        log.info(" Dummy Reader");
         if(!batchJobState){
             batchJobState=true;
             return "1";

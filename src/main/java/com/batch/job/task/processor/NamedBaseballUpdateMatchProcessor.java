@@ -34,14 +34,11 @@ public class NamedBaseballUpdateMatchProcessor implements ItemProcessor<String, 
 
     @Override
     public  List<BaseballModel> process(String s) throws Exception {
-        log.info("process");
 
         return updateBaseballMatch();
     }
 
     public List<BaseballModel> updateBaseballMatch() throws Exception {
-
-        long unixTime = System.currentTimeMillis() / 1000;
 
         int addDate = 0;
 
@@ -132,7 +129,6 @@ public class NamedBaseballUpdateMatchProcessor implements ItemProcessor<String, 
             addDate++;
 
         }
-        log.info(String.valueOf(baseballModelList.size()));
 
         return baseballModelList;
     }

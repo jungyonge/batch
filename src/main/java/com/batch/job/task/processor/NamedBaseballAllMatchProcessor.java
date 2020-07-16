@@ -32,7 +32,6 @@ public class NamedBaseballAllMatchProcessor implements ItemProcessor<String, Lis
 
     @Override
     public  List<BaseballModel> process(String s) throws Exception {
-        log.info("process");
 
         return allBaseballMatch();
     }
