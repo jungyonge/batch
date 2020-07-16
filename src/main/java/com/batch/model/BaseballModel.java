@@ -74,6 +74,23 @@ public class BaseballModel {
 
     Boolean extendYn;
 
+    //투수정보
+    Integer pitchCount;
+
+    Integer seasonWins;
+    Integer seasonLosses;
+    Double inningPitched;
+    Integer hit;
+    Integer homeRun;
+    Integer baseOnBalls;
+    Integer strikeOuts;
+    Integer run;
+    Integer earnedRun;
+    Double todayEarnedRunAverage;
+    Double seasonEarnedRunAverage;
+
+
+
     public int getTotalScore(){
         int total = firstScore +  secondScore + thirdScore +  fourthScore +   fifthScore + sixthScore + seventhScore + eighthScore + ninthScore + extendScore;
         return total;
