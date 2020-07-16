@@ -35,6 +35,7 @@ public class NamedUtil {
     public String getOldApiResponse(String matchDate, String gameId) throws IOException{
         //matchDate yyyyMMdd
 
+
         StringBuilder responseText = new StringBuilder(1024);
         URLConnection con;
         con = new URL(BASEURL + BASEBALL_PATH + BASEPARAM + matchDate + "&endDate=" + matchDate).openConnection();

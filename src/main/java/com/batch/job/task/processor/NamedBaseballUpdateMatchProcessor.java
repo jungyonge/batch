@@ -58,7 +58,6 @@ public class NamedBaseballUpdateMatchProcessor implements ItemProcessor<String, 
                 break;
             }
 
-
             try {
 
                 String json = namedUtil.getNewApiResponse(baseBall_Url + matchDate + "&status=ALL","");
@@ -80,6 +79,8 @@ public class NamedBaseballUpdateMatchProcessor implements ItemProcessor<String, 
                     bTeamModel.setGameId(String.valueOf(matchObject.getInt("id")));
                     aTeamModel.setLeague(matchObject.getJSONObject("league").getString("shortName"));
                     bTeamModel.setLeague(matchObject.getJSONObject("league").getString("shortName"));
+                    aTeamModel.setStadium(matchObject.getString("venueName"));
+                    bTeamModel.setStadium(matchObject.getString("venueName"));
 
                     if(!aTeamModel.getLeague().equals("KBO") && !aTeamModel.getLeague().equals("NPB") && !aTeamModel.getLeague().equals("MLB") && !aTeamModel.getLeague().equals("퓨처스") ){
                         continue;
