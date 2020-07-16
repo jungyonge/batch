@@ -9,4 +9,10 @@
             WHERE EXCEL_YN = 1;
     </select>
 
+    <select id="selectMemberList"  resultType="HashMap">
+        SELECT EMAIL
+            FROM sport.member
+        WHERE END_DATE > NOW();
+    </select>
+
 </mapper>

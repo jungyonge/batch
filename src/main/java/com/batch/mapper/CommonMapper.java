@@ -10,4 +10,6 @@ import java.util.List;
 public interface CommonMapper {
 
     public List selectSportMakeExcelList();
+
+    public List selectMemberList();
 }

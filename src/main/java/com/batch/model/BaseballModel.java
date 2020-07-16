@@ -75,7 +75,7 @@ public class BaseballModel {
     Boolean extendYn;
 
     public int getTotalScore(){
-        int total = firstScore +  secondScore + thirdScore +  fourthScore +   fifthScore + sixthScore + seventhScore + eighthScore + ninthScore;
+        int total = firstScore +  secondScore + thirdScore +  fourthScore +   fifthScore + sixthScore + seventhScore + eighthScore + ninthScore + extendScore;
         return total;
     }
 
