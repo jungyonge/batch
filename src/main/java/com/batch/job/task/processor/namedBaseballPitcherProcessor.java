@@ -21,11 +21,11 @@ import java.util.List;
 @Component
 @Slf4j
 public class namedBaseballPitcherProcessor implements ItemProcessor<String, List<BaseballModel>> {
-    private final static String BASEBALL_MATCH_URL   = "https://sports-api.picksmatch.com/named/v1/sports/baseball/games/";
+    private final static String BASEBALL_MATCH_URL = "https://sports-api.picksmatch.com/named/v1/sports/baseball/games/";
     private final static String BASEBALL_PITCHER_URL = "https://sports-api.picksmatch.com/named/v1/sports/games/";
 
-    private final static String BASEBALL_PARAM= "?broadcast=true&broadcastLatest=true&odds=true&scores=true&specials=true&seasonTeamStat=true&startDate=";
-    private final static String PITCHER_PARAM= "?broadcast=true&odds=true&scores=true&specials=true&lineups=true&seasonTeamLeagueRankingStat=true&broadcastDesc=true&v=";
+    private final static String BASEBALL_PARAM = "?broadcast=true&broadcastLatest=true&odds=true&scores=true&specials=true&seasonTeamStat=true&startDate=";
+    private final static String PITCHER_PARAM = "?broadcast=true&odds=true&scores=true&specials=true&lineups=true&seasonTeamLeagueRankingStat=true&broadcastDesc=true&v=";
 
 
     @Autowired
@@ -38,7 +38,7 @@ public class namedBaseballPitcherProcessor implements ItemProcessor<String, List
         return insertPitcherStat();
     }
 
-//     그날 경기 리스트
+    //     그날 경기 리스트
 //    https://sports-api.picksmatch.com/named/v1/sports/baseball/games/?broadcast=true&broadcastLatest=true&odds=true&scores=true&specials=true&seasonTeamStat=true&startDate=20200714&endDate=20200714&v=1594951570374
     // 경기 상세
 //    https://sports-api.picksmatch.com/named/v1/sports/games/10559594?broadcast=true&odds=true&scores=true&specials=true&lineups=true&seasonTeamLeagueRankingStat=true&broadcastDesc=true&v=1594951597
@@ -54,30 +54,30 @@ public class namedBaseballPitcherProcessor implements ItemProcessor<String, List
         String matchDate = df.format(cal.getTime());
         String unixTime = String.valueOf(System.currentTimeMillis() / 1000);
 
-        String json = namedUtil.getPitcherApiResponse(BASEBALL_MATCH_URL + BASEBALL_PARAM + matchDate + "&endDate=" + matchDate + "&v=" + unixTime,"");
+        String json = namedUtil.getPitcherApiResponse(BASEBALL_MATCH_URL + BASEBALL_PARAM + matchDate + "&endDate=" + matchDate + "&v=" + unixTime, "");
 
         JSONObject jsonObject = new JSONObject(json);
         JSONObject matchObject;
         JSONArray jsonArray = jsonObject.getJSONArray("response");
         String[] matchArr = new String[jsonArray.length()];
 
-        for(int i = 0 ; i < jsonArray.length() ; i++){
+        for (int i = 0; i < jsonArray.length(); i++) {
             matchObject = jsonArray.getJSONObject(i);
             String gameId = matchObject.getString("id");
             matchArr[i] = gameId;
         }
 
-        for (String gameId : matchArr){
+        for (String gameId : matchArr) {
             BaseballModel aTeamModel = new BaseballModel();
             BaseballModel bTeamModel = new BaseballModel();
 
             unixTime = String.valueOf(System.currentTimeMillis() / 1000);
-            json = namedUtil.getPitcherApiResponse(BASEBALL_PITCHER_URL + gameId + PITCHER_PARAM + unixTime,"");
+            json = namedUtil.getPitcherApiResponse(BASEBALL_PITCHER_URL + gameId + PITCHER_PARAM + unixTime, "");
 
             jsonObject = new JSONObject(json);
             matchObject = jsonObject.getJSONObject("response");
 
-            if(!matchObject.getString("status").equals("FINAL")){
+            if (!matchObject.getString("status").equals("FINAL")) {
                 continue;
             }
 
@@ -88,14 +88,14 @@ public class namedBaseballPitcherProcessor implements ItemProcessor<String, List
             aTeamModel.setStadium(matchObject.getJSONObject("venue").getString("name"));
             bTeamModel.setStadium(matchObject.getJSONObject("venue").getString("name"));
 
-            if(!aTeamModel.getLeague().equals("KBO") && !aTeamModel.getLeague().equals("NPB") && !aTeamModel.getLeague().equals("MLB") ){
+            if (!aTeamModel.getLeague().equals("KBO") && !aTeamModel.getLeague().equals("NPB") && !aTeamModel.getLeague().equals("MLB")) {
                 continue;
             }
             //기본 데이터 파싱
-            parseBaseData(matchObject,aTeamModel,bTeamModel);
+            parseBaseData(matchObject, aTeamModel, bTeamModel);
 
             //투수 정보 파싱
-           parsePitcherData(matchObject,aTeamModel,bTeamModel);
+            parsePitcherData(matchObject, aTeamModel, bTeamModel);
 
             baseballModelList.add(aTeamModel);
             baseballModelList.add(bTeamModel);
@@ -104,7 +104,7 @@ public class namedBaseballPitcherProcessor implements ItemProcessor<String, List
         return baseballModelList;
     }
 
-    private void parseBaseData( JSONObject matchObject , BaseballModel aTeamModel , BaseballModel bTeamModel) throws JSONException, ParseException {
+    private void parseBaseData(JSONObject matchObject, BaseballModel aTeamModel, BaseballModel bTeamModel) throws JSONException, ParseException {
 
         Calendar cal = Calendar.getInstance();
 
@@ -135,10 +135,10 @@ public class namedBaseballPitcherProcessor implements ItemProcessor<String, List
         String locationType = matchObject.getJSONArray("gameTeams").getJSONObject(0).getString("locationType");
         JSONObject homeTeam;
         JSONObject awayTeam;
-        if(locationType.equals("HOME")){
+        if (locationType.equals("HOME")) {
             homeTeam = matchObject.getJSONArray("gameTeams").getJSONObject(0).getJSONObject("team");
             awayTeam = matchObject.getJSONArray("gameTeams").getJSONObject(1).getJSONObject("team");
-        }else {
+        } else {
             homeTeam = matchObject.getJSONArray("gameTeams").getJSONObject(1).getJSONObject("team");
             awayTeam = matchObject.getJSONArray("gameTeams").getJSONObject(0).getJSONObject("team");
         }
@@ -151,14 +151,14 @@ public class namedBaseballPitcherProcessor implements ItemProcessor<String, List
 
     }
 
-    private void parsePitcherData( JSONObject matchObject , BaseballModel aTeamModel , BaseballModel bTeamModel) throws JSONException, ParseException{
+    private void parsePitcherData(JSONObject matchObject, BaseballModel aTeamModel, BaseballModel bTeamModel) throws JSONException, ParseException {
         String locationType = matchObject.getJSONArray("gameTeams").getJSONObject(0).getString("locationType");
         JSONArray homeTeamPitcherList;
         JSONArray awayTeamPitcherList;
-        if(locationType.equals("HOME")){
+        if (locationType.equals("HOME")) {
             homeTeamPitcherList = matchObject.getJSONArray("gameTeams").getJSONObject(0).getJSONArray("pitchingPlayers");
             awayTeamPitcherList = matchObject.getJSONArray("gameTeams").getJSONObject(1).getJSONArray("pitchingPlayers");
-        }else {
+        } else {
             homeTeamPitcherList = matchObject.getJSONArray("gameTeams").getJSONObject(1).getJSONArray("pitchingPlayers");
             awayTeamPitcherList = matchObject.getJSONArray("gameTeams").getJSONObject(0).getJSONArray("pitchingPlayers");
         }
@@ -166,20 +166,22 @@ public class namedBaseballPitcherProcessor implements ItemProcessor<String, List
         JSONObject homeTeamStartPitcher = new JSONObject();
         JSONObject awayTeamStartPitcher = new JSONObject();
 
-        for(int i = 0 ; i < homeTeamPitcherList.length() ; i++){
+        for (int i = 0; i < homeTeamPitcherList.length(); i++) {
             homeTeamStartPitcher = homeTeamPitcherList.getJSONObject(i);
-            if(homeTeamStartPitcher.getBoolean("startingMember")){
+            if (homeTeamStartPitcher.getBoolean("startingMember")) {
                 break;
             }
         }
 
-        for(int i = 0 ; i < awayTeamPitcherList.length() ; i++){
+        for (int i = 0; i < awayTeamPitcherList.length(); i++) {
             awayTeamStartPitcher = awayTeamPitcherList.getJSONObject(i);
-            if(awayTeamStartPitcher.getBoolean("startingMember")){
+            if (awayTeamStartPitcher.getBoolean("startingMember")) {
                 break;
             }
         }
 
+        aTeamModel.setATeamPitcher(homeTeamStartPitcher.getJSONObject("player").getString("displayName"));
+        aTeamModel.setPitchCount(homeTeamStartPitcher.getInt("pitchCount"));
         aTeamModel.setSeasonWins(homeTeamStartPitcher.getInt("seasonWins"));
         aTeamModel.setSeasonLosses(homeTeamStartPitcher.getInt("seasonLosses"));
         aTeamModel.setInningPitched(homeTeamStartPitcher.getDouble("inningPitched"));
@@ -193,6 +195,8 @@ public class namedBaseballPitcherProcessor implements ItemProcessor<String, List
         aTeamModel.setSeasonEarnedRunAverage(homeTeamStartPitcher.getDouble("seasonEarnedRunAverage"));
 
 
+        bTeamModel.setATeamPitcher(awayTeamStartPitcher.getJSONObject("player").getString("displayName"));
+        bTeamModel.setPitchCount(awayTeamStartPitcher.getInt("pitchCount"));
         bTeamModel.setSeasonWins(awayTeamStartPitcher.getInt("seasonWins"));
         bTeamModel.setSeasonLosses(awayTeamStartPitcher.getInt("seasonLosses"));
         bTeamModel.setInningPitched(awayTeamStartPitcher.getDouble("inningPitched"));
