@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.sf.jxls.transformer.XLSTransformer;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.StringUtils;
@@ -23,8 +24,11 @@ public class MakeExcelUtil {
     private static final String FILE_EXT2 = ".xlsx";
     private static final String SHEET_NAME = "sheet";
 
-    private static final String excelTemplatePath = "/Users/imc053/IdeaProjects/batch/src/main/resources/excelTemplate/";
-    private static final String excelOutputPath = "/Users/imc053/Desktop/xmlFile/";
+    @Value("#{excel.template-path")
+    private static String excelTemplatePath;
+
+    @Value("#{excel.output-path")
+    private static String excelOutputPath;
 
     public void statXlsDown(String type, List excelDataList) throws Exception {
         ModelMap model = new ModelMap();

@@ -1,4 +1,5 @@
 spring:
+  profiles: company
   batch:
     job:
       enabled: false
@@ -17,11 +18,27 @@ spring:
       test-while-idle: true
       max-wait: 10000
 
-master:
+
+# MyBatis Configuration
+mybatis:
+  config-location: classpath:mapper/mybatis-config.xml
+  mapper-locations: classpath:mapper/*Mapper.xml
+
+excel:
+  template-path : /Users/imc053/IdeaProjects/batch/src/main/resources/excelTemplate/
+  output-path : /Users/imc053/Desktop/xmlFile/
+
+---
+
+spring:
+  profiles: home
+  batch:
+    job:
+      enabled: false
   datasource:
     url: jdbc:mysql://localhost:3306/batch?autoReconnect=true&serverTimezone=UTC
     username: root
-    password: wjddyd.1204
+    password: ghzkrp153
     driver-class-name: com.mysql.cj.jdbc.Driver
     initialize: false
     tomcat:
@@ -33,7 +50,12 @@ master:
       test-while-idle: true
       max-wait: 10000
 
+
 # MyBatis Configuration
 mybatis:
   config-location: classpath:mapper/mybatis-config.xml
   mapper-locations: classpath:mapper/*Mapper.xml
+
+excel:
+  template-path : /Users/imc053/IdeaProjects/batch/src/main/resources/
+  output-path : /Users/imc053/Desktop/

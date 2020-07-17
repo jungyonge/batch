@@ -24,13 +24,13 @@ public class MasterDbConfig extends DatabaseConfig {
 
     @Primary
     @Bean
-    @ConfigurationProperties(prefix = "master.datasource")
+    @ConfigurationProperties(prefix = "spring.datasource")
     public DataSourceProperties masterDataSourceProp() {
         return new DataSourceProperties();
     }
 
     @Bean
-    @ConfigurationProperties(prefix = "master.datasource.tomcat")
+    @ConfigurationProperties(prefix = "spring.datasource.tomcat")
     public DataSource masterDataSource() {
         return masterDataSourceProp().initializeDataSourceBuilder().build();
     }

@@ -48,17 +48,17 @@ public class NamedBaseballPitcherJobConfig {
 
 
     @Bean
-    public Job namedBaseBallAllMatchJob(){
+    public Job NamedBaseballPitcherJob(){
         return jobBuilderFactory.get("namedBaseballPitcherJob")
                 .preventRestart()
                 .listener(notificationListener)
-                .flow(namedBaseBallAllMatchStep())
+                .flow(NamedBaseballPitcherStep())
                 .end()
                 .build();
     }
 
     @Bean
-    public Step namedBaseBallAllMatchStep(){
+    public Step NamedBaseballPitcherStep(){
         return stepBuilderFactory.get("namedBaseballPitcherStep")
                 .<String, List<BaseballModel>> chunk(1)
                 .reader(dummyReader)
