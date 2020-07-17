@@ -18,6 +18,9 @@ spring:
       test-while-idle: true
       max-wait: 10000
 
+server:
+  port: 8081
+
 
 # MyBatis Configuration
 mybatis:
@@ -50,6 +53,8 @@ spring:
       test-while-idle: true
       max-wait: 10000
 
+server:
+  port: 8081
 
 # MyBatis Configuration
 mybatis:

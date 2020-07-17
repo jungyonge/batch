@@ -132,20 +132,19 @@ public class NamedUtil {
 
     //야구 전광판 api
     //http://named.com/main/sub/#/scorecenter/baseball/broadcast/10559593
-    public String getPitcherApiResponse(String matchDate, String gameId) throws IOException{
+    public String getPitcherApiResponse(String url, String gameId) throws IOException{
         //matchDate yyyyMMdd
         String unixTime = String.valueOf(System.currentTimeMillis() / 1000);
 
         StringBuilder responseText = new StringBuilder(1024);
         URLConnection con;
-        con = new URL(BASEURL + BASEBALL_PITCHER_PATH + gameId + BASE_PITCHER_PARAM + unixTime).openConnection();
+        con = new URL(url).openConnection();
 
         con.setRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36");
         con.setRequestProperty("Accept-Language", "ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7");
         con.setRequestProperty("origin","https://sports.picksmatch.com");
         con.setRequestProperty("oki-api-key", API_KEY);
         con.setRequestProperty("oki-api-name", API_NAME);
-
 
         con.setUseCaches(false);
 

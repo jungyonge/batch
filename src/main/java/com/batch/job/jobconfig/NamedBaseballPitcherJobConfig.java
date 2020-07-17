@@ -2,6 +2,7 @@ package com.batch.job.jobconfig;
 
 import com.batch.job.listener.JobCompletionNotificationListener;
 import com.batch.job.task.processor.NamedBaseballAllMatchProcessor;
+import com.batch.job.task.processor.namedBaseballPitcherProcessor;
 import com.batch.job.task.reader.DummyReader;
 import com.batch.job.task.writer.NamedBaseballPitcherWriter;
 import com.batch.model.BaseballModel;
@@ -33,16 +34,16 @@ public class NamedBaseballPitcherJobConfig {
 
     private JobCompletionNotificationListener notificationListener;
     private DummyReader dummyReader;
-    private NamedBaseballAllMatchProcessor namedBaseballAllMatchProcessor;
+    private namedBaseballPitcherProcessor namedBaseballPitcherProcessor;
     private NamedBaseballPitcherWriter namedBaseballPitcherWriter;
 
     @Autowired
-    public NamedBaseballPitcherJobConfig(JobBuilderFactory jobBuilderFactory, StepBuilderFactory stepBuilderFactory, JobCompletionNotificationListener notificationListener, DummyReader dummyReader, NamedBaseballAllMatchProcessor namedBaseballAllMatchProcessor, NamedBaseballPitcherWriter namedBaseballPitcherWriter) {
+    public NamedBaseballPitcherJobConfig(JobBuilderFactory jobBuilderFactory, StepBuilderFactory stepBuilderFactory, JobCompletionNotificationListener notificationListener, DummyReader dummyReader, namedBaseballPitcherProcessor namedBaseballPitcherProcessor, NamedBaseballPitcherWriter namedBaseballPitcherWriter) {
         this.jobBuilderFactory = jobBuilderFactory;
         this.stepBuilderFactory = stepBuilderFactory;
         this.notificationListener = notificationListener;
         this.dummyReader = dummyReader;
-        this.namedBaseballAllMatchProcessor = namedBaseballAllMatchProcessor;
+        this.namedBaseballPitcherProcessor = namedBaseballPitcherProcessor;
         this.namedBaseballPitcherWriter = namedBaseballPitcherWriter;
     }
 
@@ -62,7 +63,7 @@ public class NamedBaseballPitcherJobConfig {
         return stepBuilderFactory.get("namedBaseballPitcherStep")
                 .<String, List<BaseballModel>> chunk(1)
                 .reader(dummyReader)
-                .processor(namedBaseballAllMatchProcessor)
+                .processor(namedBaseballPitcherProcessor)
                 .writer(namedBaseballPitcherWriter)
                 .build();
     }
