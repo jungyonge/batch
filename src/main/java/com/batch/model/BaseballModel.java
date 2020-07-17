@@ -83,6 +83,7 @@ public class BaseballModel {
     Integer hit;
     Integer homeRun;
     Integer baseOnBalls;
+    String baseOnBallTexts;
     Integer strikeOuts;
     Integer run;
     Integer earnedRun;

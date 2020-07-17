@@ -97,6 +97,9 @@ public class namedBaseballPitcherProcessor implements ItemProcessor<String, List
             //투수 정보 파싱
             parsePitcherData(matchObject, aTeamModel, bTeamModel);
 
+            //볼 정보 파싱
+            parseBaseOnBall(matchObject, aTeamModel, bTeamModel);
+
             baseballModelList.add(aTeamModel);
             baseballModelList.add(bTeamModel);
         }
@@ -208,6 +211,88 @@ public class namedBaseballPitcherProcessor implements ItemProcessor<String, List
         bTeamModel.setEarnedRun(awayTeamStartPitcher.getInt("earnedRun"));
         bTeamModel.setTodayEarnedRunAverage(awayTeamStartPitcher.getDouble("todayEarnedRunAverage"));
         bTeamModel.setSeasonEarnedRunAverage(awayTeamStartPitcher.getDouble("seasonEarnedRunAverage"));
+
+    }
+
+    private void parseBaseOnBall(JSONObject matchObject, BaseballModel aTeamModel, BaseballModel bTeamModel) throws JSONException, ParseException {
+        JSONArray broadCasts = matchObject.getJSONArray("broadcasts");
+        double homeInningPitched = aTeamModel.getInningPitched();
+        double awayInningPitched = bTeamModel.getInningPitched();
+        double checkInning = 0;
+        double checkBaseOnBall = 0;
+        int currentInning = 0;
+        String playText;
+        StringBuilder baseOnBallTexts = new StringBuilder();
+        String teamLocationType = "";
+
+        //홈 투수 먼저 볼 체크 진행
+        for(int i = broadCasts.length() - 1 ; i >= 0 ; i--){
+            JSONObject broadCastObject = broadCasts.getJSONObject(i);
+            playText = broadCastObject.getString("playText");
+            currentInning = broadCastObject.getInt("period");
+            teamLocationType = broadCastObject.getString("teamLocationType");
+
+            if(teamLocationType.equals("HOME")){
+                continue;
+            }
+
+            if (playText.contains("비디오")){
+                continue;
+            }
+
+            if (playText.contains("아웃") || playText.contains("삼진")){
+                checkInning = checkInning + 0.1;
+            }
+
+            if (playText.contains("볼넷") || playText.contains("몸에 맞는 볼")){
+                baseOnBallTexts.append(currentInning).append(" ");
+            }
+
+            if(currentInning + checkInning == homeInningPitched){
+                aTeamModel.setBaseOnBallTexts(baseOnBallTexts.toString());
+                break;
+            }
+
+            if(checkInning > 0.3){
+                checkInning = 0;
+            }
+
+        }
+
+        baseOnBallTexts = new StringBuilder();
+
+        for(int i = 0 ; i < broadCasts.length() ; i++){
+            JSONObject broadCastObject = broadCasts.getJSONObject(i);
+            playText = broadCastObject.getString("playText");
+            currentInning = broadCastObject.getInt("period");
+            teamLocationType = broadCastObject.getString("teamLocationType");
+
+            if(teamLocationType.equals("AWAY")){
+                continue;
+            }
+
+            if (playText.contains("비디오")){
+                continue;
+            }
+
+            if (playText.contains("아웃") || playText.contains("삼진")){
+                checkInning = checkInning + 0.1;
+            }
+
+            if (playText.contains("볼넷") || playText.contains("몸에 맞는 볼")){
+                baseOnBallTexts.append(currentInning).append(" ");
+            }
+
+            if(currentInning + checkInning == awayInningPitched){
+                bTeamModel.setBaseOnBallTexts(baseOnBallTexts.toString());
+                break;
+            }
+
+            if(checkInning == 0.3){
+                checkInning = 0;
+            }
+
+        }
 
     }
 }
