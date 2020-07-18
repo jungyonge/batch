@@ -104,6 +104,17 @@ public class namedBaseballPitcherProcessor implements ItemProcessor<String, List
             baseballModelList.add(bTeamModel);
         }
 
+        for (BaseballModel bb : baseballModelList){
+            int cnt = bb.getBaseOnBalls();
+            if(cnt == 0){
+                continue;
+            }
+            String text = bb.getBaseOnBallTexts();
+            String[] textArr = text.split(" ");
+            if (cnt != textArr.length){
+                log.info(bb.toString());
+            }
+        }
         return baseballModelList;
     }
 
@@ -240,15 +251,22 @@ public class namedBaseballPitcherProcessor implements ItemProcessor<String, List
                 continue;
             }
 
-            if (playText.contains("아웃") || playText.contains("삼진")){
+            if (playText.contains("아웃") || playText.contains("삼진") || playText.contains("희생번트")){
                 checkInning = checkInning + 0.1;
+
+                broadCastObject = broadCasts.getJSONObject(i - 1);
+                playText = broadCastObject.getString("playText");
+                if(playText.contains("비디오") && playText.contains("아웃→세이프")){
+                    checkInning = checkInning - 0.1;
+                }
             }
 
             if (playText.contains("볼넷") || playText.contains("몸에 맞는 볼")){
                 baseOnBallTexts.append(currentInning).append(" ");
+//                log.info(playText);
             }
 
-            if(currentInning + checkInning == homeInningPitched){
+            if((currentInning + checkInning - 1 >= homeInningPitched) || playText.contains("경기종료")){
                 aTeamModel.setBaseOnBallTexts(baseOnBallTexts.toString());
                 break;
             }
@@ -261,7 +279,7 @@ public class namedBaseballPitcherProcessor implements ItemProcessor<String, List
 
         baseOnBallTexts = new StringBuilder();
 
-        for(int i = 0 ; i < broadCasts.length() ; i++){
+        for(int i = broadCasts.length() - 1 ; i >= 0 ; i--){
             JSONObject broadCastObject = broadCasts.getJSONObject(i);
             playText = broadCastObject.getString("playText");
             currentInning = broadCastObject.getInt("period");
@@ -275,15 +293,21 @@ public class namedBaseballPitcherProcessor implements ItemProcessor<String, List
                 continue;
             }
 
-            if (playText.contains("아웃") || playText.contains("삼진")){
+            if (playText.contains("아웃") || playText.contains("삼진") || playText.contains("희생번트")){
                 checkInning = checkInning + 0.1;
+
+                broadCastObject = broadCasts.getJSONObject(i - 1);
+                playText = broadCastObject.getString("playText");
+                if(playText.contains("비디오") && playText.contains("아웃→세이프")){
+                    checkInning = checkInning - 0.1;
+                }
             }
 
             if (playText.contains("볼넷") || playText.contains("몸에 맞는 볼")){
                 baseOnBallTexts.append(currentInning).append(" ");
             }
 
-            if(currentInning + checkInning == awayInningPitched){
+            if((currentInning + checkInning - 1 >= homeInningPitched) || playText.contains("경기종료")){
                 bTeamModel.setBaseOnBallTexts(baseOnBallTexts.toString());
                 break;
             }
