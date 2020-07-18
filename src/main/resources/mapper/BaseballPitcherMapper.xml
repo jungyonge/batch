@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.batch.mapper.BaseballPitcherMapper">
+
+    <select id="selectBaseballPitcherStat" parameterType="com.batch.model.BaseballModel">
+            SELECT
+                IDX,
+               GAME_ID,
+               LEAGUE,
+               GROUND,
+               STADIUM,
+               MATCH_DATE,
+               DAY_OF_WEEK,
+               MATCH_TIME,
+               A_TEAM,
+               A_TEAM_PITCHER,
+               B_TEAM,
+               SEASON_WINS,
+               SEASON_LOSSES,
+               INNING_PITCHED,
+               HIT,
+               HOMERUN,
+               BASEONBALL_TEXTS,
+               BASEONBALLS,
+               STRIKEOUTS,
+               RUN,
+               EARNED_RUN,
+               TODAY_EARNED_RUN_AVG,
+               SEASON_EARNED_RUN_AVG,
+               FIRST_INNING_RUN,
+               FOURTH_INNING_RUN,
+               UPDATE_YN
+        FROM   sport.baseball_pitcher_data
+            ORDER  BY MATCH_DATE,
+                      MATCH_TIME,
+                      LEAGUE,
+                      GAME_ID;
+    </select>
+
+   <insert id="insertBaseballPitcherStat" parameterType="com.batch.model.BaseballModel">
+      INSERT INTO sport.baseball_pitcher_data
+            (
+             GAME_ID,
+             LEAGUE,
+             GROUND,
+             STADIUM,
+             MATCH_DATE,
+             DAY_OF_WEEK,
+             MATCH_TIME,
+             A_TEAM,
+             A_TEAM_PITCHER,
+             B_TEAM,
+             SEASON_WINS,
+             SEASON_LOSSES,
+             INNING_PITCHED,
+             PITCH_COUNT,
+             HIT,
+             HOMERUN,
+             BASEONBALL_TEXTS,
+             BASEONBALLS,
+             STRIKEOUTS,
+             RUN,
+             EARNED_RUN,
+             TODAY_EARNED_RUN_AVG,
+             SEASON_EARNED_RUN_AVG,
+             FIRST_INNING_RUN,
+             FOURTH_INNING_RUN
+             )
+     VALUES (
+             #{gameId},
+             #{league},
+             #{ground},
+             #{stadium},
+             #{date},
+             #{dayOfWeek},
+             #{time},
+             #{aTeam},
+             #{aTeamPitcher},
+             #{bTeam},
+             #{seasonWins},
+             #{seasonLosses},
+             #{inningPitched},
+             #{pitchCount},
+             #{hit},
+             #{homeRun},
+             #{baseOnBallTexts},
+             #{baseOnBalls},
+             #{strikeOuts},
+             #{run},
+             #{earnedRun},
+             #{todayEarnedRunAverage},
+             #{seasonEarnedRunAverage},
+             #{firstInningRun},
+             #{fourthInningRun}
+             );
+   </insert>
+
+   <select id="checkGameIdCount" parameterType="com.batch.model.BaseballModel" resultType="int">
+     SELECT COUNT(1)
+           FROM sport.baseball_pitcher_data
+        WHERE GAME_ID = #{gameId};
+   </select>
+
+</mapper>

@@ -148,8 +148,8 @@ public class NamedUtil {
 
         con.setUseCaches(false);
 
-        con.setReadTimeout(1000 * 30);
-        con.setConnectTimeout(1000 * 30);
+        con.setReadTimeout(1000 * 5);
+        con.setConnectTimeout(1000 * 5);
 
         con.connect();
 

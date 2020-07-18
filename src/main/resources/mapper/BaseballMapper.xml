@@ -159,6 +159,8 @@
             FROM   sport.baseball_data
             WHERE  A_TEAM_TOTAL_POINT != 99
             ORDER  BY MATCH_DATE,
+                      MATCH_TIME,
+                      LEAGUE,
                       GAME_ID;
     </select>
 

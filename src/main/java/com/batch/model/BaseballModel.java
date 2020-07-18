@@ -90,6 +90,8 @@ public class BaseballModel {
     Double todayEarnedRunAverage;
     Double seasonEarnedRunAverage;
 
+    Integer firstInningRun;
+    Integer fourthInningRun;
 
 
     public int getTotalScore(){
