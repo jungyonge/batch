@@ -121,24 +121,18 @@ public class namedBaseballPitcherProcessor implements ItemProcessor<String, List
                 if (!aTeamModel.getLeague().equals("KBO") && !aTeamModel.getLeague().equals("NPB") && !aTeamModel.getLeague().equals("MLB")) {
                     continue;
                 }
+
                 //기본 데이터 파싱
                 parseBaseData(matchObject, aTeamModel, bTeamModel);
-                log.info("기본 데이터 파싱");
 
                 //투수 정보 파싱
                 parsePitcherData(matchObject, aTeamModel, bTeamModel);
-                log.info("투수 정보 파싱");
-
 
                 //볼 정보 파싱
                 parseBaseOnBall(matchObject, aTeamModel, bTeamModel);
-                log.info("볼 정보 파싱");
-
 
                 //이닝스코어 파싱
                 parseInningScore(matchObject, aTeamModel, bTeamModel);
-                log.info("이닝스코어 정보 파싱");
-
 
                 baseballModelList.add(aTeamModel);
                 baseballModelList.add(bTeamModel);
@@ -308,32 +302,8 @@ public class namedBaseballPitcherProcessor implements ItemProcessor<String, List
                 break;
             }
 
-//            if (playText.contains("비디오")) {
-//                if (playText.contains("아웃→아웃")) {
-//                    checkInning = checkInning + 0.1;
-//
-//                    broadCastObject = broadCasts.getJSONObject(i + 1);
-//                    playText = broadCastObject.getString("playText");
-//                    if (!playText.contains("아웃") || !playText.contains("삼진") ) {
-//                        checkInning = checkInning - 0.1;
-//                        continue;
-//                    }
-//                }else {
-//                    continue;
-//                }
-//            }
-//            if ((playText.contains("아웃") || playText.contains("삼진") || playText.contains("희생번트")) && !playText.contains("낫아웃")) {
-//                checkInning = checkInning + 0.1;
-//
-//                broadCastObject = broadCasts.getJSONObject(i - 1);
-//                playText = broadCastObject.getString("playText");
-//                if (playText.contains("비디오") && playText.contains("아웃→세이프")) {
-//                    checkInning = checkInning - 0.1;
-//                }
-//            }
 
             if (playText.contains("볼넷")) {
-
                 boolean checkSB = true;
                 for (int j = 1 ; j < 5 ; j++){
                     broadCastObject = broadCasts.getJSONObject(i + j);
@@ -353,15 +323,6 @@ public class namedBaseballPitcherProcessor implements ItemProcessor<String, List
 
             if (playText.contains("고의4구")) {
                 homeBaseOnBallTexts.append(currentInning).append("(I),");
-            }
-
-//            if ((currentInning + checkInning - 1 >= homeInningPitched) || playText.contains("경기종료")) {
-//                aTeamModel.setBaseOnBallTexts(baseOnBallTexts.toString());
-//                break;
-//            }
-
-            if (checkInning > 0.3) {
-                checkInning = 0;
             }
 
         }
@@ -388,31 +349,6 @@ public class namedBaseballPitcherProcessor implements ItemProcessor<String, List
                 break;
             }
 
-//            if (playText.contains("비디오")) {
-//                if (playText.contains("아웃→아웃")) {
-//                    checkInning = checkInning + 0.1;
-//
-//                    broadCastObject = broadCasts.getJSONObject(i + 1);
-//                    playText = broadCastObject.getString("playText");
-//                    if (!playText.contains("아웃") || !playText.contains("삼진") ) {
-//                        checkInning = checkInning - 0.1;
-//                        continue;
-//                    }
-//                }else {
-//                    continue;
-//                }
-//            }
-//
-//            if ((playText.contains("아웃") || playText.contains("삼진") || playText.contains("희생번트")) && !playText.contains("낫아웃")) {
-//                checkInning = checkInning + 0.1;
-//
-//                broadCastObject = broadCasts.getJSONObject(i - 1);
-//                playText = broadCastObject.getString("playText");
-//                if (playText.contains("비디오") && playText.contains("아웃→세이프")) {
-//                    checkInning = checkInning - 0.1;
-//                }
-//            }
-
             if (playText.contains("볼넷")) {
                 boolean checkSB = true;
                 for (int j = 1 ; j < 5 ; j++){
@@ -433,16 +369,6 @@ public class namedBaseballPitcherProcessor implements ItemProcessor<String, List
             }
             if (playText.contains("고의4구")) {
                 awayBaseOnBallTexts.append(currentInning).append("(I),");
-            }
-
-//            if ((currentInning + checkInning - 1 >= homeInningPitched) || playText.contains("경기종료")) {
-//                bTeamModel.setBaseOnBallTexts(baseOnBallTexts.toString());
-//                break;
-//            }
-
-
-            if (checkInning == 0.3) {
-                checkInning = 0;
             }
 
         }
