@@ -2,6 +2,7 @@ package com.batch.mapper;
 
 import com.batch.annotation.MasterDb;
 import com.batch.model.BaseballModel;
+import com.batch.model.FilterConditionModel;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -17,4 +18,6 @@ public interface BaseballMapper {
     public void updateBaseballStat(BaseballModel baseballModel);
 
     public List selectBaseballStat();
+
+    public void insertBaseballSummary(FilterConditionModel filterConditionModel);
 }

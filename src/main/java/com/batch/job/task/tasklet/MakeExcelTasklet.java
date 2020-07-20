@@ -1,6 +1,7 @@
 package com.batch.job.task.tasklet;
 
 import com.batch.mapper.BaseballMapper;
+import com.batch.mapper.BaseballPitcherMapper;
 import com.batch.mapper.BasketballMapper;
 import com.batch.mapper.CommonMapper;
 import com.batch.util.EmailUtil;
@@ -21,14 +22,17 @@ import java.util.List;
 public class MakeExcelTasklet implements Tasklet {
 
     private final BaseballMapper baseballMapper;
+    private final BaseballPitcherMapper baseballPitcherMapper;
+
     private final BasketballMapper basketballMapper;
     private final CommonMapper commonMapper;
     private final MakeExcelUtil makeExcelUtil;
     private final EmailUtil emailUtil;
 
 
-    public MakeExcelTasklet(BaseballMapper baseballMapper, BasketballMapper basketballMapper, CommonMapper commonMapper, MakeExcelUtil makeExcelUtil, EmailUtil emailUtil) {
+    public MakeExcelTasklet(BaseballMapper baseballMapper, BaseballPitcherMapper baseballPitcherMapper, BasketballMapper basketballMapper, CommonMapper commonMapper, MakeExcelUtil makeExcelUtil, EmailUtil emailUtil) {
         this.baseballMapper = baseballMapper;
+        this.baseballPitcherMapper = baseballPitcherMapper;
         this.basketballMapper = basketballMapper;
         this.commonMapper = commonMapper;
         this.makeExcelUtil = makeExcelUtil;
@@ -76,6 +80,8 @@ public class MakeExcelTasklet implements Tasklet {
 //            excelDataList = setalarmDAO.selectBasketQuarterHandiComboSummary();
         }else if (type.equals("baseball")){
             excelDataList = baseballMapper.selectBaseballStat();
+        }else if (type.equals("baseball_pitcher")){
+            excelDataList = baseballPitcherMapper.selectBaseballPitcherStat();
         }
         return excelDataList;
     }
