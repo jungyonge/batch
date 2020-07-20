@@ -7,26 +7,23 @@ import org.springframework.batch.item.ItemWriter;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+
 @Component
 @Slf4j
-public class NamedBasketballAllMatchWriter implements ItemWriter<List<BasketballModel>> {
+public class NamedBasketballUpdateMatchWriter implements ItemWriter<List<BasketballModel>> {
 
     private final BasketballMapper basketballMapper;
 
-    public NamedBasketballAllMatchWriter(BasketballMapper basketballMapper) {
+    public NamedBasketballUpdateMatchWriter(BasketballMapper basketballMapper) {
         this.basketballMapper = basketballMapper;
     }
 
     @Override
     public void write(List<? extends List<BasketballModel>> list) throws Exception {
-        for(List<BasketballModel> basketballModels : list){
-            for(BasketballModel basketballModel : basketballModels){
-                int cnt = basketballMapper.checkGameIdCount(basketballModel);
-                if(cnt < 2){
-                    basketballMapper.insertBasketMatch(basketballModel);
-                }
+        for (List<BasketballModel> basketballModels : list) {
+            for (BasketballModel basketballModel : basketballModels) {
+                basketballMapper.updateBasketStat(basketballModel);
             }
-
         }
     }
 }
