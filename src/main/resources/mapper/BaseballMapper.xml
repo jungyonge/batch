@@ -287,6 +287,7 @@
                                 COUNT(1) allHandiCnt
                            FROM   sport.BASEBALL_DATA
                            WHERE  <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]>
+                                  AND A_TEAM_TOTAL_POINT != 99
                            GROUP  BY LEAGUE,
                                      A_TEAM,
                                     <if test="all">
@@ -331,7 +332,9 @@
                                            FROM   sport.BASEBALL_DATA
                                            WHERE  <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]>
                                                   AND A_TEAM_TOTAL_POINT > B_TEAM_TOTAL_POINT
-                                           GROUP  BY LEAGUE,
+                                                AND A_TEAM_TOTAL_POINT != 99
+
+                                                GROUP  BY LEAGUE,
                                                      A_TEAM,
                                                     <if test="all">
                                                         'all'
@@ -419,7 +422,9 @@
                                            FROM   sport.BASEBALL_DATA
                                            WHERE  <![CDATA[  MATCH_DATE < DATE_ADD(NOW(),INTERVAL - 1 DAY)  ]]>
                                                   AND HANDI_CAP_RESULT != '적특'
-                                           GROUP  BY LEAGUE,
+                                                    AND A_TEAM_TOTAL_POINT != 99
+
+                                                    GROUP  BY LEAGUE,
                                                      A_TEAM,
                                                     <if test="all">
                                                         'all'
@@ -462,6 +467,7 @@
                                                                   COUNT(1) winCnt
                                                            FROM   sport.BASEBALL_DATA
                                                            WHERE  <![CDATA[  MATCH_DATE < DATE_ADD(NOW(),INTERVAL - 1 DAY)  ]]>
+                                                                    AND A_TEAM_TOTAL_POINT != 99
                                                                   AND HANDI_CAP_RESULT !='적특'
                                                                   AND HANDI_CAP_RESULT ='승리'
                                                            GROUP  BY LEAGUE,
@@ -527,6 +533,7 @@
                                                            FROM   sport.BASEBALL_DATA
                                                            WHERE  <![CDATA[  MATCH_DATE < DATE_ADD(NOW(),INTERVAL - 1 DAY)  ]]>
                                                                   AND POINT_LINE_RESULT != '적특'
+                                                                     AND A_TEAM_TOTAL_POINT != 99
                                                            GROUP  BY LEAGUE,
                                                                      A_TEAM,
                                                                     <if test="all">
@@ -591,6 +598,7 @@
                                                            WHERE  <![CDATA[  MATCH_DATE < DATE_ADD(NOW(),INTERVAL - 1 DAY)  ]]>
                                                                   AND POINT_LINE_RESULT != '적특'
                                                                   AND POINT_LINE_RESULT = '오버'
+                                                                    AND A_TEAM_TOTAL_POINT != 99
                                                            GROUP  BY LEAGUE,
                                                                      A_TEAM,
                                                                     <if test="all">
@@ -698,6 +706,7 @@
                                            FROM   sport.BASEBALL_DATA
                                            WHERE  <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]>
                                                   AND THIRD_HANDI_CAP_RESULT != '적특'
+                                                  AND A_TEAM_TOTAL_POINT != 99
                                            GROUP  BY LEAGUE,
                                                      A_TEAM,
                                                     <if test="all">
@@ -741,6 +750,7 @@
                                                                   COUNT(1) winCnt
                                                            FROM   sport.BASEBALL_DATA
                                                            WHERE  <![CDATA[  MATCH_DATE < DATE_ADD(NOW(),INTERVAL - 1 DAY)  ]]>
+                                                                  AND A_TEAM_TOTAL_POINT != 99
                                                                   AND THIRD_HANDI_CAP_RESULT != '적특'
                                                                   AND THIRD_HANDI_CAP_RESULT = '승리'
                                                            GROUP  BY LEAGUE,
@@ -807,6 +817,7 @@
                                            FROM   sport.BASEBALL_DATA
                                            WHERE  <![CDATA[  MATCH_DATE < DATE_ADD(NOW(),INTERVAL - 1 DAY)  ]]>
                                                   AND THIRD_POINT_LINE_RESULT != '적특'
+                                                  AND A_TEAM_TOTAL_POINT != 99
                                            GROUP  BY LEAGUE,
                                                      A_TEAM,
                                                     <if test="all">
@@ -872,6 +883,7 @@
                                            WHERE  <![CDATA[  MATCH_DATE < DATE_ADD(NOW(),INTERVAL - 1 DAY)  ]]>
                                                   AND THIRD_POINT_LINE_RESULT != '적특'
                                                   AND THIRD_POINT_LINE_RESULT ='오버'
+                                                  AND A_TEAM_TOTAL_POINT != 99
                                            GROUP  BY LEAGUE,
                                                      A_TEAM,
                                                     <if test="all">
@@ -981,6 +993,7 @@
                                            FROM   sport.BASEBALL_DATA
                                            WHERE  <![CDATA[  MATCH_DATE < DATE_ADD(NOW(),INTERVAL - 1 DAY)  ]]>
                                                   AND FOURTH_HANDI_CAP_RESULT != '적특'
+                                                  AND A_TEAM_TOTAL_POINT != 99
                                            GROUP  BY LEAGUE,
                                                      A_TEAM,
                                                     <if test="all">
@@ -1027,6 +1040,7 @@
                                            WHERE  <![CDATA[  MATCH_DATE < DATE_ADD(NOW(),INTERVAL - 1 DAY)  ]]>
                                                   AND FOURTH_HANDI_CAP_RESULT != '적특'
                                                   AND FOURTH_HANDI_CAP_RESULT = '승리'
+                                                  AND A_TEAM_TOTAL_POINT != 99
                                            GROUP  BY LEAGUE,
                                                      A_TEAM,
                                                     <if test="all">
@@ -1091,6 +1105,7 @@
                                            FROM   sport.BASEBALL_DATA
                                            WHERE  <![CDATA[  MATCH_DATE < DATE_ADD(NOW(),INTERVAL - 1 DAY)  ]]>
                                                   AND FOURTH_POINT_LINE_RESULT !=  '적특'
+                                                  AND A_TEAM_TOTAL_POINT != 99
                                            GROUP  BY LEAGUE,
                                                      A_TEAM,
                                                     <if test="all">
@@ -1156,6 +1171,7 @@
                                            WHERE  <![CDATA[  MATCH_DATE < DATE_ADD(NOW(),INTERVAL - 1 DAY)  ]]>
                                                   AND FOURTH_POINT_LINE_RESULT != '적특'
                                                   AND FOURTH_POINT_LINE_RESULT = '오버'
+                                                  AND A_TEAM_TOTAL_POINT != 99
                                            GROUP  BY LEAGUE,
                                                      A_TEAM,
                                                     <if test="all">
@@ -1265,6 +1281,7 @@
                                            FROM   sport.BASEBALL_DATA
                                            WHERE  <![CDATA[  MATCH_DATE < DATE_ADD(NOW(),INTERVAL - 1 DAY)  ]]>
                                                   AND FIFTH_HANDI_CAP_RESULT != '적특'
+                                                  AND A_TEAM_TOTAL_POINT != 99
                                            GROUP  BY LEAGUE,
                                                      A_TEAM,
                                                     <if test="all">
@@ -1310,6 +1327,7 @@
                                                            WHERE  <![CDATA[  MATCH_DATE < DATE_ADD(NOW(),INTERVAL - 1 DAY)  ]]>
                                                                   AND FIFTH_HANDI_CAP_RESULT != '적특'
                                                                   AND FIFTH_HANDI_CAP_RESULT = '승리'
+                                                                  AND A_TEAM_TOTAL_POINT != 99
                                                            GROUP  BY LEAGUE,
                                                                      A_TEAM,
                                                                     <if test="all">
@@ -1374,6 +1392,7 @@
                                            FROM   sport.BASEBALL_DATA
                                            WHERE  <![CDATA[  MATCH_DATE < DATE_ADD(NOW(),INTERVAL - 1 DAY)  ]]>
                                                   AND FIFTH_POINT_LINE_RESULT != '적특'
+                                                  AND A_TEAM_TOTAL_POINT != 99
                                            GROUP  BY LEAGUE,
                                                      A_TEAM,
                                                     <if test="all">
@@ -1439,6 +1458,7 @@
                                            WHERE  <![CDATA[  MATCH_DATE < DATE_ADD(NOW(),INTERVAL - 1 DAY)  ]]>
                                                   AND FIFTH_POINT_LINE_RESULT !='적특'
                                                   AND FIFTH_POINT_LINE_RESULT ='오버'
+                                                  AND A_TEAM_TOTAL_POINT != 99
                                            GROUP  BY LEAGUE,
                                                      A_TEAM,
                                                     <if test="all">
@@ -1546,6 +1566,7 @@
                    FROM   sport.BASEBALL_DATA A
                    WHERE  <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]>
                           AND FIRST_STRIKEOUT != '적특'
+                          AND A_TEAM_TOTAL_POINT != 99
                    GROUP  BY LEAGUE,
                              A_TEAM,
                             <if test="all">
@@ -1591,6 +1612,7 @@
                                    WHERE  <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]>
                                           AND FIRST_STRIKEOUT != '적특'
                                           AND FIRST_STRIKEOUT = '승리'
+                                          AND A_TEAM_TOTAL_POINT != 99
                                    GROUP  BY LEAGUE,
                                              A_TEAM,
                                             <if test="all">
@@ -1697,6 +1719,7 @@
                                            FROM   sport.BASEBALL_DATA A
                                            WHERE  <![CDATA[  MATCH_DATE < DATE_ADD(NOW(),INTERVAL - 1 DAY)  ]]>
                                                   AND FRIST_BASEONBALL != '적특'
+                                                  AND A_TEAM_TOTAL_POINT != 99
                                            GROUP  BY LEAGUE,
                                                      A_TEAM,
                                                     <if test="all">
@@ -1742,6 +1765,7 @@
                                                            WHERE  <![CDATA[  MATCH_DATE < DATE_ADD(NOW(),INTERVAL - 1 DAY)  ]]>
                                                                   AND FRIST_BASEONBALL !='적특'
                                                                   AND FRIST_BASEONBALL ='승리'
+                                                                  AND A_TEAM_TOTAL_POINT != 99
                                                            GROUP  BY LEAGUE,
                                                                      A_TEAM,
                                                                     <if test="all">
@@ -1847,6 +1871,7 @@
                                            FROM   sport.BASEBALL_DATA A
                                            WHERE  <![CDATA[  MATCH_DATE < DATE_ADD(NOW(),INTERVAL - 1 DAY)  ]]>
                                                   AND FIRST_HOMERUN != '적특'
+                                                  AND A_TEAM_TOTAL_POINT != 99
                                            GROUP  BY LEAGUE,
                                                      A_TEAM,
                                                     <if test="all">
@@ -1892,6 +1917,7 @@
                                                            WHERE  <![CDATA[  MATCH_DATE < DATE_ADD(NOW(),INTERVAL - 1 DAY)  ]]>
                                                                   AND FIRST_HOMERUN != '적특'
                                                                   AND FIRST_HOMERUN = '승리'
+                                                                  AND A_TEAM_TOTAL_POINT != 99
                                                            GROUP  BY LEAGUE,
                                                                      A_TEAM,
                                                                     <if test="all">
