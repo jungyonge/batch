@@ -28,6 +28,8 @@ public class NamedBaseballUpdateMatchWriter implements ItemWriter< List<Baseball
             }
         }
 
+        baseballMapper.truncateBaseballSummary();
+
         FilterConditionModel filterConditionModel = new FilterConditionModel();
         filterConditionModel.setGround(true);
         baseballMapper.insertBaseballSummary(filterConditionModel);

@@ -20,4 +20,6 @@ public interface BaseballMapper {
     public List selectBaseballStat();
 
     public void insertBaseballSummary(FilterConditionModel filterConditionModel);
+
+    public void truncateBaseballSummary();
 }

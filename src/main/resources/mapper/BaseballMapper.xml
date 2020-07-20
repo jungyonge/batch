@@ -166,6 +166,10 @@
                       GAME_ID;
     </select>
 
+    <insert id="truncateBaseballSummary">
+        TRUNCATE sport.baseball_summary
+    </insert>
+
     <insert id="insertBaseballSummary" parameterType="com.batch.model.FilterConditionModel">
 
         INSERT INTO sport.baseball_summary
