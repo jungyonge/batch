@@ -602,196 +602,194 @@ public class NamedBasketballUpdateMatchProcessor implements ItemProcessor<String
 
         int i = 0;
 
+        aTeamModel.setFirstQFirstPoint("적특");
+        aTeamModel.setFirstQFirstFreeTwo("적특");
+        aTeamModel.setFirstQFirstTwoPoint("적특");
+        aTeamModel.setFirstQFirstThreePoint("적특");
+
+        aTeamModel.setSecondQFirstPoint("적특");
+        aTeamModel.setSecondQFirstFreeTwo("적특");
+        aTeamModel.setSecondQFirstTwoPoint("적특");
+        aTeamModel.setSecondQFirstThreePoint("적특");
+
+        aTeamModel.setThirdQFirstPoint("적특");
+        aTeamModel.setThirdQFirstFreeTwo("적특");
+        aTeamModel.setThirdQFirstTwoPoint("적특");
+        aTeamModel.setThirdQFirstThreePoint("적특");
+
+        aTeamModel.setFourthQFirstPoint("적특");
+        aTeamModel.setFourthQFirstFreeTwo("적특");
+        aTeamModel.setFourthQFirstTwoPoint("적특");
+        aTeamModel.setFourthQFirstThreePoint("적특");
+
+        bTeamModel.setFirstQFirstPoint("적특");
+        bTeamModel.setFirstQFirstFreeTwo("적특");
+        bTeamModel.setFirstQFirstTwoPoint("적특");
+        bTeamModel.setFirstQFirstThreePoint("적특");
+
+        bTeamModel.setSecondQFirstPoint("적특");
+        bTeamModel.setSecondQFirstFreeTwo("적특");
+        bTeamModel.setSecondQFirstTwoPoint("적특");
+        bTeamModel.setSecondQFirstThreePoint("적특");
+
+        bTeamModel.setThirdQFirstPoint("적특");
+        bTeamModel.setThirdQFirstFreeTwo("적특");
+        bTeamModel.setThirdQFirstTwoPoint("적특");
+        bTeamModel.setThirdQFirstThreePoint("적특");
+
+        bTeamModel.setFourthQFirstPoint("적특");
+        bTeamModel.setFourthQFirstFreeTwo("적특");
+        bTeamModel.setFourthQFirstTwoPoint("적특");
+        bTeamModel.setFourthQFirstThreePoint("적특");
+
         for (Element specailEle : element.select("tbody tr td.f.ico_linescore > p")) {
             if (i == 0) {
                 if (specailEle.select("span.ico_firstpoint").text().equals("첫득점")) {
                     aTeamModel.setFirstQFirstPoint("패배");
-                } else {
-                    aTeamModel.setFirstQFirstPoint("승리");
+                    bTeamModel.setFirstQFirstPoint("승리");
                 }
                 if (specailEle.select("span.ico_freetwo").text().equals("자유투")) {
                     aTeamModel.setFirstQFirstFreeTwo("패배");
-                } else {
-                    aTeamModel.setFirstQFirstFreeTwo("승리");
+                    bTeamModel.setFirstQFirstFreeTwo("승리");
                 }
                 if (specailEle.select("span.ico_twopoint").text().equals("2점슛")) {
                     aTeamModel.setFirstQFirstTwoPoint("패배");
-                } else {
-                    aTeamModel.setFirstQFirstTwoPoint("승리");
+                    bTeamModel.setFirstQFirstTwoPoint("승리");
+
                 }
                 if (specailEle.select("span.ico_threepoint").text().equals("3점슛")) {
                     aTeamModel.setFirstQFirstThreePoint("패배");
-                } else {
-                    aTeamModel.setFirstQFirstThreePoint("승리");
+                    bTeamModel.setFirstQFirstThreePoint("승리");
                 }
             }
             if (i == 1) {
                 if (specailEle.select("span.ico_firstpoint").text().equals("첫득점")) {
                     aTeamModel.setSecondQFirstPoint("패배");
-                } else {
-                    aTeamModel.setSecondQFirstPoint("승리");
+                    bTeamModel.setSecondQFirstPoint("승리");
                 }
                 if (specailEle.select("span.ico_freetwo").text().equals("자유투")) {
                     aTeamModel.setSecondQFirstFreeTwo("패배");
-                } else {
-                    aTeamModel.setSecondQFirstFreeTwo("승리");
+                    bTeamModel.setSecondQFirstFreeTwo("승리");
                 }
                 if (specailEle.select("span.ico_twopoint").text().equals("2점슛")) {
                     aTeamModel.setSecondQFirstTwoPoint("패배");
-                } else {
-                    aTeamModel.setSecondQFirstTwoPoint("승리");
+                    bTeamModel.setSecondQFirstTwoPoint("승리");
                 }
                 if (specailEle.select("span.ico_threepoint").text().equals("3점슛")) {
                     aTeamModel.setSecondQFirstThreePoint("패배");
-                } else {
-                    aTeamModel.setSecondQFirstThreePoint("승리");
+                    bTeamModel.setSecondQFirstThreePoint("승리");
                 }
             }
             if (i == 2) {
                 if (specailEle.select("span.ico_firstpoint").text().equals("첫득점")) {
                     aTeamModel.setThirdQFirstPoint("패배");
-                } else {
-                    aTeamModel.setThirdQFirstPoint("승리");
+                    bTeamModel.setThirdQFirstPoint("승리");
                 }
                 if (specailEle.select("span.ico_freetwo").text().equals("자유투")) {
                     aTeamModel.setThirdQFirstFreeTwo("패배");
-                } else {
-                    aTeamModel.setThirdQFirstFreeTwo("승리");
+                    bTeamModel.setThirdQFirstFreeTwo("승리");
                 }
                 if (specailEle.select("span.ico_twopoint").text().equals("2점슛")) {
                     aTeamModel.setThirdQFirstTwoPoint("패배");
-                } else {
-                    aTeamModel.setThirdQFirstTwoPoint("승리");
+                    bTeamModel.setThirdQFirstTwoPoint("승리");
                 }
                 if (specailEle.select("span.ico_threepoint").text().equals("3점슛")) {
                     aTeamModel.setThirdQFirstThreePoint("패배");
-                } else {
-                    aTeamModel.setThirdQFirstThreePoint("승리");
+                    bTeamModel.setThirdQFirstThreePoint("승리");
                 }
             }
             if (i == 3) {
                 if (specailEle.select("span.ico_firstpoint").text().equals("첫득점")) {
                     aTeamModel.setFourthQFirstPoint("패배");
-                } else {
-                    aTeamModel.setFourthQFirstPoint("승리");
+                    bTeamModel.setFourthQFirstPoint("승리");
                 }
                 if (specailEle.select("span.ico_freetwo").text().equals("자유투")) {
                     aTeamModel.setFourthQFirstFreeTwo("패배");
-                } else {
-                    aTeamModel.setFourthQFirstFreeTwo("승리");
+                    bTeamModel.setFourthQFirstFreeTwo("승리");
                 }
                 if (specailEle.select("span.ico_twopoint").text().equals("2점슛")) {
                     aTeamModel.setFourthQFirstTwoPoint("패배");
-                } else {
-                    aTeamModel.setFourthQFirstTwoPoint("승리");
+                    bTeamModel.setFourthQFirstTwoPoint("승리");
                 }
                 if (specailEle.select("span.ico_threepoint").text().equals("3점슛")) {
                     aTeamModel.setFourthQFirstThreePoint("패배");
-                } else {
+                    bTeamModel.setFourthQFirstThreePoint("승리");
+                }
+            }
+
+            if (i == 4) {
+                if (specailEle.select("span.ico_firstpoint").text().equals("첫득점")) {
+                    bTeamModel.setFirstQFirstPoint("패배");
+                    aTeamModel.setFirstQFirstPoint("승리");
+                }
+                if (specailEle.select("span.ico_freetwo").text().equals("자유투")) {
+                    bTeamModel.setFirstQFirstFreeTwo("패배");
+                    aTeamModel.setFirstQFirstFreeTwo("승리");
+                }
+                if (specailEle.select("span.ico_twopoint").text().equals("2점슛")) {
+                    bTeamModel.setFirstQFirstTwoPoint("패배");
+                    aTeamModel.setFirstQFirstTwoPoint("승리");
+                }
+                if (specailEle.select("span.ico_threepoint").text().equals("3점슛")) {
+                    bTeamModel.setFirstQFirstThreePoint("패배");
+                    aTeamModel.setFirstQFirstThreePoint("승리");
+                }
+            }
+            if (i == 5) {
+                if (specailEle.select("span.ico_firstpoint").text().equals("첫득점")) {
+                    bTeamModel.setSecondQFirstPoint("패배");
+                    aTeamModel.setSecondQFirstPoint("승리");
+                }
+                if (specailEle.select("span.ico_freetwo").text().equals("자유투")) {
+                    bTeamModel.setSecondQFirstFreeTwo("패배");
+                    aTeamModel.setSecondQFirstFreeTwo("승리");
+                }
+                if (specailEle.select("span.ico_twopoint").text().equals("2점슛")) {
+                    bTeamModel.setSecondQFirstTwoPoint("패배");
+                    aTeamModel.setSecondQFirstTwoPoint("승리");
+                }
+                if (specailEle.select("span.ico_threepoint").text().equals("3점슛")) {
+                    bTeamModel.setSecondQFirstThreePoint("패배");
+                    aTeamModel.setSecondQFirstThreePoint("승리");
+                }
+            }
+            if (i == 6 ) {
+                if (specailEle.select("span.ico_firstpoint").text().equals("첫득점")) {
+                    bTeamModel.setThirdQFirstPoint("패배");
+                    aTeamModel.setThirdQFirstPoint("승리");
+                }
+                if (specailEle.select("span.ico_freetwo").text().equals("자유투")) {
+                    bTeamModel.setThirdQFirstFreeTwo("패배");
+                    aTeamModel.setThirdQFirstFreeTwo("승리");
+                }
+                if (specailEle.select("span.ico_twopoint").text().equals("2점슛")) {
+                    bTeamModel.setThirdQFirstTwoPoint("패배");
+                    aTeamModel.setThirdQFirstTwoPoint("승리");
+                }
+                if (specailEle.select("span.ico_threepoint").text().equals("3점슛")) {
+                    bTeamModel.setThirdQFirstThreePoint("패배");
+                    aTeamModel.setThirdQFirstThreePoint("승리");
+                }
+            }
+            if (i == 7) {
+                if (specailEle.select("span.ico_firstpoint").text().equals("첫득점")) {
+                    bTeamModel.setFourthQFirstPoint("패배");
+                    aTeamModel.setFourthQFirstPoint("승리");
+                }
+                if (specailEle.select("span.ico_freetwo").text().equals("자유투")) {
+                    bTeamModel.setFourthQFirstFreeTwo("패배");
+                    aTeamModel.setFourthQFirstFreeTwo("승리");
+                }
+                if (specailEle.select("span.ico_twopoint").text().equals("2점슛")) {
+                    bTeamModel.setFourthQFirstTwoPoint("패배");
+                    aTeamModel.setFourthQFirstTwoPoint("승리");
+                }
+                if (specailEle.select("span.ico_threepoint").text().equals("3점슛")) {
+                    bTeamModel.setFourthQFirstThreePoint("패배");
                     aTeamModel.setFourthQFirstThreePoint("승리");
                 }
             }
             i++;
-        }
-
-        //첫2득
-        if (aTeamModel.getFirstQFirstTwoPoint().equals("승리")) {
-            bTeamModel.setFirstQFirstTwoPoint("패배");
-        } else {
-            bTeamModel.setFirstQFirstTwoPoint("승리");
-        }
-
-        if (aTeamModel.getSecondQFirstTwoPoint().equals("승리")) {
-            bTeamModel.setSecondQFirstTwoPoint("패배");
-        } else {
-            bTeamModel.setSecondQFirstTwoPoint("승리");
-        }
-
-        if (aTeamModel.getThirdQFirstTwoPoint().equals("승리")) {
-            bTeamModel.setThirdQFirstTwoPoint("패배");
-        } else {
-            bTeamModel.setThirdQFirstTwoPoint("승리");
-        }
-
-        if (aTeamModel.getFourthQFirstTwoPoint().equals("승리")) {
-            bTeamModel.setFourthQFirstTwoPoint("패배");
-        } else {
-            bTeamModel.setFourthQFirstTwoPoint("승리");
-        }
-
-        //첫득점
-        if (aTeamModel.getFirstQFirstPoint().equals("승리")) {
-            bTeamModel.setFirstQFirstPoint("패배");
-        } else {
-            bTeamModel.setFirstQFirstPoint("승리");
-        }
-
-        if (aTeamModel.getSecondQFirstPoint().equals("승리")) {
-            bTeamModel.setSecondQFirstPoint("패배");
-        } else {
-            bTeamModel.setSecondQFirstPoint("승리");
-        }
-
-        if (aTeamModel.getThirdQFirstPoint().equals("승리")) {
-            bTeamModel.setThirdQFirstPoint("패배");
-        } else {
-            bTeamModel.setThirdQFirstPoint("승리");
-        }
-
-        if (aTeamModel.getFourthQFirstPoint().equals("승리")) {
-            bTeamModel.setFourthQFirstPoint("패배");
-        } else {
-            bTeamModel.setFourthQFirstPoint("승리");
-        }
-
-        //첫3점
-        if (aTeamModel.getFirstQFirstThreePoint().equals("승리")) {
-            bTeamModel.setFirstQFirstThreePoint("패배");
-        } else {
-            bTeamModel.setFirstQFirstThreePoint("승리");
-        }
-
-        if (aTeamModel.getSecondQFirstThreePoint().equals("승리")) {
-            bTeamModel.setSecondQFirstThreePoint("패배");
-        } else {
-            bTeamModel.setSecondQFirstThreePoint("승리");
-        }
-
-        if (aTeamModel.getThirdQFirstThreePoint().equals("승리")) {
-            bTeamModel.setThirdQFirstThreePoint("패배");
-        } else {
-            bTeamModel.setThirdQFirstThreePoint("승리");
-        }
-
-        if (aTeamModel.getFourthQFirstThreePoint().equals("승리")) {
-            bTeamModel.setFourthQFirstThreePoint("패배");
-        } else {
-            bTeamModel.setFourthQFirstThreePoint("승리");
-        }
-
-        //자유투
-        if (aTeamModel.getFirstQFirstFreeTwo().equals("승리")) {
-            bTeamModel.setFirstQFirstFreeTwo("패배");
-        } else {
-            bTeamModel.setFirstQFirstFreeTwo("승리");
-        }
-
-        if (aTeamModel.getSecondQFirstFreeTwo().equals("승리")) {
-            bTeamModel.setSecondQFirstFreeTwo("패배");
-        } else {
-            bTeamModel.setSecondQFirstFreeTwo("승리");
-        }
-
-        if (aTeamModel.getThirdQFirstFreeTwo().equals("승리")) {
-            bTeamModel.setThirdQFirstFreeTwo("패배");
-        } else {
-            bTeamModel.setThirdQFirstFreeTwo("승리");
-        }
-
-        if (aTeamModel.getFourthQFirstFreeTwo().equals("승리")) {
-            bTeamModel.setFourthQFirstFreeTwo("패배");
-        } else {
-            bTeamModel.setFourthQFirstFreeTwo("승리");
         }
 
     }
