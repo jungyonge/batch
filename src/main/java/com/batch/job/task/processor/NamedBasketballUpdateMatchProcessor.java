@@ -336,22 +336,24 @@ public class NamedBasketballUpdateMatchProcessor implements ItemProcessor<String
 
         if (pointHalfHandi == 0.5 || pointHalfHandi == -0.5) {
             aTeamModel.setHalfHandiCap(aTeamModel.getHandiCap() / 2);
-            aTeamModel.setHalfHandiCap((aTeamModel.getHandiCap() / 2) * -1);
+            bTeamModel.setHalfHandiCap((aTeamModel.getHandiCap() / 2) * -1);
 
         } else if (aTeamModel.getHandiCap() >= 0.5 && aTeamModel.getHandiCap() <= 1.5) {
             aTeamModel.setHalfHandiCap(0.5);
-            aTeamModel.setHalfHandiCap(-0.5);
+            bTeamModel.setHalfHandiCap(-0.5);
         } else if (aTeamModel.getHandiCap() <= -0.5 && aTeamModel.getHandiCap() >= -1.5) {
             aTeamModel.setHalfHandiCap(-0.5);
-            aTeamModel.setHalfHandiCap(0.5);
+            bTeamModel.setHalfHandiCap(0.5);
         } else {
             aTeamModel.setHalfHandiCap((double) Math.round(aTeamModel.getHandiCap() / 4));
-            aTeamModel.setHalfHandiCap((double) Math.round(aTeamModel.getHandiCap() / 4) * -1);
+            bTeamModel.setHalfHandiCap((double) Math.round(aTeamModel.getHandiCap() / 4) * -1);
         }
 
         if (aTeamModel.getHalfHandiCap() == 0) {
             aTeamModel.setFirstHalfHandiCapResult("적특");
+            bTeamModel.setFirstHalfHandiCapResult("적특");
             aTeamModel.setSecondHalfHandiCapResult("적특");
+            bTeamModel.setSecondHalfHandiCapResult("적특");
 
         } else {
             if ((aTeamModel.getATeamFirstHalfPoint() + aTeamModel.getHalfHandiCap()) > aTeamModel.getBTeamFirstHalfPoint()) {
@@ -373,7 +375,7 @@ public class NamedBasketballUpdateMatchProcessor implements ItemProcessor<String
                 bTeamModel.setSecondHalfHandiCapResult("승리");
             } else {
                 aTeamModel.setSecondHalfHandiCapResult("적특");
-                bTeamModel.setSecondHalfHandiCapResult("적");
+                bTeamModel.setSecondHalfHandiCapResult("적특");
             }
 
         }
@@ -441,12 +443,16 @@ public class NamedBasketballUpdateMatchProcessor implements ItemProcessor<String
 
         if (pointHandi == 0.5 || pointHandi == -0.5) {
             aTeamModel.setFirstQHandiCap(aTeamModel.getHandiCap() / 4);
+            bTeamModel.setFirstQHandiCap((aTeamModel.getHandiCap() / 4) * -1);
         } else if (aTeamModel.getHandiCap() >= 0.5 && aTeamModel.getHandiCap() <= 1.5) {
             aTeamModel.setFirstQHandiCap(0.5);
+            bTeamModel.setFirstQHandiCap(-0.5);
         } else if (aTeamModel.getHandiCap() <= -0.5 && aTeamModel.getHandiCap() >= -1.5) {
             aTeamModel.setFirstQHandiCap(-0.5);
+            bTeamModel.setFirstQHandiCap(0.5);
         } else {
             aTeamModel.setFirstQHandiCap((double) Math.round(aTeamModel.getHandiCap() / 4));
+            bTeamModel.setFirstQHandiCap((double) Math.round(aTeamModel.getHandiCap() / 4) * -1);
         }
 
         if (aTeamModel.getFirstQHandiCap() == 0) {
@@ -508,19 +514,22 @@ public class NamedBasketballUpdateMatchProcessor implements ItemProcessor<String
             }
         }
 
-
         double point = aTeamModel.getPointLine() / 4;
         int pointInt = (int) point;
         double pointLine = point - pointInt;
 
         if ((pointLine <= 0.333 && pointLine >= 0.001)) {
             aTeamModel.setFirstQPointLine(Math.floor(aTeamModel.getPointLine() / 4));
+            bTeamModel.setFirstQPointLine(Math.floor(bTeamModel.getPointLine() / 4));
         } else if ((pointLine <= 0.999 && pointLine >= 0.666)) {
             aTeamModel.setFirstQPointLine(Math.ceil(aTeamModel.getPointLine() / 4));
+            bTeamModel.setFirstQPointLine(Math.ceil(bTeamModel.getPointLine() / 4));
         } else if ((pointLine <= 0.665 && pointLine >= 0.334)) {
             aTeamModel.setFirstQPointLine(pointInt + 0.5);
+            bTeamModel.setFirstQPointLine(pointInt + 0.5);
         } else {
             aTeamModel.setFirstQPointLine((double) Math.round(aTeamModel.getPointLine() / 4));
+            bTeamModel.setFirstQPointLine((double) Math.round(bTeamModel.getPointLine() / 4));
         }
 
 
@@ -593,7 +602,7 @@ public class NamedBasketballUpdateMatchProcessor implements ItemProcessor<String
 
         int i = 0;
 
-        for (Element specailEle : element.select("tbody > tr > td.f.ico_linescore > p")) {
+        for (Element specailEle : element.select("tbody tr td.f.ico_linescore > p")) {
             if (i == 0) {
                 if (specailEle.select("span.ico_firstpoint").text().equals("첫득점")) {
                     aTeamModel.setFirstQFirstPoint("패배");

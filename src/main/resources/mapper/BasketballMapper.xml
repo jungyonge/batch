@@ -98,8 +98,81 @@
                 GROUND   =     #{ground} AND
                 MATCH_DATE   =     #{date} AND
                 A_TEAM   =     #{aTeam} AND
-                B_TEAM   =     #{bTeam}
+                B_TEAM   =     #{bTeam} AND
+                UPDATE_YN = 1;
     </update>
 
-
+    <select id="selectBasketStat"  resultType="HashMap">
+        SELECT LEAGUE,
+               GROUND,
+               MATCH_DATE,
+               DAY_OF_WEEK,
+               MATCH_TIME,
+               A_TEAM_REST_DAY,
+               A_TEAM,
+               A_TEAM_TOTAL_POINT,
+               B_TEAM_TOTAL_POINT,
+               B_TEAM,
+               B_TEAM_REST_DAY,
+               HANDI_CAP,
+               HANDI_CAP_RESULT,
+               ODD,
+               POINT_LINE,
+               POINT_LINE_RESULT,
+               A_TEAM_FIRSTQ_POINT,
+               B_TEAM_FIRSTQ_POINT,
+               FIRSTQ_HANDI_CAP,
+               FIRSTQ_HANDI_CAP_RESULT,
+               FIRSTQ_POINT_LINE,
+               FIRSTQ_POINT_LINE_RESULT,
+               A_TEAM_SECONDQ_POINT,
+               B_TEAM_SECONDQ_POINT,
+               SECONDQ_HANDI_CAP_RESULT,
+               SECONDQ_POINT_LINE_RESULT,
+               A_TEAM_THIRDQ_POINT,
+               B_TEAM_THIRDQ_POINT,
+               THIRDQ_HANDI_CAP_RESULT,
+               THIRDQ_POINT_LINE_RESULT,
+               A_TEAM_FOURTHQ_POINT,
+               B_TEAM_FOURTHQ_POINT,
+               FOURTHQ_HANDI_CAP_RESULT,
+               FOURTHQ_POINT_LINE_RESULT,
+               A_TEAM_FIRST_HALF_POINT,
+               B_TEAM_FIRST_HALF_POINT,
+               HALF_HANDI_CAP,
+               FIRST_HALF_HANDI_CAP_RESULT,
+               HALF_POINT_LINE,
+               FIRST_HALF_POINT_LINE_RESULT,
+               A_TEAM_SECOND_HALF_POINT,
+               B_TEAM_SECOND_HALF_POINT,
+               SECOND_HALF_HANDI_CAP_RESULT,
+               SECOND_HALF_POINT_LINE_RESULT,
+               FIRSTQ_FIRST_POINT,
+               FIRSTQ_FIRST_FREE_TWO,
+               FIRSTQ_FIRST_TWO_POINT,
+               FIRSTQ_FIRST_THREE_POINT,
+               SECONDQ_FIRST_POINT,
+               SECONDQ_FIRST_FREE_TWO,
+               SECONDQ_FIRST_TWO_POINT,
+               SECONDQ_FIRST_THREE_POINT,
+               THIRDQ_FIRST_POINT,
+               THIRDQ_FIRST_FREE_TWO,
+               THIRDQ_FIRST_TWO_POINT,
+               THIRDQ_FIRST_THREE_POINT,
+               FOURTHQ_FIRST_POINT,
+               FOURTHQ_FIRST_FREE_TWO,
+               FOURTHQ_FIRST_TWO_POINT,
+               FOURTHQ_FIRST_THREE_POINT,
+               FIRSTQ_TOTAL_POINT,
+               SECONDQ_TOTAL_POINT,
+               THIRDQ_TOTAL_POINT,
+               FOURTHQ_TOTAL_POINT,
+               EXTENDQ_TOTAL_POINT
+        FROM   sport.BASKETBALL_DATA
+                WHERE EXCEPT_YN = 0
+        ORDER  BY MATCH_DATE,
+                      MATCH_TIME,
+                      LEAGUE,
+                      GAME_ID;
+    </select>
 </mapper>

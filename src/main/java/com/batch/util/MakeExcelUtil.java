@@ -24,11 +24,11 @@ public class MakeExcelUtil {
     private static final String FILE_EXT2 = ".xlsx";
     private static final String SHEET_NAME = "sheet";
 
-    @Value("#{excel.template-path")
-    private static String excelTemplatePath;
+    @Value("${excel.template-path}")
+    private String excelTemplatePath;
 
-    @Value("#{excel.output-path")
-    private static String excelOutputPath;
+    @Value("${excel.output-path}")
+    private String excelOutputPath;
 
     public void statXlsDown(String type, List excelDataList) throws Exception {
         ModelMap model = new ModelMap();
