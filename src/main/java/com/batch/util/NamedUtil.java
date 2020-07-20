@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -165,7 +166,34 @@ public class NamedUtil {
         return responseText.toString();
     }
 
+    public String liveScoreUrlToString(String url) throws IOException {
 
+        URL obj = new URL(url);
+        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+        con.setDoOutput(true);
+        con.setRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36");
+        con.setRequestProperty("referer", "https://livescore.co.kr/");
+        con.setRequestProperty("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3");
+        con.setRequestProperty("Accept-Language", "ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7");
+        con.setRequestProperty("Content-Type", "text/html;charset=UTF-8");
+
+        con.setConnectTimeout(2000);
+
+        StringBuffer sInputData = new StringBuffer(1024);
+        String sInputLine = "";
+        BufferedReader in;
+
+        in = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
+
+
+        while ((sInputLine = in.readLine()) != null) {
+            sInputData.append(sInputLine).append("\n");
+        }
+        in.close();
+
+        return sInputData.toString();
+
+    }
     public String getDayoOfWeek(int dayNum) {
         String dayOfWeek = "";
 
@@ -207,6 +235,7 @@ public class NamedUtil {
             e.printStackTrace();
         }
     }
+
 
 
 

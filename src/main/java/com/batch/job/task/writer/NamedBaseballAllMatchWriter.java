@@ -2,6 +2,7 @@ package com.batch.job.task.writer;
 
 import com.batch.mapper.BaseballMapper;
 import com.batch.model.BaseballModel;
+import com.batch.model.FilterConditionModel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.*;
 import org.springframework.stereotype.Component;
@@ -28,7 +29,6 @@ public class NamedBaseballAllMatchWriter implements ItemWriter< List<BaseballMod
                     baseballMapper.insertBaseballMatch(baseballModel);
                 }
             }
-
         }
     }
 }

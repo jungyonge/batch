@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
 <mapper namespace="com.batch.mapper.BaseballMapper">
 
     <insert id="insertBaseballMatch" parameterType="com.batch.model.BaseballModel">
@@ -27,7 +28,8 @@
     <select id="checkGameIdCount" parameterType="com.batch.model.BaseballModel" resultType="int">
        SELECT COUNT(1)
            FROM sport.baseball_data
-        WHERE GAME_ID = #{gameId};
+        WHERE GAME_ID = #{gameId}
+;
     </select>
 
     <update id="updateBaseballStat" parameterType="com.batch.model.BaseballModel">
@@ -163,6 +165,1827 @@
                       LEAGUE,
                       GAME_ID;
     </select>
+
+    <insert id="truncateBaseballSummary">
+        TRUNCATE sport.baseball_summary
+    </insert>
+
+    <insert id="insertBaseballSummary" parameterType="com.batch.model.FilterConditionModel">
+
+        INSERT INTO sport.baseball_summary
+                        (LEAGUE,
+                         TEAM,
+                         FILTER,
+                         CONDI,
+                         WIN_PER,
+                         LOSE_PER,
+                         HANDI_WIN_PER,
+                         HANDI_LOSE_PER,
+                         OVER_PER,
+                         UNDER_PER,
+                         THIRD_HANDI_WIN_PER,
+                         THIRD_HANDI_LOSE_PER,
+                         THIRD_OVER_PER,
+                         THIRD_UNDER_PER,
+                         FOURTH_HANDI_WIN_PER,
+                         FOURTH_HANDI_LOSE_PER,
+                         FOURTH_OVER_PER,
+                         FOURTH_UNDER_PER,
+                         FIFTH_HANDI_WIN_PER,
+                         FIFTH_HANDI_LOSE_PER,
+                         FIFTH_OVER_PER,
+                         FIFTH_UNDER_PER,
+                         FIRST_STRIKE_PER,
+                         FIRST_BALL_PER,
+                         FIRST_HOMERUN_PER)
+            SELECT MATCHWIN.LEAGUE,
+                   MATCHWIN.A_TEAM,
+                   <if test="all">
+                       '전체',
+                       'all',
+                   </if>
+                   <if test="ground">
+                       '홈/원정',
+                       MATCHWIN.GROUND,
+                   </if>
+                   <if test="week">
+                       '요일',
+                       MATCHWIN.DAY_OF_WEEK,
+                   </if>
+                   <if test="odd">
+                       '정/역배',
+                       MATCHWIN.ODD,
+                   </if>
+                   <if test="rest">
+                       '휴식일',
+                       MATCHWIN.A_TEAM_REST_DAY,
+                   </if>
+                   <if test="pitcher">
+                       '투수',
+                       MATCHWIN.A_TEAM_PITCHER,
+                   </if>
+                   WINPER,
+                   LOSEPER,
+                   FULLWINPER,
+                   FULLLOSEPER,
+                   FULLOVERPER,
+                   FULLUNDERPER,
+                   THIRDWINPER,
+                   THIRDLOSEPER,
+                   THIRDOVERPER,
+                   THIRDUNDERPER,
+                   FOURTHWINPER,
+                   FOURTHLOSEPER,
+                   FOURTHOVERPER,
+                   FOURTHUNDERPER,
+                   FIFTHWINPER,
+                   FIFTHLOSEPER,
+                   FIFTHOVERPER,
+                   FIFTHUNDERPER,
+                   STRIKEWINPER,
+                   BASEWINPER,
+                   HOMERUNWINPER
+            FROM  (SELECT A.LEAGUE,
+                          A.A_TEAM,
+                        <if test="all">
+                            'all',
+                        </if>
+                        <if test="ground">
+                            A.GROUND,
+                        </if>
+                        <if test="week">
+                            A.DAY_OF_WEEK,
+                        </if>
+                        <if test="odd">
+                            A.ODD,
+                        </if>
+                        <if test="rest">
+                            A.A_TEAM_REST_DAY,
+                        </if>
+                        <if test="pitcher">
+                            A.A_TEAM_PITCHER,
+                        </if>
+                          IFNULL(ROUND(WINCNT / ALLHANDICNT * 100, 1), 0)       AS winPer,
+                          100 - IFNULL(ROUND(WINCNT / ALLHANDICNT * 100, 1), 0) AS losePer,
+                          NOW()
+                   FROM   (SELECT LEAGUE,
+                                  A_TEAM,
+                                <if test="all">
+                                    'all',
+                                </if>
+                                <if test="ground">
+                                    GROUND,
+                                </if>
+                                <if test="week">
+                                    DAY_OF_WEEK,
+                                </if>
+                                <if test="odd">
+                                    ODD,
+                                </if>
+                                <if test="rest">
+                                    A_TEAM_REST_DAY,
+                                </if>
+                                <if test="pitcher">
+                                    A_TEAM_PITCHER,
+                                </if>
+                                COUNT(1) allHandiCnt
+                           FROM   sport.BASEBALL_DATA
+                           WHERE  <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]>
+                                  AND A_TEAM_TOTAL_POINT != 99
+                           GROUP  BY LEAGUE,
+                                     A_TEAM,
+                                    <if test="all">
+                                        'all'
+                                    </if>
+                                    <if test="ground">
+                                        GROUND
+                                    </if>
+                                    <if test="week">
+                                        DAY_OF_WEEK
+                                    </if>
+                                    <if test="odd">
+                                        ODD
+                                    </if>
+                                    <if test="rest">
+                                        A_TEAM_REST_DAY
+                                    </if>
+                                    <if test="pitcher">
+                                        A_TEAM_PITCHER
+                                    </if>) A
+                          LEFT OUTER JOIN (SELECT LEAGUE,
+                                                  A_TEAM,
+                                                <if test="all">
+                                                    'all',
+                                                </if>
+                                                <if test="ground">
+                                                    GROUND,
+                                                </if>
+                                                <if test="week">
+                                                    DAY_OF_WEEK,
+                                                </if>
+                                                <if test="odd">
+                                                    ODD,
+                                                </if>
+                                                <if test="rest">
+                                                    A_TEAM_REST_DAY,
+                                                </if>
+                                                <if test="pitcher">
+                                                    A_TEAM_PITCHER,
+                                                </if>
+                                                  COUNT(1) winCnt
+                                           FROM   sport.BASEBALL_DATA
+                                           WHERE  <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]>
+                                                  AND A_TEAM_TOTAL_POINT > B_TEAM_TOTAL_POINT
+                                                AND A_TEAM_TOTAL_POINT != 99
+
+                                                GROUP  BY LEAGUE,
+                                                     A_TEAM,
+                                                    <if test="all">
+                                                        'all'
+                                                    </if>
+                                                    <if test="ground">
+                                                        GROUND
+                                                    </if>
+                                                    <if test="week">
+                                                        DAY_OF_WEEK
+                                                    </if>
+                                                    <if test="odd">
+                                                        ODD
+                                                    </if>
+                                                    <if test="rest">
+                                                        A_TEAM_REST_DAY
+                                                    </if>
+                                                    <if test="pitcher">
+                                                        A_TEAM_PITCHER
+                                                    </if>)B
+                                       ON A.A_TEAM = B.A_TEAM
+                                        <if test="all">
+                                        </if>
+                                        <if test="ground">
+                                            AND A.GROUND = B.GROUND
+                                        </if>
+                                        <if test="week">
+                                            AND A.DAY_OF_WEEK = B.DAY_OF_WEEK
+                                        </if>
+                                        <if test="odd">
+                                            AND A.ODD = B.ODD
+                                        </if>
+                                        <if test="rest">
+                                            AND A.A_TEAM_REST_DAY = B.A_TEAM_REST_DAY
+                                        </if>
+                                        <if test="pitcher">
+                                            AND A.A_TEAM_PITCHER = B.A_TEAM_PITCHER
+                                        </if>
+                                          AND A.LEAGUE = B.LEAGUE) MATCHWIN
+                  LEFT OUTER JOIN (SELECT A.LEAGUE,
+                                          A.A_TEAM,
+                                        <if test="all">
+                                            'all',
+                                        </if>
+                                        <if test="ground">
+                                            A.GROUND,
+                                        </if>
+                                        <if test="week">
+                                            A.DAY_OF_WEEK,
+                                        </if>
+                                        <if test="odd">
+                                            A.ODD,
+                                        </if>
+                                        <if test="rest">
+                                            A.A_TEAM_REST_DAY,
+                                        </if>
+                                        <if test="pitcher">
+                                            A.A_TEAM_PITCHER,
+                                        </if>
+                                          IFNULL(ROUND(WINCNT / ALLHANDICNT * 100, 1), 0) AS fullWinPer,
+                                          100 - IFNULL(ROUND(WINCNT / ALLHANDICNT * 100, 1),0) AS fullLosePer,
+                                          IFNULL(ROUND(OVERCNT / ALLPOINTCNT * 100, 1), 0) AS fullOverPer,
+                                          100 - IFNULL(ROUND(OVERCNT / ALLPOINTCNT * 100, 1), 0) AS fullUnderPer,
+                                          NOW()
+                                   FROM   (SELECT LEAGUE,
+                                                  A_TEAM,
+                                                <if test="all">
+                                                    'all',
+                                                </if>
+                                                <if test="ground">
+                                                    GROUND,
+                                                </if>
+                                                <if test="week">
+                                                    DAY_OF_WEEK,
+                                                </if>
+                                                <if test="odd">
+                                                    ODD,
+                                                </if>
+                                                <if test="rest">
+                                                    A_TEAM_REST_DAY,
+                                                </if>
+                                                <if test="pitcher">
+                                                    A_TEAM_PITCHER,
+                                                </if>
+                                                  COUNT(1) allHandiCnt
+                                           FROM   sport.BASEBALL_DATA
+                                           WHERE  <![CDATA[  MATCH_DATE < DATE_ADD(NOW(),INTERVAL - 1 DAY)  ]]>
+                                                  AND HANDI_CAP_RESULT != '적특'
+                                                    AND A_TEAM_TOTAL_POINT != 99
+
+                                                    GROUP  BY LEAGUE,
+                                                     A_TEAM,
+                                                    <if test="all">
+                                                        'all'
+                                                    </if>
+                                                    <if test="ground">
+                                                        GROUND
+                                                    </if>
+                                                    <if test="week">
+                                                        DAY_OF_WEEK
+                                                    </if>
+                                                    <if test="odd">
+                                                        ODD
+                                                    </if>
+                                                    <if test="rest">
+                                                        A_TEAM_REST_DAY
+                                                    </if>
+                                                    <if test="pitcher">
+                                                        A_TEAM_PITCHER
+                                                    </if>) A
+                                          LEFT OUTER JOIN (SELECT LEAGUE,
+                                                                  A_TEAM,
+                                                                <if test="all">
+                                                                    'all',
+                                                                </if>
+                                                                <if test="ground">
+                                                                    GROUND,
+                                                                </if>
+                                                                <if test="week">
+                                                                    DAY_OF_WEEK,
+                                                                </if>
+                                                                <if test="odd">
+                                                                    ODD,
+                                                                </if>
+                                                                <if test="rest">
+                                                                    A_TEAM_REST_DAY,
+                                                                </if>
+                                                                <if test="pitcher">
+                                                                    A_TEAM_PITCHER,
+                                                                </if>
+                                                                  COUNT(1) winCnt
+                                                           FROM   sport.BASEBALL_DATA
+                                                           WHERE  <![CDATA[  MATCH_DATE < DATE_ADD(NOW(),INTERVAL - 1 DAY)  ]]>
+                                                                    AND A_TEAM_TOTAL_POINT != 99
+                                                                  AND HANDI_CAP_RESULT !='적특'
+                                                                  AND HANDI_CAP_RESULT ='승리'
+                                                           GROUP  BY LEAGUE,
+                                                                     A_TEAM,
+                                                                    <if test="all">
+                                                                        'all'
+                                                                    </if>
+                                                                    <if test="ground">
+                                                                        GROUND
+                                                                    </if>
+                                                                    <if test="week">
+                                                                        DAY_OF_WEEK
+                                                                    </if>
+                                                                    <if test="odd">
+                                                                        ODD
+                                                                    </if>
+                                                                    <if test="rest">
+                                                                        A_TEAM_REST_DAY
+                                                                    </if>
+                                                                    <if test="pitcher">
+                                                                        A_TEAM_PITCHER
+                                                                    </if>)B
+                                                       ON A.A_TEAM = B.A_TEAM
+                                                            <if test="all">
+                                                            </if>
+                                                            <if test="ground">
+                                                                AND A.GROUND = B.GROUND
+                                                            </if>
+                                                            <if test="week">
+                                                                AND A.DAY_OF_WEEK = B.DAY_OF_WEEK
+                                                            </if>
+                                                            <if test="odd">
+                                                                AND A.ODD = B.ODD
+                                                            </if>
+                                                            <if test="rest">
+                                                                AND A.A_TEAM_REST_DAY = B.A_TEAM_REST_DAY
+                                                            </if>
+                                                            <if test="pitcher">
+                                                                AND A.A_TEAM_PITCHER = B.A_TEAM_PITCHER
+                                                            </if>
+                                                        AND A.LEAGUE = B.LEAGUE
+                                          LEFT OUTER JOIN (SELECT LEAGUE,
+                                                                  A_TEAM,
+                                                                <if test="all">
+                                                                    'all',
+                                                                </if>
+                                                                <if test="ground">
+                                                                    GROUND,
+                                                                </if>
+                                                                <if test="week">
+                                                                    DAY_OF_WEEK,
+                                                                </if>
+                                                                <if test="odd">
+                                                                    ODD,
+                                                                </if>
+                                                                <if test="rest">
+                                                                    A_TEAM_REST_DAY,
+                                                                </if>
+                                                                <if test="pitcher">
+                                                                    A_TEAM_PITCHER,
+                                                                </if>
+                                                                  COUNT(1) allPointCnt
+                                                           FROM   sport.BASEBALL_DATA
+                                                           WHERE  <![CDATA[  MATCH_DATE < DATE_ADD(NOW(),INTERVAL - 1 DAY)  ]]>
+                                                                  AND POINT_LINE_RESULT != '적특'
+                                                                     AND A_TEAM_TOTAL_POINT != 99
+                                                           GROUP  BY LEAGUE,
+                                                                     A_TEAM,
+                                                                    <if test="all">
+                                                                        'all'
+                                                                    </if>
+                                                                    <if test="ground">
+                                                                        GROUND
+                                                                    </if>
+                                                                    <if test="week">
+                                                                        DAY_OF_WEEK
+                                                                    </if>
+                                                                    <if test="odd">
+                                                                        ODD
+                                                                    </if>
+                                                                    <if test="rest">
+                                                                        A_TEAM_REST_DAY
+                                                                    </if>
+                                                                    <if test="pitcher">
+                                                                        A_TEAM_PITCHER
+                                                                    </if>) C
+                                                       ON A.A_TEAM = C.A_TEAM
+                                                        <if test="all">
+                                                        </if>
+                                                        <if test="ground">
+                                                            AND A.GROUND = C.GROUND
+                                                        </if>
+                                                        <if test="week">
+                                                            AND A.DAY_OF_WEEK = C.DAY_OF_WEEK
+                                                        </if>
+                                                        <if test="odd">
+                                                            AND A.ODD = C.ODD
+                                                        </if>
+                                                        <if test="rest">
+                                                            AND A.A_TEAM_REST_DAY = C.A_TEAM_REST_DAY
+                                                        </if>
+                                                        <if test="pitcher">
+                                                            AND A.A_TEAM_PITCHER = C.A_TEAM_PITCHER
+                                                        </if>
+                                                          AND A.LEAGUE = C.LEAGUE
+                                          LEFT OUTER JOIN (SELECT LEAGUE,
+                                                                  A_TEAM,
+                                                                <if test="all">
+                                                                    'all',
+                                                                </if>
+                                                                <if test="ground">
+                                                                    GROUND,
+                                                                </if>
+                                                                <if test="week">
+                                                                    DAY_OF_WEEK,
+                                                                </if>
+                                                                <if test="odd">
+                                                                    ODD,
+                                                                </if>
+                                                                <if test="rest">
+                                                                    A_TEAM_REST_DAY,
+                                                                </if>
+                                                                <if test="pitcher">
+                                                                    A_TEAM_PITCHER,
+                                                                </if>
+                                                                  COUNT(1) overCnt
+                                                           FROM   sport.BASEBALL_DATA
+                                                           WHERE  <![CDATA[  MATCH_DATE < DATE_ADD(NOW(),INTERVAL - 1 DAY)  ]]>
+                                                                  AND POINT_LINE_RESULT != '적특'
+                                                                  AND POINT_LINE_RESULT = '오버'
+                                                                    AND A_TEAM_TOTAL_POINT != 99
+                                                           GROUP  BY LEAGUE,
+                                                                     A_TEAM,
+                                                                    <if test="all">
+                                                                        'all'
+                                                                    </if>
+                                                                    <if test="ground">
+                                                                        GROUND
+                                                                    </if>
+                                                                    <if test="week">
+                                                                        DAY_OF_WEEK
+                                                                    </if>
+                                                                    <if test="odd">
+                                                                        ODD
+                                                                    </if>
+                                                                    <if test="rest">
+                                                                        A_TEAM_REST_DAY
+                                                                    </if>
+                                                                    <if test="pitcher">
+                                                                        A_TEAM_PITCHER
+                                                                    </if>)D
+                                                       ON A.A_TEAM = D.A_TEAM
+                                                        <if test="all">
+                                                        </if>
+                                                        <if test="ground">
+                                                            AND A.GROUND = D.GROUND
+                                                        </if>
+                                                        <if test="week">
+                                                            AND A.DAY_OF_WEEK = D.DAY_OF_WEEK
+                                                        </if>
+                                                        <if test="odd">
+                                                            AND A.ODD = D.ODD
+                                                        </if>
+                                                        <if test="rest">
+                                                            AND A.A_TEAM_REST_DAY = D.A_TEAM_REST_DAY
+                                                        </if>
+                                                        <if test="pitcher">
+                                                            AND A.A_TEAM_PITCHER = D.A_TEAM_PITCHER
+                                                        </if>
+                                                          AND A.LEAGUE = D.LEAGUE) HANDIWIN
+                                                          ON MATCHWIN.LEAGUE = HANDIWIN.LEAGUE
+                                                          AND MATCHWIN.A_TEAM = HANDIWIN.A_TEAM
+                                                        <if test="all">
+                                                        </if>
+                                                        <if test="ground">
+                                                            AND MATCHWIN.GROUND = HANDIWIN.GROUND
+                                                        </if>
+                                                        <if test="week">
+                                                            AND MATCHWIN.DAY_OF_WEEK = HANDIWIN.DAY_OF_WEEK
+                                                        </if>
+                                                        <if test="odd">
+                                                            AND MATCHWIN.ODD = HANDIWIN.ODD
+                                                        </if>
+                                                        <if test="rest">
+                                                            AND MATCHWIN.A_TEAM_REST_DAY = HANDIWIN.A_TEAM_REST_DAY
+                                                        </if>
+                                                        <if test="pitcher">
+                                                            AND MATCHWIN.A_TEAM_PITCHER = HANDIWIN.A_TEAM_PITCHER
+                                                        </if>
+                  LEFT OUTER JOIN (SELECT A.LEAGUE,
+                                          A.A_TEAM,
+                                            <if test="all">
+                                                'all',
+                                            </if>
+                                            <if test="ground">
+                                                A.GROUND,
+                                            </if>
+                                            <if test="week">
+                                                A.DAY_OF_WEEK,
+                                            </if>
+                                            <if test="odd">
+                                                A.ODD,
+                                            </if>
+                                            <if test="rest">
+                                                A.A_TEAM_REST_DAY,
+                                            </if>
+                                            <if test="pitcher">
+                                                A.A_TEAM_PITCHER,
+                                            </if>
+                                          IFNULL(ROUND(WINCNT / ALLHANDICNT * 100, 1), 0) AS thirdwinPer,
+                                          100 - IFNULL(ROUND(WINCNT / ALLHANDICNT * 100, 1), 0) AS thirdlosePer,
+                                          IFNULL(ROUND(OVERCNT / ALLPOINTCNT * 100, 1), 0) AS thirdoverPer,
+                                          100 - IFNULL(ROUND(OVERCNT / ALLPOINTCNT * 100, 1), 0) AS thirdunderPer,
+                                          NOW()
+                                   FROM   (SELECT LEAGUE,
+                                                  A_TEAM,
+                                                <if test="all">
+                                                    'all',
+                                                </if>
+                                                <if test="ground">
+                                                    GROUND,
+                                                </if>
+                                                <if test="week">
+                                                    DAY_OF_WEEK,
+                                                </if>
+                                                <if test="odd">
+                                                    ODD,
+                                                </if>
+                                                <if test="rest">
+                                                    A_TEAM_REST_DAY,
+                                                </if>
+                                                <if test="pitcher">
+                                                    A_TEAM_PITCHER,
+                                                </if>
+                                                  COUNT(1) allHandiCnt
+                                           FROM   sport.BASEBALL_DATA
+                                           WHERE  <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]>
+                                                  AND THIRD_HANDI_CAP_RESULT != '적특'
+                                                  AND A_TEAM_TOTAL_POINT != 99
+                                           GROUP  BY LEAGUE,
+                                                     A_TEAM,
+                                                    <if test="all">
+                                                        'all'
+                                                    </if>
+                                                    <if test="ground">
+                                                        GROUND
+                                                    </if>
+                                                    <if test="week">
+                                                        DAY_OF_WEEK
+                                                    </if>
+                                                    <if test="odd">
+                                                        ODD
+                                                    </if>
+                                                    <if test="rest">
+                                                        A_TEAM_REST_DAY
+                                                    </if>
+                                                    <if test="pitcher">
+                                                        A_TEAM_PITCHER
+                                                    </if>) A
+                                          LEFT OUTER JOIN (SELECT LEAGUE,
+                                                                  A_TEAM,
+                                                                <if test="all">
+                                                                    'all',
+                                                                </if>
+                                                                <if test="ground">
+                                                                    GROUND,
+                                                                </if>
+                                                                <if test="week">
+                                                                    DAY_OF_WEEK,
+                                                                </if>
+                                                                <if test="odd">
+                                                                    ODD,
+                                                                </if>
+                                                                <if test="rest">
+                                                                    A_TEAM_REST_DAY,
+                                                                </if>
+                                                                <if test="pitcher">
+                                                                    A_TEAM_PITCHER,
+                                                                </if>
+                                                                  COUNT(1) winCnt
+                                                           FROM   sport.BASEBALL_DATA
+                                                           WHERE  <![CDATA[  MATCH_DATE < DATE_ADD(NOW(),INTERVAL - 1 DAY)  ]]>
+                                                                  AND A_TEAM_TOTAL_POINT != 99
+                                                                  AND THIRD_HANDI_CAP_RESULT != '적특'
+                                                                  AND THIRD_HANDI_CAP_RESULT = '승리'
+                                                           GROUP  BY LEAGUE,
+                                                                     A_TEAM,
+                                                                    <if test="all">
+                                                                        'all'
+                                                                    </if>
+                                                                    <if test="ground">
+                                                                        GROUND
+                                                                    </if>
+                                                                    <if test="week">
+                                                                        DAY_OF_WEEK
+                                                                    </if>
+                                                                    <if test="odd">
+                                                                        ODD
+                                                                    </if>
+                                                                    <if test="rest">
+                                                                        A_TEAM_REST_DAY
+                                                                    </if>
+                                                                    <if test="pitcher">
+                                                                        A_TEAM_PITCHER
+                                                                    </if>)B
+                                                       ON A.A_TEAM = B.A_TEAM
+                                                        <if test="all">
+                                                        </if>
+                                                        <if test="ground">
+                                                            AND A.GROUND = B.GROUND
+                                                        </if>
+                                                        <if test="week">
+                                                            AND A.DAY_OF_WEEK = B.DAY_OF_WEEK
+                                                        </if>
+                                                        <if test="odd">
+                                                            AND A.ODD = B.ODD
+                                                        </if>
+                                                        <if test="rest">
+                                                            AND A.A_TEAM_REST_DAY = B.A_TEAM_REST_DAY
+                                                        </if>
+                                                        <if test="pitcher">
+                                                            AND A.A_TEAM_PITCHER = B.A_TEAM_PITCHER
+                                                        </if>
+                                                          AND A.LEAGUE = B.LEAGUE
+                                          LEFT OUTER JOIN
+                                          (SELECT LEAGUE,
+                                                  A_TEAM,
+                                                <if test="all">
+                                                    'all',
+                                                </if>
+                                                <if test="ground">
+                                                    GROUND,
+                                                </if>
+                                                <if test="week">
+                                                    DAY_OF_WEEK,
+                                                </if>
+                                                <if test="odd">
+                                                    ODD,
+                                                </if>
+                                                <if test="rest">
+                                                    A_TEAM_REST_DAY,
+                                                </if>
+                                                <if test="pitcher">
+                                                    A_TEAM_PITCHER,
+                                                </if>
+                                                  COUNT(1) allPointCnt
+                                           FROM   sport.BASEBALL_DATA
+                                           WHERE  <![CDATA[  MATCH_DATE < DATE_ADD(NOW(),INTERVAL - 1 DAY)  ]]>
+                                                  AND THIRD_POINT_LINE_RESULT != '적특'
+                                                  AND A_TEAM_TOTAL_POINT != 99
+                                           GROUP  BY LEAGUE,
+                                                     A_TEAM,
+                                                    <if test="all">
+                                                        'all'
+                                                    </if>
+                                                    <if test="ground">
+                                                        GROUND
+                                                    </if>
+                                                    <if test="week">
+                                                        DAY_OF_WEEK
+                                                    </if>
+                                                    <if test="odd">
+                                                        ODD
+                                                    </if>
+                                                    <if test="rest">
+                                                        A_TEAM_REST_DAY
+                                                    </if>
+                                                    <if test="pitcher">
+                                                        A_TEAM_PITCHER
+                                                    </if>) C
+                                                       ON A.A_TEAM = C.A_TEAM
+                                                        <if test="all">
+                                                        </if>
+                                                        <if test="ground">
+                                                            AND A.GROUND = C.GROUND
+                                                        </if>
+                                                        <if test="week">
+                                                            AND A.DAY_OF_WEEK = C.DAY_OF_WEEK
+                                                        </if>
+                                                        <if test="odd">
+                                                            AND A.ODD = C.ODD
+                                                        </if>
+                                                        <if test="rest">
+                                                            AND A.A_TEAM_REST_DAY = C.A_TEAM_REST_DAY
+                                                        </if>
+                                                        <if test="pitcher">
+                                                            AND A.A_TEAM_PITCHER = C.A_TEAM_PITCHER
+                                                        </if>
+                                                    AND A.LEAGUE = C.LEAGUE
+                                          LEFT OUTER JOIN
+                                          (SELECT LEAGUE,
+                                                  A_TEAM,
+                                                <if test="all">
+                                                    'all',
+                                                </if>
+                                                <if test="ground">
+                                                    GROUND,
+                                                </if>
+                                                <if test="week">
+                                                    DAY_OF_WEEK,
+                                                </if>
+                                                <if test="odd">
+                                                    ODD,
+                                                </if>
+                                                <if test="rest">
+                                                    A_TEAM_REST_DAY,
+                                                </if>
+                                                <if test="pitcher">
+                                                    A_TEAM_PITCHER,
+                                                </if>
+                                                  COUNT(1) overCnt
+                                           FROM   sport.BASEBALL_DATA
+                                           WHERE  <![CDATA[  MATCH_DATE < DATE_ADD(NOW(),INTERVAL - 1 DAY)  ]]>
+                                                  AND THIRD_POINT_LINE_RESULT != '적특'
+                                                  AND THIRD_POINT_LINE_RESULT ='오버'
+                                                  AND A_TEAM_TOTAL_POINT != 99
+                                           GROUP  BY LEAGUE,
+                                                     A_TEAM,
+                                                    <if test="all">
+                                                        'all'
+                                                    </if>
+                                                    <if test="ground">
+                                                        GROUND
+                                                    </if>
+                                                    <if test="week">
+                                                        DAY_OF_WEEK
+                                                    </if>
+                                                    <if test="odd">
+                                                        ODD
+                                                    </if>
+                                                    <if test="rest">
+                                                        A_TEAM_REST_DAY
+                                                    </if>
+                                                    <if test="pitcher">
+                                                        A_TEAM_PITCHER
+                                                    </if>)D
+                                                       ON A.A_TEAM = D.A_TEAM
+                                                    <if test="all">
+                                                    </if>
+                                                    <if test="ground">
+                                                        AND A.GROUND = D.GROUND
+                                                    </if>
+                                                    <if test="week">
+                                                        AND A.DAY_OF_WEEK = D.DAY_OF_WEEK
+                                                    </if>
+                                                    <if test="odd">
+                                                        AND A.ODD = D.ODD
+                                                    </if>
+                                                    <if test="rest">
+                                                        AND A.A_TEAM_REST_DAY = D.A_TEAM_REST_DAY
+                                                    </if>
+                                                    <if test="pitcher">
+                                                        AND A.A_TEAM_PITCHER = D.A_TEAM_PITCHER
+                                                    </if>
+                                                          AND A.LEAGUE = D.LEAGUE) THIRD
+                                  ON MATCHWIN.LEAGUE = THIRD.LEAGUE
+                                  AND MATCHWIN.A_TEAM = THIRD.A_TEAM
+                                <if test="all">
+                                </if>
+                                <if test="ground">
+                                    AND MATCHWIN.GROUND = THIRD.GROUND
+                                </if>
+                                <if test="week">
+                                    AND MATCHWIN.DAY_OF_WEEK = THIRD.DAY_OF_WEEK
+                                </if>
+                                <if test="odd">
+                                    AND MATCHWIN.ODD = THIRD.ODD
+                                </if>
+                                <if test="rest">
+                                    AND MATCHWIN.A_TEAM_REST_DAY = THIRD.A_TEAM_REST_DAY
+                                </if>
+                                <if test="pitcher">
+                                    AND MATCHWIN.A_TEAM_PITCHER = THIRD.A_TEAM_PITCHER
+                                </if>
+                  LEFT OUTER JOIN
+                                   (SELECT
+                                          A.LEAGUE,
+                                          A.A_TEAM,
+                                        <if test="all">
+                                            'all',
+                                        </if>
+                                        <if test="ground">
+                                            A.GROUND,
+                                        </if>
+                                        <if test="week">
+                                            A.DAY_OF_WEEK,
+                                        </if>
+                                        <if test="odd">
+                                            A.ODD,
+                                        </if>
+                                        <if test="rest">
+                                            A.A_TEAM_REST_DAY,
+                                        </if>
+                                        <if test="pitcher">
+                                            A.A_TEAM_PITCHER,
+                                        </if>
+                                          IFNULL(ROUND(WINCNT / ALLHANDICNT * 100, 1), 0) AS fourthwinPer ,
+                                          100 - IFNULL(ROUND(WINCNT / ALLHANDICNT * 100, 1), 0)  AS fourthlosePer,
+                                          IFNULL(ROUND(OVERCNT / ALLPOINTCNT * 100, 1), 0)  AS fourthoverPer,
+                                          100 - IFNULL(ROUND(OVERCNT / ALLPOINTCNT * 100, 1), 0)   AS fourthunderPer,
+                                          NOW()
+                                   FROM   (SELECT LEAGUE,
+                                                  A_TEAM,
+                                                <if test="all">
+                                                    'all',
+                                                </if>
+                                                <if test="ground">
+                                                    GROUND,
+                                                </if>
+                                                <if test="week">
+                                                    DAY_OF_WEEK,
+                                                </if>
+                                                <if test="odd">
+                                                    ODD,
+                                                </if>
+                                                <if test="rest">
+                                                    A_TEAM_REST_DAY,
+                                                </if>
+                                                <if test="pitcher">
+                                                    A_TEAM_PITCHER,
+                                                </if>
+                                                  COUNT(1) allHandiCnt
+                                           FROM   sport.BASEBALL_DATA
+                                           WHERE  <![CDATA[  MATCH_DATE < DATE_ADD(NOW(),INTERVAL - 1 DAY)  ]]>
+                                                  AND FOURTH_HANDI_CAP_RESULT != '적특'
+                                                  AND A_TEAM_TOTAL_POINT != 99
+                                           GROUP  BY LEAGUE,
+                                                     A_TEAM,
+                                                    <if test="all">
+                                                        'all'
+                                                    </if>
+                                                    <if test="ground">
+                                                        GROUND
+                                                    </if>
+                                                    <if test="week">
+                                                        DAY_OF_WEEK
+                                                    </if>
+                                                    <if test="odd">
+                                                        ODD
+                                                    </if>
+                                                    <if test="rest">
+                                                        A_TEAM_REST_DAY
+                                                    </if>
+                                                    <if test="pitcher">
+                                                        A_TEAM_PITCHER
+                                                    </if>) A
+                                          LEFT OUTER JOIN
+                                          (SELECT LEAGUE,
+                                                  A_TEAM,
+                                                <if test="all">
+                                                    'all',
+                                                </if>
+                                                <if test="ground">
+                                                    GROUND,
+                                                </if>
+                                                <if test="week">
+                                                    DAY_OF_WEEK,
+                                                </if>
+                                                <if test="odd">
+                                                    ODD,
+                                                </if>
+                                                <if test="rest">
+                                                    A_TEAM_REST_DAY,
+                                                </if>
+                                                <if test="pitcher">
+                                                    A_TEAM_PITCHER,
+                                                </if>
+                                                  COUNT(1) winCnt
+                                           FROM   sport.BASEBALL_DATA
+                                           WHERE  <![CDATA[  MATCH_DATE < DATE_ADD(NOW(),INTERVAL - 1 DAY)  ]]>
+                                                  AND FOURTH_HANDI_CAP_RESULT != '적특'
+                                                  AND FOURTH_HANDI_CAP_RESULT = '승리'
+                                                  AND A_TEAM_TOTAL_POINT != 99
+                                           GROUP  BY LEAGUE,
+                                                     A_TEAM,
+                                                    <if test="all">
+                                                        'all'
+                                                    </if>
+                                                    <if test="ground">
+                                                        GROUND
+                                                    </if>
+                                                    <if test="week">
+                                                        DAY_OF_WEEK
+                                                    </if>
+                                                    <if test="odd">
+                                                        ODD
+                                                    </if>
+                                                    <if test="rest">
+                                                        A_TEAM_REST_DAY
+                                                    </if>
+                                                    <if test="pitcher">
+                                                        A_TEAM_PITCHER
+                                                    </if>)B
+                                                       ON A.A_TEAM = B.A_TEAM
+                                                        <if test="all">
+                                                        </if>
+                                                        <if test="ground">
+                                                            AND A.GROUND = B.GROUND
+                                                        </if>
+                                                        <if test="week">
+                                                            AND A.DAY_OF_WEEK = B.DAY_OF_WEEK
+                                                        </if>
+                                                        <if test="odd">
+                                                            AND A.ODD = B.ODD
+                                                        </if>
+                                                        <if test="rest">
+                                                            AND A.A_TEAM_REST_DAY = B.A_TEAM_REST_DAY
+                                                        </if>
+                                                        <if test="pitcher">
+                                                            AND A.A_TEAM_PITCHER = B.A_TEAM_PITCHER
+                                                        </if>
+                                                          AND A.LEAGUE = B.LEAGUE
+                                          LEFT OUTER JOIN
+                                          (SELECT LEAGUE,
+                                                  A_TEAM,
+                                                <if test="all">
+                                                    'all',
+                                                </if>
+                                                <if test="ground">
+                                                    GROUND,
+                                                </if>
+                                                <if test="week">
+                                                    DAY_OF_WEEK,
+                                                </if>
+                                                <if test="odd">
+                                                    ODD,
+                                                </if>
+                                                <if test="rest">
+                                                    A_TEAM_REST_DAY,
+                                                </if>
+                                                <if test="pitcher">
+                                                    A_TEAM_PITCHER,
+                                                </if>
+                                                  COUNT(1) allPointCnt
+                                           FROM   sport.BASEBALL_DATA
+                                           WHERE  <![CDATA[  MATCH_DATE < DATE_ADD(NOW(),INTERVAL - 1 DAY)  ]]>
+                                                  AND FOURTH_POINT_LINE_RESULT !=  '적특'
+                                                  AND A_TEAM_TOTAL_POINT != 99
+                                           GROUP  BY LEAGUE,
+                                                     A_TEAM,
+                                                    <if test="all">
+                                                        'all'
+                                                    </if>
+                                                    <if test="ground">
+                                                        GROUND
+                                                    </if>
+                                                    <if test="week">
+                                                        DAY_OF_WEEK
+                                                    </if>
+                                                    <if test="odd">
+                                                        ODD
+                                                    </if>
+                                                    <if test="rest">
+                                                        A_TEAM_REST_DAY
+                                                    </if>
+                                                    <if test="pitcher">
+                                                        A_TEAM_PITCHER
+                                                    </if>) C
+                                                       ON A.A_TEAM = C.A_TEAM
+                                                        <if test="all">
+                                                        </if>
+                                                        <if test="ground">
+                                                            AND A.GROUND = C.GROUND
+                                                        </if>
+                                                        <if test="week">
+                                                            AND A.DAY_OF_WEEK = C.DAY_OF_WEEK
+                                                        </if>
+                                                        <if test="odd">
+                                                            AND A.ODD = C.ODD
+                                                        </if>
+                                                        <if test="rest">
+                                                            AND A.A_TEAM_REST_DAY = C.A_TEAM_REST_DAY
+                                                        </if>
+                                                        <if test="pitcher">
+                                                            AND A.A_TEAM_PITCHER = C.A_TEAM_PITCHER
+                                                        </if>
+                                                          AND A.LEAGUE = C.LEAGUE
+                                          LEFT OUTER JOIN
+                                          (SELECT LEAGUE,
+                                                  A_TEAM,
+                                                <if test="all">
+                                                    'all',
+                                                </if>
+                                                <if test="ground">
+                                                    GROUND,
+                                                </if>
+                                                <if test="week">
+                                                    DAY_OF_WEEK,
+                                                </if>
+                                                <if test="odd">
+                                                    ODD,
+                                                </if>
+                                                <if test="rest">
+                                                    A_TEAM_REST_DAY,
+                                                </if>
+                                                <if test="pitcher">
+                                                    A_TEAM_PITCHER,
+                                                </if>
+                                                  COUNT(1) overCnt
+                                           FROM   sport.BASEBALL_DATA
+                                           WHERE  <![CDATA[  MATCH_DATE < DATE_ADD(NOW(),INTERVAL - 1 DAY)  ]]>
+                                                  AND FOURTH_POINT_LINE_RESULT != '적특'
+                                                  AND FOURTH_POINT_LINE_RESULT = '오버'
+                                                  AND A_TEAM_TOTAL_POINT != 99
+                                           GROUP  BY LEAGUE,
+                                                     A_TEAM,
+                                                    <if test="all">
+                                                        'all'
+                                                    </if>
+                                                    <if test="ground">
+                                                        GROUND
+                                                    </if>
+                                                    <if test="week">
+                                                        DAY_OF_WEEK
+                                                    </if>
+                                                    <if test="odd">
+                                                        ODD
+                                                    </if>
+                                                    <if test="rest">
+                                                        A_TEAM_REST_DAY
+                                                    </if>
+                                                    <if test="pitcher">
+                                                        A_TEAM_PITCHER
+                                                    </if>)D
+                                                       ON A.A_TEAM = D.A_TEAM
+                                                            <if test="all">
+                                                            </if>
+                                                            <if test="ground">
+                                                                AND A.GROUND = D.GROUND
+                                                            </if>
+                                                            <if test="week">
+                                                                AND A.DAY_OF_WEEK = D.DAY_OF_WEEK
+                                                            </if>
+                                                            <if test="odd">
+                                                                AND A.ODD = D.ODD
+                                                            </if>
+                                                            <if test="rest">
+                                                                AND A.A_TEAM_REST_DAY = D.A_TEAM_REST_DAY
+                                                            </if>
+                                                            <if test="pitcher">
+                                                                AND A.A_TEAM_PITCHER = D.A_TEAM_PITCHER
+                                                            </if>
+                                                          AND A.LEAGUE = D.LEAGUE) FOURTH
+                                  ON MATCHWIN.LEAGUE = FOURTH.LEAGUE
+                                  AND MATCHWIN.A_TEAM = FOURTH.A_TEAM
+                                    <if test="all">
+                                    </if>
+                                    <if test="ground">
+                                        AND MATCHWIN.GROUND = FOURTH.GROUND
+                                    </if>
+                                    <if test="week">
+                                        AND MATCHWIN.DAY_OF_WEEK = FOURTH.DAY_OF_WEEK
+                                    </if>
+                                    <if test="odd">
+                                        AND MATCHWIN.ODD = FOURTH.ODD
+                                    </if>
+                                    <if test="rest">
+                                        AND MATCHWIN.A_TEAM_REST_DAY = FOURTH.A_TEAM_REST_DAY
+                                    </if>
+                                    <if test="pitcher">
+                                        AND MATCHWIN.A_TEAM_PITCHER = FOURTH.A_TEAM_PITCHER
+                                    </if>
+                          LEFT OUTER JOIN
+                                (SELECT
+                                          A.LEAGUE,
+                                          A.A_TEAM,
+                                            <if test="all">
+                                                'all',
+                                            </if>
+                                            <if test="ground">
+                                                A.GROUND,
+                                            </if>
+                                            <if test="week">
+                                                A.DAY_OF_WEEK,
+                                            </if>
+                                            <if test="odd">
+                                                A.ODD,
+                                            </if>
+                                            <if test="rest">
+                                                A.A_TEAM_REST_DAY,
+                                            </if>
+                                            <if test="pitcher">
+                                                A.A_TEAM_PITCHER,
+                                            </if>
+                                          IFNULL(ROUND(WINCNT / ALLHANDICNT * 100, 1), 0)   AS fifthwinPer  ,
+                                          100 - IFNULL(ROUND(WINCNT / ALLHANDICNT * 100, 1), 0)  AS fifthlosePer,
+                                          IFNULL(ROUND(OVERCNT / ALLPOINTCNT * 100, 1), 0) AS fifthoverPer,
+                                          100 - IFNULL(ROUND(OVERCNT / ALLPOINTCNT * 100, 1) , 0) AS fifthunderPer,
+                                          NOW()
+                                   FROM   (SELECT LEAGUE,
+                                                  A_TEAM,
+                                                <if test="all">
+                                                    'all',
+                                                </if>
+                                                <if test="ground">
+                                                    GROUND,
+                                                </if>
+                                                <if test="week">
+                                                    DAY_OF_WEEK,
+                                                </if>
+                                                <if test="odd">
+                                                    ODD,
+                                                </if>
+                                                <if test="rest">
+                                                    A_TEAM_REST_DAY,
+                                                </if>
+                                                <if test="pitcher">
+                                                    A_TEAM_PITCHER,
+                                                </if>
+                                                  COUNT(1) allHandiCnt
+                                           FROM   sport.BASEBALL_DATA
+                                           WHERE  <![CDATA[  MATCH_DATE < DATE_ADD(NOW(),INTERVAL - 1 DAY)  ]]>
+                                                  AND FIFTH_HANDI_CAP_RESULT != '적특'
+                                                  AND A_TEAM_TOTAL_POINT != 99
+                                           GROUP  BY LEAGUE,
+                                                     A_TEAM,
+                                                    <if test="all">
+                                                        'all'
+                                                    </if>
+                                                    <if test="ground">
+                                                        GROUND
+                                                    </if>
+                                                    <if test="week">
+                                                        DAY_OF_WEEK
+                                                    </if>
+                                                    <if test="odd">
+                                                        ODD
+                                                    </if>
+                                                    <if test="rest">
+                                                        A_TEAM_REST_DAY
+                                                    </if>
+                                                    <if test="pitcher">
+                                                        A_TEAM_PITCHER
+                                                    </if>) A
+                                          LEFT OUTER JOIN (SELECT LEAGUE,
+                                                                  A_TEAM,
+                                                                <if test="all">
+                                                                    'all',
+                                                                </if>
+                                                                <if test="ground">
+                                                                    GROUND,
+                                                                </if>
+                                                                <if test="week">
+                                                                    DAY_OF_WEEK,
+                                                                </if>
+                                                                <if test="odd">
+                                                                    ODD,
+                                                                </if>
+                                                                <if test="rest">
+                                                                    A_TEAM_REST_DAY,
+                                                                </if>
+                                                                <if test="pitcher">
+                                                                    A_TEAM_PITCHER,
+                                                                </if>
+                                                                  COUNT(1) winCnt
+                                                           FROM   sport.BASEBALL_DATA
+                                                           WHERE  <![CDATA[  MATCH_DATE < DATE_ADD(NOW(),INTERVAL - 1 DAY)  ]]>
+                                                                  AND FIFTH_HANDI_CAP_RESULT != '적특'
+                                                                  AND FIFTH_HANDI_CAP_RESULT = '승리'
+                                                                  AND A_TEAM_TOTAL_POINT != 99
+                                                           GROUP  BY LEAGUE,
+                                                                     A_TEAM,
+                                                                    <if test="all">
+                                                                        'all'
+                                                                    </if>
+                                                                    <if test="ground">
+                                                                        GROUND
+                                                                    </if>
+                                                                    <if test="week">
+                                                                        DAY_OF_WEEK
+                                                                    </if>
+                                                                    <if test="odd">
+                                                                        ODD
+                                                                    </if>
+                                                                    <if test="rest">
+                                                                        A_TEAM_REST_DAY
+                                                                    </if>
+                                                                    <if test="pitcher">
+                                                                        A_TEAM_PITCHER
+                                                                    </if>)B
+                                                       ON A.A_TEAM = B.A_TEAM
+                                                        <if test="all">
+                                                        </if>
+                                                        <if test="ground">
+                                                            AND A.GROUND = B.GROUND
+                                                        </if>
+                                                        <if test="week">
+                                                            AND A.DAY_OF_WEEK = B.DAY_OF_WEEK
+                                                        </if>
+                                                        <if test="odd">
+                                                            AND A.ODD = B.ODD
+                                                        </if>
+                                                        <if test="rest">
+                                                            AND A.A_TEAM_REST_DAY = B.A_TEAM_REST_DAY
+                                                        </if>
+                                                        <if test="pitcher">
+                                                            AND A.A_TEAM_PITCHER = B.A_TEAM_PITCHER
+                                                        </if>
+                                                          AND A.LEAGUE = B.LEAGUE
+                                          LEFT OUTER JOIN
+                                          (SELECT LEAGUE,
+                                                  A_TEAM,
+                                                <if test="all">
+                                                    'all',
+                                                </if>
+                                                <if test="ground">
+                                                    GROUND,
+                                                </if>
+                                                <if test="week">
+                                                    DAY_OF_WEEK,
+                                                </if>
+                                                <if test="odd">
+                                                    ODD,
+                                                </if>
+                                                <if test="rest">
+                                                    A_TEAM_REST_DAY,
+                                                </if>
+                                                <if test="pitcher">
+                                                    A_TEAM_PITCHER,
+                                                </if>
+                                                  COUNT(1) allPointCnt
+                                           FROM   sport.BASEBALL_DATA
+                                           WHERE  <![CDATA[  MATCH_DATE < DATE_ADD(NOW(),INTERVAL - 1 DAY)  ]]>
+                                                  AND FIFTH_POINT_LINE_RESULT != '적특'
+                                                  AND A_TEAM_TOTAL_POINT != 99
+                                           GROUP  BY LEAGUE,
+                                                     A_TEAM,
+                                                    <if test="all">
+                                                        'all'
+                                                    </if>
+                                                    <if test="ground">
+                                                        GROUND
+                                                    </if>
+                                                    <if test="week">
+                                                        DAY_OF_WEEK
+                                                    </if>
+                                                    <if test="odd">
+                                                        ODD
+                                                    </if>
+                                                    <if test="rest">
+                                                        A_TEAM_REST_DAY
+                                                    </if>
+                                                    <if test="pitcher">
+                                                        A_TEAM_PITCHER
+                                                    </if>) C
+                                                       ON A.A_TEAM = C.A_TEAM
+                                                        <if test="all">
+                                                        </if>
+                                                        <if test="ground">
+                                                            AND A.GROUND = C.GROUND
+                                                        </if>
+                                                        <if test="week">
+                                                            AND A.DAY_OF_WEEK = C.DAY_OF_WEEK
+                                                        </if>
+                                                        <if test="odd">
+                                                            AND A.ODD = C.ODD
+                                                        </if>
+                                                        <if test="rest">
+                                                            AND A.A_TEAM_REST_DAY = C.A_TEAM_REST_DAY
+                                                        </if>
+                                                        <if test="pitcher">
+                                                            AND A.A_TEAM_PITCHER = C.A_TEAM_PITCHER
+                                                        </if>
+                                                          AND A.LEAGUE = C.LEAGUE
+                                          LEFT OUTER JOIN
+                                          (SELECT LEAGUE,
+                                                  A_TEAM,
+                                                <if test="all">
+                                                    'all',
+                                                </if>
+                                                <if test="ground">
+                                                    GROUND,
+                                                </if>
+                                                <if test="week">
+                                                    DAY_OF_WEEK,
+                                                </if>
+                                                <if test="odd">
+                                                    ODD,
+                                                </if>
+                                                <if test="rest">
+                                                    A_TEAM_REST_DAY,
+                                                </if>
+                                                <if test="pitcher">
+                                                    A_TEAM_PITCHER,
+                                                </if>
+                                                  COUNT(1) overCnt
+                                           FROM   sport.BASEBALL_DATA
+                                           WHERE  <![CDATA[  MATCH_DATE < DATE_ADD(NOW(),INTERVAL - 1 DAY)  ]]>
+                                                  AND FIFTH_POINT_LINE_RESULT !='적특'
+                                                  AND FIFTH_POINT_LINE_RESULT ='오버'
+                                                  AND A_TEAM_TOTAL_POINT != 99
+                                           GROUP  BY LEAGUE,
+                                                     A_TEAM,
+                                                    <if test="all">
+                                                        'all'
+                                                    </if>
+                                                    <if test="ground">
+                                                        GROUND
+                                                    </if>
+                                                    <if test="week">
+                                                        DAY_OF_WEEK
+                                                    </if>
+                                                    <if test="odd">
+                                                        ODD
+                                                    </if>
+                                                    <if test="rest">
+                                                        A_TEAM_REST_DAY
+                                                    </if>
+                                                    <if test="pitcher">
+                                                        A_TEAM_PITCHER
+                                                    </if>)D
+                                                       ON A.A_TEAM = D.A_TEAM
+                                                        <if test="all">
+                                                        </if>
+                                                        <if test="ground">
+                                                            AND A.GROUND = D.GROUND
+                                                        </if>
+                                                        <if test="week">
+                                                            AND A.DAY_OF_WEEK = D.DAY_OF_WEEK
+                                                        </if>
+                                                        <if test="odd">
+                                                            AND A.ODD = D.ODD
+                                                        </if>
+                                                        <if test="rest">
+                                                            AND A.A_TEAM_REST_DAY = D.A_TEAM_REST_DAY
+                                                        </if>
+                                                        <if test="pitcher">
+                                                            AND A.A_TEAM_PITCHER = D.A_TEAM_PITCHER
+                                                        </if>
+                                                          AND A.LEAGUE = D.LEAGUE) FIFTH
+                                  ON MATCHWIN.LEAGUE = FIFTH.LEAGUE
+                                  AND MATCHWIN.A_TEAM = FIFTH.A_TEAM
+                                <if test="all">
+                                </if>
+                                <if test="ground">
+                                    AND MATCHWIN.GROUND = FIFTH.GROUND
+                                </if>
+                                <if test="week">
+                                    AND MATCHWIN.DAY_OF_WEEK = FIFTH.DAY_OF_WEEK
+                                </if>
+                                <if test="odd">
+                                    AND MATCHWIN.ODD = FIFTH.ODD
+                                </if>
+                                <if test="rest">
+                                    AND MATCHWIN.A_TEAM_REST_DAY = FIFTH.A_TEAM_REST_DAY
+                                </if>
+                                <if test="pitcher">
+                                    AND MATCHWIN.A_TEAM_PITCHER = FIFTH.A_TEAM_PITCHER
+                                </if>
+                          LEFT OUTER JOIN
+                                 (SELECT
+                                          A.LEAGUE,
+                                          A.A_TEAM,
+                                            <if test="all">
+                                                'all',
+                                            </if>
+                                            <if test="ground">
+                                                A.GROUND,
+                                            </if>
+                                            <if test="week">
+                                                A.DAY_OF_WEEK,
+                                            </if>
+                                            <if test="odd">
+                                                A.ODD,
+                                            </if>
+                                            <if test="rest">
+                                                A.A_TEAM_REST_DAY,
+                                            </if>
+                                            <if test="pitcher">
+                                                A.A_TEAM_PITCHER,
+                                            </if>
+                                          IFNULL(ROUND(STRIKEPER / ALLMATCH * 100, 1), 0) AS strikeWinPer,
+                                          100 - IFNULL(ROUND(STRIKEPER / ALLMATCH * 100, 1), 0) AS strikeLosePer
+                  FROM   (SELECT
+                          A.LEAGUE,
+                          A.A_TEAM,
+                        <if test="all">
+                            'all',
+                        </if>
+                        <if test="ground">
+                            A.GROUND,
+                        </if>
+                        <if test="week">
+                            A.DAY_OF_WEEK,
+                        </if>
+                        <if test="odd">
+                            A.ODD,
+                        </if>
+                        <if test="rest">
+                            A.A_TEAM_REST_DAY,
+                        </if>
+                        <if test="pitcher">
+                            A.A_TEAM_PITCHER,
+                        </if>
+                          COUNT(1) allMatch
+                   FROM   sport.BASEBALL_DATA A
+                   WHERE  <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]>
+                          AND FIRST_STRIKEOUT != '적특'
+                          AND A_TEAM_TOTAL_POINT != 99
+                   GROUP  BY LEAGUE,
+                             A_TEAM,
+                            <if test="all">
+                                'all'
+                            </if>
+                            <if test="ground">
+                                GROUND
+                            </if>
+                            <if test="week">
+                                DAY_OF_WEEK
+                            </if>
+                            <if test="odd">
+                                ODD
+                            </if>
+                            <if test="rest">
+                                A_TEAM_REST_DAY
+                            </if>
+                            <if test="pitcher">
+                                A_TEAM_PITCHER
+                            </if>) A
+                  LEFT OUTER JOIN (SELECT A.LEAGUE,
+                                          A.A_TEAM,
+                                            <if test="all">
+                                                'all',
+                                            </if>
+                                            <if test="ground">
+                                                A.GROUND,
+                                            </if>
+                                            <if test="week">
+                                                A.DAY_OF_WEEK,
+                                            </if>
+                                            <if test="odd">
+                                                A.ODD,
+                                            </if>
+                                            <if test="rest">
+                                                A.A_TEAM_REST_DAY,
+                                            </if>
+                                            <if test="pitcher">
+                                                A.A_TEAM_PITCHER,
+                                            </if>
+                                          COUNT(1) strikePer
+                                   FROM   sport.BASEBALL_DATA A
+                                   WHERE  <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]>
+                                          AND FIRST_STRIKEOUT != '적특'
+                                          AND FIRST_STRIKEOUT = '승리'
+                                          AND A_TEAM_TOTAL_POINT != 99
+                                   GROUP  BY LEAGUE,
+                                             A_TEAM,
+                                            <if test="all">
+                                                'all'
+                                            </if>
+                                            <if test="ground">
+                                                GROUND
+                                            </if>
+                                            <if test="week">
+                                                DAY_OF_WEEK
+                                            </if>
+                                            <if test="odd">
+                                                ODD
+                                            </if>
+                                            <if test="rest">
+                                                A_TEAM_REST_DAY
+                                            </if>
+                                            <if test="pitcher">
+                                                A_TEAM_PITCHER
+                                            </if>) B
+                               ON A.A_TEAM = B.A_TEAM
+                                <if test="all">
+                                </if>
+                                <if test="ground">
+                                    AND A.GROUND = B.GROUND
+                                </if>
+                                <if test="week">
+                                    AND A.DAY_OF_WEEK = B.DAY_OF_WEEK
+                                </if>
+                                <if test="odd">
+                                    AND A.ODD = B.ODD
+                                </if>
+                                <if test="rest">
+                                    AND A.A_TEAM_REST_DAY = B.A_TEAM_REST_DAY
+                                </if>
+                                <if test="pitcher">
+                                    AND A.A_TEAM_PITCHER = B.A_TEAM_PITCHER
+                                </if>
+                                  AND A.LEAGUE = B.LEAGUE) STRIKE
+                               ON MATCHWIN.LEAGUE = STRIKE.LEAGUE
+                                  AND MATCHWIN.A_TEAM = STRIKE.A_TEAM
+                                <if test="all">
+                                </if>
+                                <if test="ground">
+                                    AND MATCHWIN.GROUND = STRIKE.GROUND
+                                </if>
+                                <if test="week">
+                                    AND MATCHWIN.DAY_OF_WEEK = STRIKE.DAY_OF_WEEK
+                                </if>
+                                <if test="odd">
+                                    AND MATCHWIN.ODD = STRIKE.ODD
+                                </if>
+                                <if test="rest">
+                                    AND MATCHWIN.A_TEAM_REST_DAY = STRIKE.A_TEAM_REST_DAY
+                                </if>
+                                <if test="pitcher">
+                                    AND MATCHWIN.A_TEAM_PITCHER = STRIKE.A_TEAM_PITCHER
+                                </if>
+                  LEFT OUTER JOIN
+                                 (SELECT
+                                          A.LEAGUE,
+                                          A.A_TEAM,
+                                            <if test="all">
+                                                'all',
+                                            </if>
+                                            <if test="ground">
+                                                A.GROUND,
+                                            </if>
+                                            <if test="week">
+                                                A.DAY_OF_WEEK,
+                                            </if>
+                                            <if test="odd">
+                                                A.ODD,
+                                            </if>
+                                            <if test="rest">
+                                                A.A_TEAM_REST_DAY,
+                                            </if>
+                                            <if test="pitcher">
+                                                A.A_TEAM_PITCHER,
+                                            </if>
+                                          IFNULL(ROUND(BASEBALLPER / ALLMATCH * 100, 1), 0)AS baseWinPer,
+                                          100 - IFNULL(ROUND(BASEBALLPER / ALLMATCH * 100, 1), 0) AS baseLosePer
+                                   FROM   (SELECT A.LEAGUE,
+                                                  A.A_TEAM,
+                                                <if test="all">
+                                                    'all',
+                                                </if>
+                                                <if test="ground">
+                                                    A.GROUND,
+                                                </if>
+                                                <if test="week">
+                                                    A.DAY_OF_WEEK,
+                                                </if>
+                                                <if test="odd">
+                                                    A.ODD,
+                                                </if>
+                                                <if test="rest">
+                                                    A.A_TEAM_REST_DAY,
+                                                </if>
+                                                <if test="pitcher">
+                                                    A.A_TEAM_PITCHER,
+                                                </if>
+                                                  COUNT(1) allMatch
+                                           FROM   sport.BASEBALL_DATA A
+                                           WHERE  <![CDATA[  MATCH_DATE < DATE_ADD(NOW(),INTERVAL - 1 DAY)  ]]>
+                                                  AND FRIST_BASEONBALL != '적특'
+                                                  AND A_TEAM_TOTAL_POINT != 99
+                                           GROUP  BY LEAGUE,
+                                                     A_TEAM,
+                                                    <if test="all">
+                                                        'all'
+                                                    </if>
+                                                    <if test="ground">
+                                                        GROUND
+                                                    </if>
+                                                    <if test="week">
+                                                        DAY_OF_WEEK
+                                                    </if>
+                                                    <if test="odd">
+                                                        ODD
+                                                    </if>
+                                                    <if test="rest">
+                                                        A_TEAM_REST_DAY
+                                                    </if>
+                                                    <if test="pitcher">
+                                                        A_TEAM_PITCHER
+                                                    </if>) A
+                                          LEFT OUTER JOIN (SELECT A.LEAGUE,
+                                                                  A.A_TEAM,
+                                                                <if test="all">
+                                                                    'all',
+                                                                </if>
+                                                                <if test="ground">
+                                                                    A.GROUND,
+                                                                </if>
+                                                                <if test="week">
+                                                                    A.DAY_OF_WEEK,
+                                                                </if>
+                                                                <if test="odd">
+                                                                    A.ODD,
+                                                                </if>
+                                                                <if test="rest">
+                                                                    A.A_TEAM_REST_DAY,
+                                                                </if>
+                                                                <if test="pitcher">
+                                                                    A.A_TEAM_PITCHER,
+                                                                </if>
+                                                                  COUNT(1) baseBallPer
+                                                           FROM   sport.BASEBALL_DATA A
+                                                           WHERE  <![CDATA[  MATCH_DATE < DATE_ADD(NOW(),INTERVAL - 1 DAY)  ]]>
+                                                                  AND FRIST_BASEONBALL !='적특'
+                                                                  AND FRIST_BASEONBALL ='승리'
+                                                                  AND A_TEAM_TOTAL_POINT != 99
+                                                           GROUP  BY LEAGUE,
+                                                                     A_TEAM,
+                                                                    <if test="all">
+                                                                        'all'
+                                                                    </if>
+                                                                    <if test="ground">
+                                                                        GROUND
+                                                                    </if>
+                                                                    <if test="week">
+                                                                        DAY_OF_WEEK
+                                                                    </if>
+                                                                    <if test="odd">
+                                                                        ODD
+                                                                    </if>
+                                                                    <if test="rest">
+                                                                        A_TEAM_REST_DAY
+                                                                    </if>
+                                                                    <if test="pitcher">
+                                                                        A_TEAM_PITCHER
+                                                                    </if>) B
+                                                       ON A.A_TEAM = B.A_TEAM
+                                                        <if test="all">
+                                                        </if>
+                                                        <if test="ground">
+                                                            AND A.GROUND = B.GROUND
+                                                        </if>
+                                                        <if test="week">
+                                                            AND A.DAY_OF_WEEK = B.DAY_OF_WEEK
+                                                        </if>
+                                                        <if test="odd">
+                                                            AND A.ODD = B.ODD
+                                                        </if>
+                                                        <if test="rest">
+                                                            AND A.A_TEAM_REST_DAY = B.A_TEAM_REST_DAY
+                                                        </if>
+                                                        <if test="pitcher">
+                                                            AND A.A_TEAM_PITCHER = B.A_TEAM_PITCHER
+                                                        </if>
+                                                          AND A.LEAGUE = B.LEAGUE) BASEBALL
+                                  ON MATCHWIN.LEAGUE = BASEBALL.LEAGUE
+                                  AND MATCHWIN.A_TEAM = BASEBALL.A_TEAM
+                                    <if test="all">
+                                    </if>
+                                    <if test="ground">
+                                        AND MATCHWIN.GROUND = BASEBALL.GROUND
+                                    </if>
+                                    <if test="week">
+                                        AND MATCHWIN.DAY_OF_WEEK = BASEBALL.DAY_OF_WEEK
+                                    </if>
+                                    <if test="odd">
+                                        AND MATCHWIN.ODD = BASEBALL.ODD
+                                    </if>
+                                    <if test="rest">
+                                        AND MATCHWIN.A_TEAM_REST_DAY = BASEBALL.A_TEAM_REST_DAY
+                                    </if>
+                                    <if test="pitcher">
+                                        AND MATCHWIN.A_TEAM_PITCHER = BASEBALL.A_TEAM_PITCHER
+                                    </if>
+                  LEFT OUTER JOIN
+                                  (SELECT A.LEAGUE,
+                                          A.A_TEAM,
+                                            <if test="all">
+                                                'all',
+                                            </if>
+                                            <if test="ground">
+                                                A.GROUND,
+                                            </if>
+                                            <if test="week">
+                                                A.DAY_OF_WEEK,
+                                            </if>
+                                            <if test="odd">
+                                                A.ODD,
+                                            </if>
+                                            <if test="rest">
+                                                A.A_TEAM_REST_DAY,
+                                            </if>
+                                            <if test="pitcher">
+                                                A.A_TEAM_PITCHER,
+                                            </if>
+                                          IFNULL(ROUND(HOMERUNPER / ALLMATCH * 100, 1), 0) AS homeRunWinPer,
+                                          100 - IFNULL(ROUND(HOMERUNPER / ALLMATCH * 100, 1), 0) AS homeRunLosePer
+                                   FROM   (SELECT A.LEAGUE,
+                                                  A.A_TEAM,
+                                                <if test="all">
+                                                    'all',
+                                                </if>
+                                                <if test="ground">
+                                                    A.GROUND,
+                                                </if>
+                                                <if test="week">
+                                                    A.DAY_OF_WEEK,
+                                                </if>
+                                                <if test="odd">
+                                                    A.ODD,
+                                                </if>
+                                                <if test="rest">
+                                                    A.A_TEAM_REST_DAY,
+                                                </if>
+                                                <if test="pitcher">
+                                                    A.A_TEAM_PITCHER,
+                                                </if>
+                                               COUNT(1) allMatch
+                                           FROM   sport.BASEBALL_DATA A
+                                           WHERE  <![CDATA[  MATCH_DATE < DATE_ADD(NOW(),INTERVAL - 1 DAY)  ]]>
+                                                  AND FIRST_HOMERUN != '적특'
+                                                  AND A_TEAM_TOTAL_POINT != 99
+                                           GROUP  BY LEAGUE,
+                                                     A_TEAM,
+                                                    <if test="all">
+                                                        'all'
+                                                    </if>
+                                                    <if test="ground">
+                                                        GROUND
+                                                    </if>
+                                                    <if test="week">
+                                                        DAY_OF_WEEK
+                                                    </if>
+                                                    <if test="odd">
+                                                        ODD
+                                                    </if>
+                                                    <if test="rest">
+                                                        A_TEAM_REST_DAY
+                                                    </if>
+                                                    <if test="pitcher">
+                                                        A_TEAM_PITCHER
+                                                    </if>) A
+                                          LEFT OUTER JOIN (SELECT A.LEAGUE,
+                                                                  A.A_TEAM,
+                                                                <if test="all">
+                                                                    'all',
+                                                                </if>
+                                                                <if test="ground">
+                                                                    A.GROUND,
+                                                                </if>
+                                                                <if test="week">
+                                                                    A.DAY_OF_WEEK,
+                                                                </if>
+                                                                <if test="odd">
+                                                                    A.ODD,
+                                                                </if>
+                                                                <if test="rest">
+                                                                    A.A_TEAM_REST_DAY,
+                                                                </if>
+                                                                <if test="pitcher">
+                                                                    A.A_TEAM_PITCHER,
+                                                                </if>
+                                                                  COUNT(1) homeRunPer
+                                                           FROM   sport.BASEBALL_DATA A
+                                                           WHERE  <![CDATA[  MATCH_DATE < DATE_ADD(NOW(),INTERVAL - 1 DAY)  ]]>
+                                                                  AND FIRST_HOMERUN != '적특'
+                                                                  AND FIRST_HOMERUN = '승리'
+                                                                  AND A_TEAM_TOTAL_POINT != 99
+                                                           GROUP  BY LEAGUE,
+                                                                     A_TEAM,
+                                                                    <if test="all">
+                                                                        'all'
+                                                                    </if>
+                                                                    <if test="ground">
+                                                                        GROUND
+                                                                    </if>
+                                                                    <if test="week">
+                                                                        DAY_OF_WEEK
+                                                                    </if>
+                                                                    <if test="odd">
+                                                                        ODD
+                                                                    </if>
+                                                                    <if test="rest">
+                                                                        A_TEAM_REST_DAY
+                                                                    </if>
+                                                                    <if test="pitcher">
+                                                                        A_TEAM_PITCHER
+                                                                    </if>) B
+                                                       ON A.A_TEAM = B.A_TEAM
+                                                            <if test="all">
+                                                            </if>
+                                                            <if test="ground">
+                                                                AND A.GROUND = B.GROUND
+                                                            </if>
+                                                            <if test="week">
+                                                                AND A.DAY_OF_WEEK = B.DAY_OF_WEEK
+                                                            </if>
+                                                            <if test="odd">
+                                                                AND A.ODD = B.ODD
+                                                            </if>
+                                                            <if test="rest">
+                                                                AND A.A_TEAM_REST_DAY = B.A_TEAM_REST_DAY
+                                                            </if>
+                                                            <if test="pitcher">
+                                                                AND A.A_TEAM_PITCHER = B.A_TEAM_PITCHER
+                                                            </if>
+                                                          AND A.LEAGUE = B.LEAGUE) HOMERUN
+                               ON MATCHWIN.LEAGUE = HOMERUN.LEAGUE
+                                  AND MATCHWIN.A_TEAM = HOMERUN.A_TEAM
+                                <if test="all">
+                                </if>
+                                <if test="ground">
+                                    AND MATCHWIN.GROUND = HOMERUN.GROUND
+                                </if>
+                                <if test="week">
+                                    AND MATCHWIN.DAY_OF_WEEK = HOMERUN.DAY_OF_WEEK
+                                </if>
+                                <if test="odd">
+                                    AND MATCHWIN.ODD = HOMERUN.ODD
+                                </if>
+                                <if test="rest">
+                                    AND MATCHWIN.A_TEAM_REST_DAY = HOMERUN.A_TEAM_REST_DAY
+                                </if>
+                                <if test="pitcher">
+                                    AND MATCHWIN.A_TEAM_PITCHER = HOMERUN.A_TEAM_PITCHER
+                                </if>
+                                ;
+    </insert>
+
+
+
+
 
 
 </mapper>

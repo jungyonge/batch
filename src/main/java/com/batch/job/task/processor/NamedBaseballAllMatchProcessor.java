@@ -25,7 +25,7 @@ import java.util.List;
 public class NamedBaseballAllMatchProcessor implements ItemProcessor<String, List<BaseballModel>> {
 
     private String initSeasonDate;
-    private String finishSeasonDate = "2020-12-14";
+    private String finishSeasonDate = "2020-12-05";
     private String baseBall_Url = "https://api.picksmatch.com/v1.0/sports/baseball/games?date=";
     @Autowired
     private NamedUtil namedUtil;

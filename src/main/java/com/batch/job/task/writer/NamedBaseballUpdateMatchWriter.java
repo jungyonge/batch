@@ -2,6 +2,7 @@ package com.batch.job.task.writer;
 
 import com.batch.mapper.BaseballMapper;
 import com.batch.model.BaseballModel;
+import com.batch.model.FilterConditionModel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.stereotype.Component;
@@ -24,8 +25,30 @@ public class NamedBaseballUpdateMatchWriter implements ItemWriter< List<Baseball
         for(List<BaseballModel> baseballModels : list){
             for(BaseballModel baseballModel : baseballModels){
                     baseballMapper.updateBaseballStat(baseballModel);
-
             }
         }
+
+        baseballMapper.truncateBaseballSummary();
+
+        FilterConditionModel filterConditionModel = new FilterConditionModel();
+        filterConditionModel.setGround(true);
+        baseballMapper.insertBaseballSummary(filterConditionModel);
+
+        filterConditionModel = new FilterConditionModel();
+        filterConditionModel.setAll(true);
+        baseballMapper.insertBaseballSummary(filterConditionModel);
+
+        filterConditionModel = new FilterConditionModel();
+        filterConditionModel.setOdd(true);
+        baseballMapper.insertBaseballSummary(filterConditionModel);
+
+        filterConditionModel = new FilterConditionModel();
+        filterConditionModel.setWeek(true);
+        baseballMapper.insertBaseballSummary(filterConditionModel);
+
+        filterConditionModel = new FilterConditionModel();
+        filterConditionModel.setPitcher(true);
+        baseballMapper.insertBaseballSummary(filterConditionModel);
+
     }
 }
