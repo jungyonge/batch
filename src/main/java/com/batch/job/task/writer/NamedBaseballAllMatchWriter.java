@@ -31,7 +31,7 @@ public class NamedBaseballAllMatchWriter implements ItemWriter< List<BaseballMod
 //            }
 //        }
         FilterConditionModel filterConditionModel = new FilterConditionModel();
-        filterConditionModel.setGround(true);;
+        filterConditionModel.setGround(true);
         baseballMapper.insertBaseballSummary(filterConditionModel);
     }
 }

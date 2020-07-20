@@ -896,19 +896,19 @@
                                                     <if test="all">
                                                     </if>
                                                     <if test="ground">
-                                                        AND A.GROUND = C.GROUND
+                                                        AND A.GROUND = D.GROUND
                                                     </if>
                                                     <if test="week">
-                                                        AND A.DAY_OF_WEEK = C.DAY_OF_WEEK
+                                                        AND A.DAY_OF_WEEK = D.DAY_OF_WEEK
                                                     </if>
                                                     <if test="odd">
-                                                        AND A.ODD = C.ODD
+                                                        AND A.ODD = D.ODD
                                                     </if>
                                                     <if test="rest">
-                                                        AND A.A_TEAM_REST_DAY = C.A_TEAM_REST_DAY
+                                                        AND A.A_TEAM_REST_DAY = D.A_TEAM_REST_DAY
                                                     </if>
                                                     <if test="pitcher">
-                                                        AND A.A_TEAM_PITCHER = C.A_TEAM_PITCHER
+                                                        AND A.A_TEAM_PITCHER = D.A_TEAM_PITCHER
                                                     </if>
                                                           AND A.LEAGUE = D.LEAGUE) THIRD
                                   ON MATCHWIN.LEAGUE = THIRD.LEAGUE
@@ -1180,19 +1180,19 @@
                                                             <if test="all">
                                                             </if>
                                                             <if test="ground">
-                                                                AND A.GROUND = C.GROUND
+                                                                AND A.GROUND = D.GROUND
                                                             </if>
                                                             <if test="week">
-                                                                AND A.DAY_OF_WEEK = C.DAY_OF_WEEK
+                                                                AND A.DAY_OF_WEEK = D.DAY_OF_WEEK
                                                             </if>
                                                             <if test="odd">
-                                                                AND A.ODD = C.ODD
+                                                                AND A.ODD = D.ODD
                                                             </if>
                                                             <if test="rest">
-                                                                AND A.A_TEAM_REST_DAY = C.A_TEAM_REST_DAY
+                                                                AND A.A_TEAM_REST_DAY = D.A_TEAM_REST_DAY
                                                             </if>
                                                             <if test="pitcher">
-                                                                AND A.A_TEAM_PITCHER = C.A_TEAM_PITCHER
+                                                                AND A.A_TEAM_PITCHER = D.A_TEAM_PITCHER
                                                             </if>
                                                           AND A.LEAGUE = D.LEAGUE) FOURTH
                                   ON MATCHWIN.LEAGUE = FOURTH.LEAGUE
@@ -1463,19 +1463,19 @@
                                                         <if test="all">
                                                         </if>
                                                         <if test="ground">
-                                                            AND A.GROUND = C.GROUND
+                                                            AND A.GROUND = D.GROUND
                                                         </if>
                                                         <if test="week">
-                                                            AND A.DAY_OF_WEEK = C.DAY_OF_WEEK
+                                                            AND A.DAY_OF_WEEK = D.DAY_OF_WEEK
                                                         </if>
                                                         <if test="odd">
-                                                            AND A.ODD = C.ODD
+                                                            AND A.ODD = D.ODD
                                                         </if>
                                                         <if test="rest">
-                                                            AND A.A_TEAM_REST_DAY = C.A_TEAM_REST_DAY
+                                                            AND A.A_TEAM_REST_DAY = D.A_TEAM_REST_DAY
                                                         </if>
                                                         <if test="pitcher">
-                                                            AND A.A_TEAM_PITCHER = C.A_TEAM_PITCHER
+                                                            AND A.A_TEAM_PITCHER = D.A_TEAM_PITCHER
                                                         </if>
                                                           AND A.LEAGUE = D.LEAGUE) FIFTH
                                   ON MATCHWIN.LEAGUE = FIFTH.LEAGUE
