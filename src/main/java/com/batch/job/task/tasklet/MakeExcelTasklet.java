@@ -47,9 +47,25 @@ public class MakeExcelTasklet implements Tasklet {
 
         String sport;
 
+
+
+        basketballMapper.truncateBasketballSpecialSummary();
+
         FilterConditionModel filterConditionModel = new FilterConditionModel();
         filterConditionModel.setGround(true);
-        basketballMapper.insertBaseBallSpecialSummary(filterConditionModel);
+        basketballMapper.insertBasketballSpecialSummary(filterConditionModel);
+
+        filterConditionModel = new FilterConditionModel();
+        filterConditionModel.setAll(true);
+        basketballMapper.insertBasketballSpecialSummary(filterConditionModel);
+
+        filterConditionModel = new FilterConditionModel();
+        filterConditionModel.setOdd(true);
+        basketballMapper.insertBasketballSpecialSummary(filterConditionModel);
+
+        filterConditionModel = new FilterConditionModel();
+        filterConditionModel.setWeek(true);
+        basketballMapper.insertBasketballSpecialSummary(filterConditionModel);
 
 //        sportMakeExcelList = commonMapper.selectSportMakeExcelList();
 //        for (int i = 0 ; i < sportMakeExcelList.size() ; i++){
@@ -68,7 +84,7 @@ public class MakeExcelTasklet implements Tasklet {
         List excelDataList = new ArrayList<>();
 
         if(type.equals("basketball")){
-            excelDataList = basketballMapper.selectBasketStat();
+            excelDataList = basketballMapper.selectBasketballStat();
         }else if (type.equals("volleyball")){
 //            excelDataList = setalarmDAO.selectVolleyStat();
         }else if (type.equals("hockey")){

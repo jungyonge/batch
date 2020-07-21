@@ -102,7 +102,7 @@
                 UPDATE_YN = 1;
     </update>
 
-    <select id="selectBasketStat"  resultType="HashMap">
+    <select id="selectBasketballStat"  resultType="HashMap">
         SELECT LEAGUE,
                GROUND,
                MATCH_DATE,
@@ -176,7 +176,7 @@
                       GAME_ID;
     </select>
 
-    <insert id="insertBaseBallSpecialSummary" parameterType="com.batch.model.FilterConditionModel">
+    <insert id="insertBasketballSpecialSummary" parameterType="com.batch.model.FilterConditionModel">
         INSERT INTO sport.basketball_special_summary
                     (
                                 league,
@@ -862,7 +862,7 @@
                          AND A.GROUND = D3.GROUND
                      </if>
                      <if test="week">
-                         AND A.DAY_OF_WEEK = D33.DAY_OF_WEEK
+                         AND A.DAY_OF_WEEK = D3.DAY_OF_WEEK
                      </if>
                      <if test="odd">
                          AND A.ODD = D3.ODD
@@ -1143,5 +1143,8 @@
                        AND A.LEAGUE = E4.LEAGUE
     </insert>
 
+    <insert id="truncateBasketballSpecialSummary">
+        TRUNCATE sport.basketball_special_summary
+    </insert>
 
 </mapper>

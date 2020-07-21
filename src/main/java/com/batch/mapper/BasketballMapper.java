@@ -17,7 +17,9 @@ public interface BasketballMapper {
 
     public int updateBasketStat(BasketballModel basketballModel);
 
-    public List selectBasketStat();
+    public List selectBasketballStat();
 
-    public int insertBaseBallSpecialSummary(FilterConditionModel filterConditionModel);
+    public int insertBasketballSpecialSummary(FilterConditionModel filterConditionModel);
+
+    public int truncateBasketballSpecialSummary();
 }
