@@ -175,4 +175,973 @@
                       LEAGUE,
                       GAME_ID;
     </select>
+
+    <insert id="insertBaseBallSpecialSummary" parameterType="com.batch.model.FilterConditionModel">
+        INSERT INTO sport.basketball_special_summary
+                    (
+                                league,
+                                team,
+                                filter,
+                                condi,
+                                first_first_point_per,
+                                second_first_point_per,
+                                third_first_point_per,
+                                fourth_first_point_per,
+                                first_first_two_point_per,
+                                second_first_two_point_per,
+                                third_first_two_point_per,
+                                fourth_first_two_point_per,
+                                first_first_free_two_per,
+                                second_first_free_two_per,
+                                third_first_free_two_per,
+                                fourth_first_free_two_per,
+                                first_first_three_point_per,
+                                second_first_three_point_per,
+                                third_first_three_point_per,
+                                fourth_first_three_point_per,
+                                rdate
+                    )
+            SELECT A.LEAGUE,
+                   A.A_TEAM,
+                   <if test="all">
+                       '전체',
+                       'all',
+                   </if>
+                   <if test="ground">
+                       '홈/원정',
+                       A.GROUND,
+                   </if>
+                   <if test="week">
+                       '요일',
+                       A.DAY_OF_WEEK,
+                   </if>
+                   <if test="odd">
+                       '정/역배',
+                       A.ODD,
+                   </if>
+                   <if test="rest">
+                       '휴식일',
+                       A.A_TEAM_REST_DAY,
+                   </if>
+                   ROUND(FIRST_FIRST_POINT_RES / ALLCNT * 100, 1)        AS       first_first_point_per,
+                   ROUND(SECOND_FIRST_POINT_RES / ALLCNT * 100, 1)       AS       second_first_point_per,
+                   ROUND(THIRD_FIRST_POINT_RES / ALLCNT * 100, 1)        AS       third_first_point_per,
+                   ROUND(FOURTH_FIRST_POINT_RES / ALLCNT * 100, 1)       AS       fourth_first_point_per,
+                   ROUND(FIRST_FIRST_TWO_POINT_RES / ALLCNT * 100, 1)    AS       first_first_two_point_per,
+                   ROUND(SECOND_FIRST_TWO_POINT_RES / ALLCNT * 100, 1)   AS       second_first_two_point_per,
+                   ROUND(THIRD_FIRST_TWO_POINT_RES / ALLCNT * 100, 1)    AS       third_first_two_point_per,
+                   ROUND(FOURTH_FIRST_TWO_POINT_RES / ALLCNT * 100, 1)   AS       fourth_first_two_point_per,
+                   ROUND(FIRST_FIRST_FREE_TWO_RES / ALLCNT * 100, 1)     AS       first_first_free_two_per,
+                   ROUND(SECOND_FIRST_FREE_TWO_RES / ALLCNT * 100, 1)    AS       second_first_free_two_per,
+                   ROUND(THIRD_FIRST_FREE_TWO_RES / ALLCNT * 100, 1)     AS       third_first_free_two_per,
+                   ROUND(FOURTH_FIRST_FREE_TWO_RES / ALLCNT * 100, 1)    AS       fourth_first_free_two_per,
+                   ROUND(FIRST_FIRST_THREE_POINT_RES / ALLCNT * 100, 1)  AS       first_first_three_point_per,
+                   ROUND(SECOND_FIRST_THREE_POINT_RES / ALLCNT * 100, 1) AS       second_first_three_point_per,
+                   ROUND(THIRD_FIRST_THREE_POINT_RES / ALLCNT * 100, 1)  AS       third_first_three_point_per,
+                   ROUND(FOURTH_FIRST_THREE_POINT_RES / ALLCNT * 100, 1) AS       fourth_first_three_point_per,
+                   NOW()
+  FROM (SELECT LEAGUE,
+               A_TEAM,
+               <if test="all">
+                   'all',
+               </if>
+               <if test="ground">
+                   A.GROUND,
+               </if>
+               <if test="week">
+                   A.DAY_OF_WEEK,
+               </if>
+               <if test="odd">
+                   A.ODD,
+               </if>
+               <if test="rest">
+                   A.A_TEAM_REST_DAY,
+               </if>
+               COUNT(1) AS allCnt
+          FROM sport.basketball_data A
+         WHERE  <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]>
+         GROUP  BY LEAGUE,
+                                     A_TEAM,
+                                    <if test="all">
+                                        'all'
+                                    </if>
+                                    <if test="ground">
+                                        GROUND
+                                    </if>
+                                    <if test="week">
+                                        DAY_OF_WEEK
+                                    </if>
+                                    <if test="odd">
+                                        ODD
+                                    </if>
+                                    <if test="rest">
+                                        A_TEAM_REST_DAY
+                                    </if>) A
+       LEFT OUTER JOIN (SELECT LEAGUE,
+                               A_TEAM,
+                                    <if test="all">
+                                        'all',
+                                    </if>
+                                    <if test="ground">
+                                        GROUND,
+                                    </if>
+                                    <if test="week">
+                                        DAY_OF_WEEK,
+                                    </if>
+                                    <if test="odd">
+                                        ODD,
+                                    </if>
+                                    <if test="rest">
+                                        A_TEAM_REST_DAY,
+                                    </if>
+                               COUNT(1) AS first_first_point_res
+                          FROM sport.basketball_data
+                         WHERE FIRSTQ_FIRST_POINT = '승리'
+                               AND  <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]>
+                         GROUP  BY LEAGUE,
+                                     A_TEAM,
+                                    <if test="all">
+                                        'all'
+                                    </if>
+                                    <if test="ground">
+                                        GROUND
+                                    </if>
+                                    <if test="week">
+                                        DAY_OF_WEEK
+                                    </if>
+                                    <if test="odd">
+                                        ODD
+                                    </if>
+                                    <if test="rest">
+                                        A_TEAM_REST_DAY
+                                    </if>) B
+                    ON A.A_TEAM = B.A_TEAM
+                     <if test="all">
+                     </if>
+                     <if test="ground">
+                         AND A.GROUND = B.GROUND
+                     </if>
+                     <if test="week">
+                         AND A.DAY_OF_WEEK = B.DAY_OF_WEEK
+                     </if>
+                     <if test="odd">
+                         AND A.ODD = B.ODD
+                     </if>
+                     <if test="rest">
+                         AND A.A_TEAM_REST_DAY = B.A_TEAM_REST_DAY
+                     </if>
+                       AND A.LEAGUE = B.LEAGUE
+       LEFT OUTER JOIN (SELECT LEAGUE,
+                               A_TEAM,
+                                    <if test="all">
+                                        'all',
+                                    </if>
+                                    <if test="ground">
+                                        GROUND,
+                                    </if>
+                                    <if test="week">
+                                        DAY_OF_WEEK,
+                                    </if>
+                                    <if test="odd">
+                                        ODD,
+                                    </if>
+                                    <if test="rest">
+                                        A_TEAM_REST_DAY,
+                                    </if>
+                               COUNT(1) AS second_first_point_res
+                          FROM sport.basketball_data
+                         WHERE SECONDQ_FIRST_POINT = '승리'
+                               AND  <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]>
+                         GROUP  BY LEAGUE,
+                                     A_TEAM,
+                                    <if test="all">
+                                        'all'
+                                    </if>
+                                    <if test="ground">
+                                        GROUND
+                                    </if>
+                                    <if test="week">
+                                        DAY_OF_WEEK
+                                    </if>
+                                    <if test="odd">
+                                        ODD
+                                    </if>
+                                    <if test="rest">
+                                        A_TEAM_REST_DAY
+                                    </if>) C
+                    ON A.A_TEAM = C.A_TEAM
+                     <if test="all">
+                     </if>
+                     <if test="ground">
+                         AND A.GROUND = C.GROUND
+                     </if>
+                     <if test="week">
+                         AND A.DAY_OF_WEEK = C.DAY_OF_WEEK
+                     </if>
+                     <if test="odd">
+                         AND A.ODD = C.ODD
+                     </if>
+                     <if test="rest">
+                         AND A.A_TEAM_REST_DAY = C.A_TEAM_REST_DAY
+                     </if>
+                       AND A.LEAGUE = C.LEAGUE
+       LEFT OUTER JOIN (SELECT LEAGUE,
+                               A_TEAM,
+                                    <if test="all">
+                                        'all',
+                                    </if>
+                                    <if test="ground">
+                                        GROUND,
+                                    </if>
+                                    <if test="week">
+                                        DAY_OF_WEEK,
+                                    </if>
+                                    <if test="odd">
+                                        ODD,
+                                    </if>
+                                    <if test="rest">
+                                        A_TEAM_REST_DAY,
+                                    </if>
+                               COUNT(1) AS third_first_point_res
+                          FROM sport.basketball_data
+                         WHERE THIRDQ_FIRST_POINT = '승리'
+                               AND  <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]>
+                         GROUP  BY LEAGUE,
+                                     A_TEAM,
+                                    <if test="all">
+                                        'all'
+                                    </if>
+                                    <if test="ground">
+                                        GROUND
+                                    </if>
+                                    <if test="week">
+                                        DAY_OF_WEEK
+                                    </if>
+                                    <if test="odd">
+                                        ODD
+                                    </if>
+                                    <if test="rest">
+                                        A_TEAM_REST_DAY
+                                    </if>) D
+                    ON A.A_TEAM = D.A_TEAM
+                     <if test="all">
+                     </if>
+                     <if test="ground">
+                         AND A.GROUND = D.GROUND
+                     </if>
+                     <if test="week">
+                         AND A.DAY_OF_WEEK = D.DAY_OF_WEEK
+                     </if>
+                     <if test="odd">
+                         AND A.ODD = D.ODD
+                     </if>
+                     <if test="rest">
+                         AND A.A_TEAM_REST_DAY = D.A_TEAM_REST_DAY
+                     </if>
+                       AND A.LEAGUE = D.LEAGUE
+       LEFT OUTER JOIN (SELECT LEAGUE,
+                               A_TEAM,
+                                    <if test="all">
+                                        'all',
+                                    </if>
+                                    <if test="ground">
+                                        GROUND,
+                                    </if>
+                                    <if test="week">
+                                        DAY_OF_WEEK,
+                                    </if>
+                                    <if test="odd">
+                                        ODD,
+                                    </if>
+                                    <if test="rest">
+                                        A_TEAM_REST_DAY,
+                                    </if>
+                               COUNT(1) AS fourth_first_point_res
+                          FROM sport.basketball_data
+                         WHERE SECONDQ_FIRST_POINT = '승리'
+                               AND  <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]>
+                         GROUP  BY LEAGUE,
+                                     A_TEAM,
+                                    <if test="all">
+                                        'all'
+                                    </if>
+                                    <if test="ground">
+                                        GROUND
+                                    </if>
+                                    <if test="week">
+                                        DAY_OF_WEEK
+                                    </if>
+                                    <if test="odd">
+                                        ODD
+                                    </if>
+                                    <if test="rest">
+                                        A_TEAM_REST_DAY
+                                    </if>) E
+                    ON A.A_TEAM = E.A_TEAM
+                     <if test="all">
+                     </if>
+                     <if test="ground">
+                         AND A.GROUND = E.GROUND
+                     </if>
+                     <if test="week">
+                         AND A.DAY_OF_WEEK = E.DAY_OF_WEEK
+                     </if>
+                     <if test="odd">
+                         AND A.ODD = E.ODD
+                     </if>
+                     <if test="rest">
+                         AND A.A_TEAM_REST_DAY = E.A_TEAM_REST_DAY
+                     </if>
+                       AND A.LEAGUE = E.LEAGUE
+       LEFT OUTER JOIN (SELECT LEAGUE,
+                               A_TEAM,
+                                    <if test="all">
+                                        'all',
+                                    </if>
+                                    <if test="ground">
+                                        GROUND,
+                                    </if>
+                                    <if test="week">
+                                        DAY_OF_WEEK,
+                                    </if>
+                                    <if test="odd">
+                                        ODD,
+                                    </if>
+                                    <if test="rest">
+                                        A_TEAM_REST_DAY,
+                                    </if>
+                               COUNT(1) AS first_first_two_point_res
+                          FROM sport.basketball_data
+                         WHERE FIRSTQ_FIRST_TWO_POINT = '승리'
+                               AND  <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]>
+                         GROUP  BY LEAGUE,
+                                     A_TEAM,
+                                    <if test="all">
+                                        'all'
+                                    </if>
+                                    <if test="ground">
+                                        GROUND
+                                    </if>
+                                    <if test="week">
+                                        DAY_OF_WEEK
+                                    </if>
+                                    <if test="odd">
+                                        ODD
+                                    </if>
+                                    <if test="rest">
+                                        A_TEAM_REST_DAY
+                                    </if>) B2
+                    ON A.A_TEAM = B2.A_TEAM
+                   <if test="all">
+                     </if>
+                     <if test="ground">
+                         AND A.GROUND = B2.GROUND
+                     </if>
+                     <if test="week">
+                         AND A.DAY_OF_WEEK = B2.DAY_OF_WEEK
+                     </if>
+                     <if test="odd">
+                         AND A.ODD = B2.ODD
+                     </if>
+                     <if test="rest">
+                         AND A.A_TEAM_REST_DAY = B2.A_TEAM_REST_DAY
+                     </if>
+                       AND A.LEAGUE = B2.LEAGUE
+                LEFT OUTER JOIN (SELECT LEAGUE,
+                               A_TEAM,
+                                    <if test="all">
+                                        'all',
+                                    </if>
+                                    <if test="ground">
+                                        GROUND,
+                                    </if>
+                                    <if test="week">
+                                        DAY_OF_WEEK,
+                                    </if>
+                                    <if test="odd">
+                                        ODD,
+                                    </if>
+                                    <if test="rest">
+                                        A_TEAM_REST_DAY,
+                                    </if>
+                               COUNT(1) AS second_first_two_point_res
+                          FROM sport.basketball_data
+                         WHERE SECONDQ_FIRST_TWO_POINT = '승리'
+                               AND  <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]>
+                         GROUP  BY LEAGUE,
+                                     A_TEAM,
+                                    <if test="all">
+                                        'all'
+                                    </if>
+                                    <if test="ground">
+                                        GROUND
+                                    </if>
+                                    <if test="week">
+                                        DAY_OF_WEEK
+                                    </if>
+                                    <if test="odd">
+                                        ODD
+                                    </if>
+                                    <if test="rest">
+                                        A_TEAM_REST_DAY
+                                    </if>) C2
+                    ON A.A_TEAM = C2.A_TEAM
+                   <if test="all">
+                     </if>
+                     <if test="ground">
+                         AND A.GROUND = C2.GROUND
+                     </if>
+                     <if test="week">
+                         AND A.DAY_OF_WEEK = C2.DAY_OF_WEEK
+                     </if>
+                     <if test="odd">
+                         AND A.ODD = C2.ODD
+                     </if>
+                     <if test="rest">
+                         AND A.A_TEAM_REST_DAY = C2.A_TEAM_REST_DAY
+                     </if>
+                       AND A.LEAGUE = C2.LEAGUE
+       LEFT OUTER JOIN (SELECT LEAGUE,
+                               A_TEAM,
+                                    <if test="all">
+                                        'all',
+                                    </if>
+                                    <if test="ground">
+                                        GROUND,
+                                    </if>
+                                    <if test="week">
+                                        DAY_OF_WEEK,
+                                    </if>
+                                    <if test="odd">
+                                        ODD,
+                                    </if>
+                                    <if test="rest">
+                                        A_TEAM_REST_DAY,
+                                    </if>
+                               COUNT(1) AS third_first_two_point_res
+                          FROM sport.basketball_data
+                         WHERE THIRDQ_FIRST_TWO_POINT = '승리'
+                               AND  <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]>
+                         GROUP  BY LEAGUE,
+                                     A_TEAM,
+                                    <if test="all">
+                                        'all'
+                                    </if>
+                                    <if test="ground">
+                                        GROUND
+                                    </if>
+                                    <if test="week">
+                                        DAY_OF_WEEK
+                                    </if>
+                                    <if test="odd">
+                                        ODD
+                                    </if>
+                                    <if test="rest">
+                                        A_TEAM_REST_DAY
+                                    </if>) D2
+                    ON A.A_TEAM = D2.A_TEAM
+                   <if test="all">
+                     </if>
+                     <if test="ground">
+                         AND A.GROUND = D2.GROUND
+                     </if>
+                     <if test="week">
+                         AND A.DAY_OF_WEEK = D2.DAY_OF_WEEK
+                     </if>
+                     <if test="odd">
+                         AND A.ODD = D2.ODD
+                     </if>
+                     <if test="rest">
+                         AND A.A_TEAM_REST_DAY = D2.A_TEAM_REST_DAY
+                     </if>
+                       AND A.LEAGUE = D2.LEAGUE
+       LEFT OUTER JOIN (SELECT LEAGUE,
+                               A_TEAM,
+                                    <if test="all">
+                                        'all',
+                                    </if>
+                                    <if test="ground">
+                                        GROUND,
+                                    </if>
+                                    <if test="week">
+                                        DAY_OF_WEEK,
+                                    </if>
+                                    <if test="odd">
+                                        ODD,
+                                    </if>
+                                    <if test="rest">
+                                        A_TEAM_REST_DAY,
+                                    </if>
+                               COUNT(1) AS fourth_first_two_point_res
+                          FROM sport.basketball_data
+                         WHERE SECONDQ_FIRST_TWO_POINT = '승리'
+                               AND  <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]>
+                         GROUP  BY LEAGUE,
+                                     A_TEAM,
+                                    <if test="all">
+                                        'all'
+                                    </if>
+                                    <if test="ground">
+                                        GROUND
+                                    </if>
+                                    <if test="week">
+                                        DAY_OF_WEEK
+                                    </if>
+                                    <if test="odd">
+                                        ODD
+                                    </if>
+                                    <if test="rest">
+                                        A_TEAM_REST_DAY
+                                    </if>) E2
+                    ON A.A_TEAM = E2.A_TEAM
+                   <if test="all">
+                     </if>
+                     <if test="ground">
+                         AND A.GROUND = E2.GROUND
+                     </if>
+                     <if test="week">
+                         AND A.DAY_OF_WEEK = E2.DAY_OF_WEEK
+                     </if>
+                     <if test="odd">
+                         AND A.ODD = E2.ODD
+                     </if>
+                     <if test="rest">
+                         AND A.A_TEAM_REST_DAY = E2.A_TEAM_REST_DAY
+                     </if>
+                       AND A.LEAGUE = E2.LEAGUE
+       LEFT OUTER JOIN (SELECT LEAGUE,
+                               A_TEAM,
+                                    <if test="all">
+                                        'all',
+                                    </if>
+                                    <if test="ground">
+                                        GROUND,
+                                    </if>
+                                    <if test="week">
+                                        DAY_OF_WEEK,
+                                    </if>
+                                    <if test="odd">
+                                        ODD,
+                                    </if>
+                                    <if test="rest">
+                                        A_TEAM_REST_DAY,
+                                    </if>
+                               COUNT(1) AS first_first_free_two_res
+                          FROM sport.basketball_data
+                         WHERE FIRSTQ_FIRST_FREE_TWO = '승리'
+                               AND  <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]>
+                         GROUP  BY LEAGUE,
+                                     A_TEAM,
+                                    <if test="all">
+                                        'all'
+                                    </if>
+                                    <if test="ground">
+                                        GROUND
+                                    </if>
+                                    <if test="week">
+                                        DAY_OF_WEEK
+                                    </if>
+                                    <if test="odd">
+                                        ODD
+                                    </if>
+                                    <if test="rest">
+                                        A_TEAM_REST_DAY
+                                    </if>) B3
+                    ON A.A_TEAM = B3.A_TEAM
+                   <if test="all">
+                     </if>
+                     <if test="ground">
+                         AND A.GROUND = B3.GROUND
+                     </if>
+                     <if test="week">
+                         AND A.DAY_OF_WEEK = B3.DAY_OF_WEEK
+                     </if>
+                     <if test="odd">
+                         AND A.ODD = B3.ODD
+                     </if>
+                     <if test="rest">
+                         AND A.A_TEAM_REST_DAY = B3.A_TEAM_REST_DAY
+                     </if>
+                       AND A.LEAGUE = B3.LEAGUE
+       LEFT OUTER JOIN (SELECT LEAGUE,
+                               A_TEAM,
+                                    <if test="all">
+                                        'all',
+                                    </if>
+                                    <if test="ground">
+                                        GROUND,
+                                    </if>
+                                    <if test="week">
+                                        DAY_OF_WEEK,
+                                    </if>
+                                    <if test="odd">
+                                        ODD,
+                                    </if>
+                                    <if test="rest">
+                                        A_TEAM_REST_DAY,
+                                    </if>
+                               COUNT(1) AS second_first_free_two_res
+                          FROM sport.basketball_data
+                         WHERE SECONDQ_FIRST_FREE_TWO = '승리'
+                               AND  <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]>
+                         GROUP  BY LEAGUE,
+                                     A_TEAM,
+                                    <if test="all">
+                                        'all'
+                                    </if>
+                                    <if test="ground">
+                                        GROUND
+                                    </if>
+                                    <if test="week">
+                                        DAY_OF_WEEK
+                                    </if>
+                                    <if test="odd">
+                                        ODD
+                                    </if>
+                                    <if test="rest">
+                                        A_TEAM_REST_DAY
+                                    </if>) C3
+                    ON A.A_TEAM = C3.A_TEAM
+                   <if test="all">
+                     </if>
+                     <if test="ground">
+                         AND A.GROUND = C3.GROUND
+                     </if>
+                     <if test="week">
+                         AND A.DAY_OF_WEEK = C3.DAY_OF_WEEK
+                     </if>
+                     <if test="odd">
+                         AND A.ODD = C3.ODD
+                     </if>
+                     <if test="rest">
+                         AND A.A_TEAM_REST_DAY = C3.A_TEAM_REST_DAY
+                     </if>
+                       AND A.LEAGUE = C3.LEAGUE
+       LEFT OUTER JOIN (SELECT LEAGUE,
+                               A_TEAM,
+                                    <if test="all">
+                                        'all',
+                                    </if>
+                                    <if test="ground">
+                                        GROUND,
+                                    </if>
+                                    <if test="week">
+                                        DAY_OF_WEEK,
+                                    </if>
+                                    <if test="odd">
+                                        ODD,
+                                    </if>
+                                    <if test="rest">
+                                        A_TEAM_REST_DAY,
+                                    </if>
+                               COUNT(1) AS third_first_free_two_res
+                          FROM sport.basketball_data
+                         WHERE THIRDQ_FIRST_FREE_TWO = '승리'
+                               AND  <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]>
+                         GROUP  BY LEAGUE,
+                                     A_TEAM,
+                                    <if test="all">
+                                        'all'
+                                    </if>
+                                    <if test="ground">
+                                        GROUND
+                                    </if>
+                                    <if test="week">
+                                        DAY_OF_WEEK
+                                    </if>
+                                    <if test="odd">
+                                        ODD
+                                    </if>
+                                    <if test="rest">
+                                        A_TEAM_REST_DAY
+                                    </if>) D3
+                    ON A.A_TEAM = D3.A_TEAM
+                   <if test="all">
+                     </if>
+                     <if test="ground">
+                         AND A.GROUND = D3.GROUND
+                     </if>
+                     <if test="week">
+                         AND A.DAY_OF_WEEK = D33.DAY_OF_WEEK
+                     </if>
+                     <if test="odd">
+                         AND A.ODD = D3.ODD
+                     </if>
+                     <if test="rest">
+                         AND A.A_TEAM_REST_DAY = D3.A_TEAM_REST_DAY
+                     </if>
+                       AND A.LEAGUE = D3.LEAGUE
+       LEFT OUTER JOIN (SELECT LEAGUE,
+                               A_TEAM,
+                                     <if test="all">
+                                        'all',
+                                    </if>
+                                    <if test="ground">
+                                        GROUND,
+                                    </if>
+                                    <if test="week">
+                                        DAY_OF_WEEK,
+                                    </if>
+                                    <if test="odd">
+                                        ODD,
+                                    </if>
+                                    <if test="rest">
+                                        A_TEAM_REST_DAY,
+                                    </if>
+                               COUNT(1) AS fourth_first_free_two_res
+                          FROM sport.basketball_data
+                         WHERE SECONDQ_FIRST_FREE_TWO = '승리'
+                               AND  <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]>
+                         GROUP  BY LEAGUE,
+                                     A_TEAM,
+                                    <if test="all">
+                                        'all'
+                                    </if>
+                                    <if test="ground">
+                                        GROUND
+                                    </if>
+                                    <if test="week">
+                                        DAY_OF_WEEK
+                                    </if>
+                                    <if test="odd">
+                                        ODD
+                                    </if>
+                                    <if test="rest">
+                                        A_TEAM_REST_DAY
+                                    </if>) E3
+                    ON A.A_TEAM = E3.A_TEAM
+                   <if test="all">
+                     </if>
+                     <if test="ground">
+                         AND A.GROUND = E3.GROUND
+                     </if>
+                     <if test="week">
+                         AND A.DAY_OF_WEEK = E3.DAY_OF_WEEK
+                     </if>
+                     <if test="odd">
+                         AND A.ODD = E3.ODD
+                     </if>
+                     <if test="rest">
+                         AND A.A_TEAM_REST_DAY = E3.A_TEAM_REST_DAY
+                     </if>
+                       AND A.LEAGUE = E3.LEAGUE
+       LEFT OUTER JOIN (SELECT LEAGUE,
+                               A_TEAM,
+                                    <if test="all">
+                                        'all',
+                                    </if>
+                                    <if test="ground">
+                                        GROUND,
+                                    </if>
+                                    <if test="week">
+                                        DAY_OF_WEEK,
+                                    </if>
+                                    <if test="odd">
+                                        ODD,
+                                    </if>
+                                    <if test="rest">
+                                        A_TEAM_REST_DAY,
+                                    </if>
+                               COUNT(1) AS first_first_three_point_res
+                          FROM sport.basketball_data
+                         WHERE FIRSTQ_FIRST_THREE_POINT = '승리'
+                               AND  <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]>
+                         GROUP  BY LEAGUE,
+                                     A_TEAM,
+                                    <if test="all">
+                                        'all'
+                                    </if>
+                                    <if test="ground">
+                                        GROUND
+                                    </if>
+                                    <if test="week">
+                                        DAY_OF_WEEK
+                                    </if>
+                                    <if test="odd">
+                                        ODD
+                                    </if>
+                                    <if test="rest">
+                                        A_TEAM_REST_DAY
+                                    </if>) B4
+                    ON A.A_TEAM = B4.A_TEAM
+                        <if test="all">
+                     </if>
+                     <if test="ground">
+                         AND A.GROUND = B4.GROUND
+                     </if>
+                     <if test="week">
+                         AND A.DAY_OF_WEEK = B4.DAY_OF_WEEK
+                     </if>
+                     <if test="odd">
+                         AND A.ODD = B4.ODD
+                     </if>
+                     <if test="rest">
+                         AND A.A_TEAM_REST_DAY = B4.A_TEAM_REST_DAY
+                     </if>
+                       AND A.LEAGUE = B4.LEAGUE
+       LEFT OUTER JOIN (SELECT LEAGUE,
+                               A_TEAM,
+                                    <if test="all">
+                                        'all',
+                                    </if>
+                                    <if test="ground">
+                                        GROUND,
+                                    </if>
+                                    <if test="week">
+                                        DAY_OF_WEEK,
+                                    </if>
+                                    <if test="odd">
+                                        ODD,
+                                    </if>
+                                    <if test="rest">
+                                        A_TEAM_REST_DAY,
+                                    </if>
+                               COUNT(1) AS second_first_three_point_res
+                          FROM sport.basketball_data
+                         WHERE SECONDQ_FIRST_THREE_POINT = '승리'
+                               AND  <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]>
+                         GROUP  BY LEAGUE,
+                                     A_TEAM,
+                                    <if test="all">
+                                        'all'
+                                    </if>
+                                    <if test="ground">
+                                        GROUND
+                                    </if>
+                                    <if test="week">
+                                        DAY_OF_WEEK
+                                    </if>
+                                    <if test="odd">
+                                        ODD
+                                    </if>
+                                    <if test="rest">
+                                        A_TEAM_REST_DAY
+                                    </if>) C4
+                    ON A.A_TEAM = C4.A_TEAM
+                   <if test="all">
+                     </if>
+                     <if test="ground">
+                         AND A.GROUND = C4.GROUND
+                     </if>
+                     <if test="week">
+                         AND A.DAY_OF_WEEK = C4.DAY_OF_WEEK
+                     </if>
+                     <if test="odd">
+                         AND A.ODD = C4.ODD
+                     </if>
+                     <if test="rest">
+                         AND A.A_TEAM_REST_DAY = C4.A_TEAM_REST_DAY
+                     </if>
+                       AND A.LEAGUE = C4.LEAGUE
+       LEFT OUTER JOIN (SELECT LEAGUE,
+                               A_TEAM,
+                                    <if test="all">
+                                        'all',
+                                    </if>
+                                    <if test="ground">
+                                        GROUND,
+                                    </if>
+                                    <if test="week">
+                                        DAY_OF_WEEK,
+                                    </if>
+                                    <if test="odd">
+                                        ODD,
+                                    </if>
+                                    <if test="rest">
+                                        A_TEAM_REST_DAY,
+                                    </if>
+                               COUNT(1) AS third_first_three_point_res
+                          FROM sport.basketball_data
+                         WHERE THIRDQ_FIRST_THREE_POINT = '승리'
+                               AND  <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]>
+                         GROUP  BY LEAGUE,
+                                     A_TEAM,
+                                    <if test="all">
+                                        'all'
+                                    </if>
+                                    <if test="ground">
+                                        GROUND
+                                    </if>
+                                    <if test="week">
+                                        DAY_OF_WEEK
+                                    </if>
+                                    <if test="odd">
+                                        ODD
+                                    </if>
+                                    <if test="rest">
+                                        A_TEAM_REST_DAY
+                                    </if>) D4
+                    ON A.A_TEAM = D4.A_TEAM
+                   <if test="all">
+                     </if>
+                     <if test="ground">
+                         AND A.GROUND = D4.GROUND
+                     </if>
+                     <if test="week">
+                         AND A.DAY_OF_WEEK = D4.DAY_OF_WEEK
+                     </if>
+                     <if test="odd">
+                         AND A.ODD = D4.ODD
+                     </if>
+                     <if test="rest">
+                         AND A.A_TEAM_REST_DAY = D4.A_TEAM_REST_DAY
+                     </if>
+                       AND A.LEAGUE = D4.LEAGUE
+            LEFT OUTER JOIN (SELECT LEAGUE,
+                               A_TEAM,
+                                    <if test="all">
+                                        'all',
+                                    </if>
+                                    <if test="ground">
+                                        GROUND,
+                                    </if>
+                                    <if test="week">
+                                        DAY_OF_WEEK,
+                                    </if>
+                                    <if test="odd">
+                                        ODD,
+                                    </if>
+                                    <if test="rest">
+                                        A_TEAM_REST_DAY,
+                                    </if>
+                               COUNT(1) AS fourth_first_three_point_res
+                          FROM sport.basketball_data
+                         WHERE SECONDQ_FIRST_THREE_POINT = '승리'
+                               AND  <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]>
+                         GROUP  BY LEAGUE,
+                                     A_TEAM,
+                                    <if test="all">
+                                        'all'
+                                    </if>
+                                    <if test="ground">
+                                        GROUND
+                                    </if>
+                                    <if test="week">
+                                        DAY_OF_WEEK
+                                    </if>
+                                    <if test="odd">
+                                        ODD
+                                    </if>
+                                    <if test="rest">
+                                        A_TEAM_REST_DAY
+                                    </if>) E4
+                    ON A.A_TEAM = E4.A_TEAM
+                   <if test="all">
+                     </if>
+                     <if test="ground">
+                         AND A.GROUND = E4.GROUND
+                     </if>
+                     <if test="week">
+                         AND A.DAY_OF_WEEK = E4.DAY_OF_WEEK
+                     </if>
+                     <if test="odd">
+                         AND A.ODD = E4.ODD
+                     </if>
+                     <if test="rest">
+                         AND A.A_TEAM_REST_DAY = E4.A_TEAM_REST_DAY
+                     </if>
+                       AND A.LEAGUE = E4.LEAGUE
+    </insert>
+
+
 </mapper>

@@ -4,6 +4,7 @@ import com.batch.mapper.BaseballMapper;
 import com.batch.mapper.BaseballPitcherMapper;
 import com.batch.mapper.BasketballMapper;
 import com.batch.mapper.CommonMapper;
+import com.batch.model.FilterConditionModel;
 import com.batch.util.EmailUtil;
 import com.batch.util.MakeExcelUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -46,16 +47,20 @@ public class MakeExcelTasklet implements Tasklet {
 
         String sport;
 
-        sportMakeExcelList = commonMapper.selectSportMakeExcelList();
-        for (int i = 0 ; i < sportMakeExcelList.size() ; i++){
-            HashMap sportMap = (HashMap) sportMakeExcelList.get(i);
-            sport = String.valueOf(sportMap.get("SPORT"));
-            if(sport != null) {
-                sportDataList = getExcelDataList(sport);
-                makeExcelUtil.statXlsDown(sport, sportDataList);
-            }
-        }
-        emailUtil.sendSSLMessage("qjsro1204@naver.com",sportMakeExcelList,"jungyongee@gmail.com");
+        FilterConditionModel filterConditionModel = new FilterConditionModel();
+        filterConditionModel.setGround(true);
+        basketballMapper.insertBaseBallSpecialSummary(filterConditionModel);
+
+//        sportMakeExcelList = commonMapper.selectSportMakeExcelList();
+//        for (int i = 0 ; i < sportMakeExcelList.size() ; i++){
+//            HashMap sportMap = (HashMap) sportMakeExcelList.get(i);
+//            sport = String.valueOf(sportMap.get("SPORT"));
+//            if(sport != null) {
+//                sportDataList = getExcelDataList(sport);
+//                makeExcelUtil.statXlsDown(sport, sportDataList);
+//            }
+//        }
+//        emailUtil.sendSSLMessage("qjsro1204@naver.com",sportMakeExcelList,"jungyongee@gmail.com");
         return RepeatStatus.FINISHED;
     }
 
