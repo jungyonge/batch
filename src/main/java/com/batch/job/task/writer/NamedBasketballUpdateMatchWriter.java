@@ -29,22 +29,24 @@ public class NamedBasketballUpdateMatchWriter implements ItemWriter<List<Basketb
 
 
         basketballMapper.truncateBasketballSpecialSummary();
+        basketballMapper.truncateBasketHandiOverSummary();
+        basketballMapper.truncateBasketQuarterHandiOverSummary();
 
-        FilterConditionModel filterConditionModel = new FilterConditionModel();
-        filterConditionModel.setGround(true);
-        basketballMapper.insertBasketballSpecialSummary(filterConditionModel);
-
-        filterConditionModel = new FilterConditionModel();
-        filterConditionModel.setAll(true);
-        basketballMapper.insertBasketballSpecialSummary(filterConditionModel);
-
-        filterConditionModel = new FilterConditionModel();
-        filterConditionModel.setOdd(true);
-        basketballMapper.insertBasketballSpecialSummary(filterConditionModel);
-
-        filterConditionModel = new FilterConditionModel();
-        filterConditionModel.setWeek(true);
-        basketballMapper.insertBasketballSpecialSummary(filterConditionModel);
+        for (int i = 0; i < 4; i++) {
+            FilterConditionModel filterConditionModel = new FilterConditionModel();
+            if (i == 0) {
+                filterConditionModel.setAll(true);
+            } else if (i == 1) {
+                filterConditionModel.setGround(true);
+            } else if (i == 2) {
+                filterConditionModel.setOdd(true);
+            } else {
+                filterConditionModel.setWeek(true);
+            }
+            basketballMapper.insertBasketballSpecialSummary(filterConditionModel);
+            basketballMapper.insertBasketHandiOverSummary(filterConditionModel);
+            basketballMapper.insertBasketQuarterHandiOverSummary(filterConditionModel);
+        }
 
     }
 }

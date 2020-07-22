@@ -41,20 +41,25 @@ public class NamedBaseballUpdateMatchProcessor implements ItemProcessor<String, 
     public List<BaseballModel> updateBaseballMatch() throws Exception {
 
         int addDate = 0;
+        Calendar curDate = Calendar.getInstance();
+        curDate.setTime(new Date());
+        curDate.add(Calendar.DATE, 1);
 
         List<BaseballModel> baseballModelList = new ArrayList<>();
 
         while (true){
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(new Date());
+            Calendar startDate = Calendar.getInstance();
+            startDate.setTime(new Date());
 
-            cal.set(2020, 4, 01);
+//            startDate.set(2020, 4, 01);
+            startDate.add(Calendar.DATE, -2);
+
             DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
-            cal.add(Calendar.DATE, addDate);
-            String matchDate = df.format(cal.getTime());
-            if(df.format(cal.getTime()).equals("2020-07-14")){
-                log.info("설정한 시즌 마김 기한까지 파싱 완료 : " + "2020-07-14");
+            startDate.add(Calendar.DATE, addDate);
+            String matchDate = df.format(startDate.getTime());
+            if(df.format(startDate.getTime()).equals("2020-07-14")){
+                log.info("야구 Update Match 완료 : " + df.format(startDate.getTime()));
                 break;
             }
 
