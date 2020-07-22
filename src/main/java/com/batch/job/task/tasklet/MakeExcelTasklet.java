@@ -48,35 +48,17 @@ public class MakeExcelTasklet implements Tasklet {
         String sport;
 
 
+        sportMakeExcelList = commonMapper.selectSportMakeExcelList();
+        for (int i = 0 ; i < sportMakeExcelList.size() ; i++){
+            HashMap sportMap = (HashMap) sportMakeExcelList.get(i);
+            sport = String.valueOf(sportMap.get("SPORT"));
+            if(sport != null) {
+                sportDataList = getExcelDataList(sport);
+                makeExcelUtil.statXlsDown(sport, sportDataList);
+            }
+        }
+        emailUtil.sendSSLMessage("qjsro1204@naver.com",sportMakeExcelList,"jungyongee@gmail.com");
 
-        basketballMapper.truncateBasketQuarterHandiOverSummary();
-
-        FilterConditionModel filterConditionModel = new FilterConditionModel();
-        filterConditionModel.setGround(true);
-        basketballMapper.insertBasketQuarterHandiOverSummary(filterConditionModel);
-
-        filterConditionModel = new FilterConditionModel();
-        filterConditionModel.setAll(true);
-        basketballMapper.insertBasketQuarterHandiOverSummary(filterConditionModel);
-
-        filterConditionModel = new FilterConditionModel();
-        filterConditionModel.setOdd(true);
-        basketballMapper.insertBasketQuarterHandiOverSummary(filterConditionModel);
-
-        filterConditionModel = new FilterConditionModel();
-        filterConditionModel.setWeek(true);
-        basketballMapper.insertBasketQuarterHandiOverSummary(filterConditionModel);
-
-//        sportMakeExcelList = commonMapper.selectSportMakeExcelList();
-//        for (int i = 0 ; i < sportMakeExcelList.size() ; i++){
-//            HashMap sportMap = (HashMap) sportMakeExcelList.get(i);
-//            sport = String.valueOf(sportMap.get("SPORT"));
-//            if(sport != null) {
-//                sportDataList = getExcelDataList(sport);
-//                makeExcelUtil.statXlsDown(sport, sportDataList);
-//            }
-//        }
-//        emailUtil.sendSSLMessage("qjsro1204@naver.com",sportMakeExcelList,"jungyongee@gmail.com");
         return RepeatStatus.FINISHED;
     }
 
@@ -91,14 +73,6 @@ public class MakeExcelTasklet implements Tasklet {
 //            excelDataList = setalarmDAO.selectHockeyStat();
         }else if (type.equals("soccer")){
 //            excelDataList = setalarmDAO.selectSoccerStat();
-        }else if (type.equals("basketball_special")){
-//            excelDataList = setalarmDAO.selectBasketSpecialSummary();
-        }else if (type.equals("basketball_quarter_special_combo")){
-//            excelDataList = setalarmDAO.selectBasketSpecialComboSummary();
-        }else if (type.equals("basketball_quarter_handi_over")){
-//            excelDataList = setalarmDAO.selectBasketQuarterHandiOverSummary();
-        }else if (type.equals("basketball_quarter_handi_combo")){
-//            excelDataList = setalarmDAO.selectBasketQuarterHandiComboSummary();
         }else if (type.equals("baseball")){
             excelDataList = baseballMapper.selectBaseballStat();
         }else if (type.equals("baseball_pitcher")){

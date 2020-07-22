@@ -19,6 +19,8 @@ public interface BasketballMapper {
 
     List selectBasketballStat();
 
+    List selectBasketballAllSummary();
+
     void insertBasketballSpecialSummary(FilterConditionModel filterConditionModel);
 
     void truncateBasketballSpecialSummary();

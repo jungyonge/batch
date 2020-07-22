@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public interface BaseballMapper {
 
-   int insertBaseballMatch(BaseballModel baseballModel);
+   void insertBaseballMatch(BaseballModel baseballModel);
 
    int checkGameIdCount(BaseballModel baseballModel);
 
@@ -22,4 +22,5 @@ public interface BaseballMapper {
    void insertBaseballSummary(FilterConditionModel filterConditionModel);
 
    void truncateBaseballSummary();
+
 }
