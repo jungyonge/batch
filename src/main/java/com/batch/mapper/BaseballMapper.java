@@ -11,15 +11,15 @@ import java.util.List;
 @Repository
 public interface BaseballMapper {
 
-    public int insertBaseballMatch(BaseballModel baseballModel);
+   int insertBaseballMatch(BaseballModel baseballModel);
 
-    public int checkGameIdCount(BaseballModel baseballModel);
+   int checkGameIdCount(BaseballModel baseballModel);
 
-    public void updateBaseballStat(BaseballModel baseballModel);
+   void updateBaseballStat(BaseballModel baseballModel);
 
-    public List selectBaseballStat();
+   List selectBaseballStat();
 
-    public void insertBaseballSummary(FilterConditionModel filterConditionModel);
+   void insertBaseballSummary(FilterConditionModel filterConditionModel);
 
-    public void truncateBaseballSummary();
+   void truncateBaseballSummary();
 }

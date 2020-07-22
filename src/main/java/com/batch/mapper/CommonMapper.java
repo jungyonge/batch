@@ -9,7 +9,7 @@ import java.util.List;
 @MasterDb
 public interface CommonMapper {
 
-    public List selectSportMakeExcelList();
+    List selectSportMakeExcelList();
 
-    public List selectMemberList();
+    List selectMemberList();
 }

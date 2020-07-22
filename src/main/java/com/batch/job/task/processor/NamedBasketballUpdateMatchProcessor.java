@@ -58,7 +58,6 @@ public class NamedBasketballUpdateMatchProcessor implements ItemProcessor<String
             Calendar startDate = Calendar.getInstance();
             startDate.setTime(new Date());
 //            startDate.set(2019, 9, 03);
-
             startDate.add(Calendar.DATE, -2);
             DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 

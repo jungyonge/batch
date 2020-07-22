@@ -31,7 +31,7 @@ import java.util.*;
 public class NamedBasketballAllMatchProcessor implements ItemProcessor<String, List<BasketballModel>> {
 
     private String initSeasonDate;
-    private String finishSeasonDate = "2019-12-14";
+    private String finishSeasonDate = "2020-12-14";
 
     @Autowired
     private NamedUtil namedUtil;

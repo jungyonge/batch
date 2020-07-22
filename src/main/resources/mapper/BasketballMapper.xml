@@ -2688,6 +2688,461 @@
     </insert>
 
     <insert id="truncateBasketSpecialComboSummary">
-        TRUNCATE  sport.basketball_special_combo_summary;
+        TRUNCATE sport.basketball_special_combo_summary;
+    </insert>
+
+    <insert id="truncateBasketQuarterHandiComboSummary">
+        TRUNCATE sport.basketball_quarter_handi_combo_special;
+    </insert>
+
+    <insert id="insertBasketQuarterHandiComboSummary">
+        INSERT INTO sport.basketball_quarter_handi_combo_special
+            (
+             LEAGUE,
+             TEAM,
+             FIRST_HANDI_WIN_OVER_PER,
+             FIRST_HANDI_WIN_UNDER_PER,
+             SECOND_HANDI_WIN_OVER_PER,
+             SECOND_HANDI_WIN_UNDER_PER,
+             THIRD_HANDI_WIN_OVER_PER,
+             THIRD_HANDI_WIN_UNDER_PER,
+             FOURTH_HANDI_WIN_OVER_PER,
+             FOURTH_HANDI_WIN_UNDER_PER,
+             FIRST_HANDI_LOSE_OVER_PER,
+             FIRST_HANDI_LOSE_UNDER_PER,
+             SECOND_HANDI_LOSE_OVER_PER,
+             SECOND_HANDI_LOSE_UNDER_PER,
+             THIRD_HANDI_LOSE_OVER_PER,
+             THIRD_HANDI_LOSE_UNDER_PER,
+             FOURTH_HANDI_LOSE_OVER_PER,
+             FOURTH_HANDI_LOSE_UNDER_PER,
+             RDATE
+             )
+        SELECT A.LEAGUE,
+               A.A_TEAM ,
+               first_handi_win_over_per ,
+               first_handi_win_under_per ,
+               second_handi_win_over_per ,
+               second_handi_win_under_per ,
+               third_handi_win_over_per ,
+               third_handi_win_under_per ,
+               fourth_handi_win_over_per ,
+               fourth_handi_win_under_per ,
+               first_handi_lose_over_per ,
+               first_handi_lose_under_per ,
+               second_handi_lose_over_per ,
+               second_handi_lose_under_per ,
+               third_handi_lose_over_per ,
+               third_handi_lose_under_per ,
+               fourth_handi_lose_over_per ,
+               fourth_handi_lose_under_per ,
+               NOW()
+        FROM
+          (SELECT A.LEAGUE,
+                  A.A_TEAM,
+                  allCnt ,
+                  first_res,
+                  ROUND(first_res/allCnt * 100, 1) AS first_handi_win_over_per
+           FROM
+             (SELECT LEAGUE,
+                     A_TEAM,
+                     COUNT(1) AS allCnt
+              FROM sport.basketball_data
+              WHERE <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]>
+                AND FIRSTQ_HANDI_CAP_RESULT != '적특'
+              GROUP BY A_TEAM) A
+           LEFT OUTER JOIN
+             (SELECT LEAGUE,
+                     A_TEAM,
+                     COUNT(1) AS first_res
+              FROM sport.basketball_data
+              WHERE FIRSTQ_HANDI_CAP_RESULT = '승리'
+                AND FIRSTQ_POINT_LINE_RESULT IN('오버',
+                                                '적특')
+                AND <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]>
+              GROUP BY A_TEAM) B ON A.A_TEAM = B.A_TEAM) A
+        LEFT OUTER JOIN
+          (SELECT A.LEAGUE,
+                  A.A_TEAM,
+                  allCnt ,
+                  second_res,
+                  ROUND(second_res/allCnt * 100, 1) AS second_handi_win_over_per
+           FROM
+             (SELECT LEAGUE,
+                     A_TEAM,
+                     COUNT(1) AS allCnt
+              FROM sport.basketball_data
+              WHERE <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]>
+                AND SECONDQ_HANDI_CAP_RESULT != '적특'
+              GROUP BY A_TEAM) A
+           LEFT OUTER JOIN
+             (SELECT LEAGUE,
+                     A_TEAM,
+                     COUNT(1) AS second_res
+              FROM sport.basketball_data
+              WHERE SECONDQ_HANDI_CAP_RESULT = '승리'
+                AND SECONDQ_POINT_LINE_RESULT IN('오버',
+                                                 '적특')
+                AND <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]>
+              GROUP BY A_TEAM) B ON A.A_TEAM = B.A_TEAM) B ON A.A_TEAM = B.A_TEAM
+        LEFT OUTER JOIN
+          (SELECT A.LEAGUE,
+                  A.A_TEAM,
+                  allCnt ,
+                  third_res,
+                  ROUND(third_res/allCnt * 100, 1) AS third_handi_win_over_per
+           FROM
+             (SELECT LEAGUE,
+                     A_TEAM,
+                     COUNT(1) AS allCnt
+              FROM sport.basketball_data
+              WHERE <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]>
+                AND THIRDQ_HANDI_CAP_RESULT != '적특'
+              GROUP BY A_TEAM) A
+           LEFT OUTER JOIN
+             (SELECT LEAGUE,
+                     A_TEAM,
+                     COUNT(1) AS third_res
+              FROM sport.basketball_data
+              WHERE THIRDQ_HANDI_CAP_RESULT = '승리'
+                AND THIRDQ_POINT_LINE_RESULT IN('오버',
+                                                '적특')
+                AND <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]>
+              GROUP BY A_TEAM) B ON A.A_TEAM = B.A_TEAM) C ON A.A_TEAM = C.A_TEAM
+        LEFT OUTER JOIN
+          (SELECT A.LEAGUE,
+                  A.A_TEAM,
+                  allCnt ,
+                  fourth_res,
+                  ROUND(fourth_res/allCnt * 100, 1) AS fourth_handi_win_over_per
+           FROM
+             (SELECT LEAGUE,
+                     A_TEAM,
+                     COUNT(1) AS allCnt
+              FROM sport.basketball_data
+              WHERE <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]>
+                AND FOURTHQ_HANDI_CAP_RESULT != '적특'
+              GROUP BY A_TEAM) A
+           LEFT OUTER JOIN
+             (SELECT LEAGUE,
+                     A_TEAM,
+                     COUNT(1) AS fourth_res
+              FROM sport.basketball_data
+              WHERE FOURTHQ_HANDI_CAP_RESULT = '승리'
+                AND FOURTHQ_POINT_LINE_RESULT IN('오버',
+                                                 '적특')
+                AND <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]>
+              GROUP BY A_TEAM) B ON A.A_TEAM = B.A_TEAM) D ON A.A_TEAM = D.A_TEAM
+        LEFT OUTER JOIN
+          (SELECT A2.LEAGUE,
+                  A2.A_TEAM ,
+                  first_handi_lose_over_per ,
+                  second_handi_lose_over_per ,
+                  third_handi_lose_over_per ,
+                  fourth_handi_lose_over_per
+           FROM
+             (SELECT A.LEAGUE,
+                     A.A_TEAM,
+                     allCnt ,
+                     first_res,
+                     ROUND(first_res/allCnt * 100, 1) AS first_handi_lose_over_per
+              FROM
+                (SELECT LEAGUE,
+                        A_TEAM,
+                        COUNT(1) AS allCnt
+                 FROM sport.basketball_data
+                 WHERE <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]>
+                   AND FIRSTQ_HANDI_CAP_RESULT != '적특'
+                 GROUP BY A_TEAM) A
+              LEFT OUTER JOIN
+                (SELECT LEAGUE,
+                        A_TEAM,
+                        COUNT(1) AS first_res
+                 FROM sport.basketball_data
+                 WHERE FIRSTQ_HANDI_CAP_RESULT = '패배'
+                   AND FIRSTQ_POINT_LINE_RESULT IN('오버',
+                                                   '적특')
+                   AND <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]>
+                 GROUP BY A_TEAM) B ON A.A_TEAM = B.A_TEAM) A2
+           LEFT OUTER JOIN
+             (SELECT A.LEAGUE,
+                     A.A_TEAM,
+                     allCnt ,
+                     second_res,
+                     ROUND(second_res/allCnt * 100, 1) AS second_handi_lose_over_per
+              FROM
+                (SELECT LEAGUE,
+                        A_TEAM,
+                        COUNT(1) AS allCnt
+                 FROM sport.basketball_data
+                 WHERE <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]>
+                   AND SECONDQ_HANDI_CAP_RESULT != '적특'
+                 GROUP BY A_TEAM) A
+              LEFT OUTER JOIN
+                (SELECT LEAGUE,
+                        A_TEAM,
+                        COUNT(1) AS second_res
+                 FROM sport.basketball_data
+                 WHERE SECONDQ_HANDI_CAP_RESULT = '패배'
+                   AND SECONDQ_POINT_LINE_RESULT IN('오버',
+                                                    '적특')
+                   AND <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]>
+                 GROUP BY A_TEAM) B ON A.A_TEAM = B.A_TEAM) B2 ON A2.A_TEAM = B2.A_TEAM
+           LEFT OUTER JOIN
+             (SELECT A.LEAGUE,
+                     A.A_TEAM,
+                     allCnt ,
+                     third_res,
+                     ROUND(third_res/allCnt * 100, 1) AS third_handi_lose_over_per
+              FROM
+                (SELECT LEAGUE,
+                        A_TEAM,
+                        COUNT(1) AS allCnt
+                 FROM sport.basketball_data
+                 WHERE <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]>
+                   AND THIRDQ_HANDI_CAP_RESULT != '적특'
+                 GROUP BY A_TEAM) A
+              LEFT OUTER JOIN
+                (SELECT LEAGUE,
+                        A_TEAM,
+                        COUNT(1) AS third_res
+                 FROM sport.basketball_data
+                 WHERE THIRDQ_HANDI_CAP_RESULT = '패배'
+                   AND THIRDQ_POINT_LINE_RESULT IN('오버',
+                                                   '적특')
+                   AND <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]>
+                 GROUP BY A_TEAM) B ON A.A_TEAM = B.A_TEAM) C2 ON A2.A_TEAM = C2.A_TEAM
+           LEFT OUTER JOIN
+             (SELECT A.LEAGUE,
+                     A.A_TEAM,
+                     allCnt ,
+                     fourth_res,
+                     ROUND(fourth_res/allCnt * 100, 1) AS fourth_handi_lose_over_per
+              FROM
+                (SELECT LEAGUE,
+                        A_TEAM,
+                        COUNT(1) AS allCnt
+                 FROM sport.basketball_data
+                 WHERE <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]>
+                   AND FOURTHQ_HANDI_CAP_RESULT != '적특'
+                 GROUP BY A_TEAM) A
+              LEFT OUTER JOIN
+                (SELECT LEAGUE,
+                        A_TEAM,
+                        COUNT(1) AS fourth_res
+                 FROM sport.basketball_data
+                 WHERE FOURTHQ_HANDI_CAP_RESULT = '패배'
+                   AND FOURTHQ_POINT_LINE_RESULT IN('오버',
+                                                    '적특')
+                   AND <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]>
+                 GROUP BY A_TEAM) B ON A.A_TEAM = B.A_TEAM) D2 ON A2.A_TEAM = D2.A_TEAM) A2 ON A.A_TEAM = A2.A_TEAM
+        LEFT OUTER JOIN
+          (SELECT A.* ,
+                  second_handi_win_under_per ,
+                  third_handi_win_under_per ,
+                  fourth_handi_win_under_per ,
+                  first_handi_lose_under_per ,
+                  second_handi_lose_under_per ,
+                  third_handi_lose_under_per ,
+                  fourth_handi_lose_under_per
+           FROM
+             (SELECT A.LEAGUE,
+                     A.A_TEAM,
+                     allCnt ,
+                     first_res,
+                     ROUND(first_res/allCnt * 100, 1) AS first_handi_win_under_per
+              FROM
+                (SELECT LEAGUE,
+                        A_TEAM,
+                        COUNT(1) AS allCnt
+                 FROM sport.basketball_data
+                 WHERE <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]>
+                   AND FIRSTQ_HANDI_CAP_RESULT != '적특'
+                 GROUP BY A_TEAM) A
+              LEFT OUTER JOIN
+                (SELECT LEAGUE,
+                        A_TEAM,
+                        COUNT(1) AS first_res
+                 FROM sport.basketball_data
+                 WHERE FIRSTQ_HANDI_CAP_RESULT = '승리'
+                   AND FIRSTQ_POINT_LINE_RESULT IN('언더',
+                                                   '적특')
+                   AND <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]>
+                 GROUP BY A_TEAM) B ON A.A_TEAM = B.A_TEAM) A
+           LEFT OUTER JOIN
+             (SELECT A.LEAGUE,
+                     A.A_TEAM,
+                     allCnt ,
+                     second_res,
+                     ROUND(second_res/allCnt * 100, 1) AS second_handi_win_under_per
+              FROM
+                (SELECT LEAGUE,
+                        A_TEAM,
+                        COUNT(1) AS allCnt
+                 FROM sport.basketball_data
+                 WHERE <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]>
+                   AND SECONDQ_HANDI_CAP_RESULT != '적특'
+                 GROUP BY A_TEAM) A
+              LEFT OUTER JOIN
+                (SELECT LEAGUE,
+                        A_TEAM,
+                        COUNT(1) AS second_res
+                 FROM sport.basketball_data
+                 WHERE SECONDQ_HANDI_CAP_RESULT = '승리'
+                   AND SECONDQ_POINT_LINE_RESULT IN('언더',
+                                                    '적특')
+                   AND <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]>
+                 GROUP BY A_TEAM) B ON A.A_TEAM = B.A_TEAM) B ON A.A_TEAM = B.A_TEAM
+           LEFT OUTER JOIN
+             (SELECT A.LEAGUE,
+                     A.A_TEAM,
+                     allCnt ,
+                     third_res,
+                     ROUND(third_res/allCnt * 100, 1) AS third_handi_win_under_per
+              FROM
+                (SELECT LEAGUE,
+                        A_TEAM,
+                        COUNT(1) AS allCnt
+                 FROM sport.basketball_data
+                 WHERE <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]>
+                   AND THIRDQ_HANDI_CAP_RESULT != '적특'
+                 GROUP BY A_TEAM) A
+              LEFT OUTER JOIN
+                (SELECT LEAGUE,
+                        A_TEAM,
+                        COUNT(1) AS third_res
+                 FROM sport.basketball_data
+                 WHERE THIRDQ_HANDI_CAP_RESULT = '승리'
+                   AND THIRDQ_POINT_LINE_RESULT IN('언더',
+                                                   '적특')
+                   AND <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]>
+                 GROUP BY A_TEAM) B ON A.A_TEAM = B.A_TEAM) C ON A.A_TEAM = C.A_TEAM
+           LEFT OUTER JOIN
+             (SELECT A.LEAGUE,
+                     A.A_TEAM,
+                     allCnt ,
+                     fourth_res,
+                     ROUND(fourth_res/allCnt * 100, 1) AS fourth_handi_win_under_per
+              FROM
+                (SELECT LEAGUE,
+                        A_TEAM,
+                        COUNT(1) AS allCnt
+                 FROM sport.basketball_data
+                 WHERE <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]>
+                   AND FOURTHQ_HANDI_CAP_RESULT != '적특'
+                 GROUP BY A_TEAM) A
+              LEFT OUTER JOIN
+                (SELECT LEAGUE,
+                        A_TEAM,
+                        COUNT(1) AS fourth_res
+                 FROM sport.basketball_data
+                 WHERE FOURTHQ_HANDI_CAP_RESULT = '승리'
+                   AND FOURTHQ_POINT_LINE_RESULT IN('언더',
+                                                    '적특')
+                   AND <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]>
+                 GROUP BY A_TEAM) B ON A.A_TEAM = B.A_TEAM) D ON A.A_TEAM = D.A_TEAM
+           LEFT OUTER JOIN
+             (SELECT A2.LEAGUE,
+                     A2.A_TEAM ,
+                     first_handi_lose_under_per ,
+                     second_handi_lose_under_per ,
+                     third_handi_lose_under_per ,
+                     fourth_handi_lose_under_per
+              FROM
+                (SELECT A.LEAGUE,
+                        A.A_TEAM,
+                        allCnt ,
+                        first_res,
+                        ROUND(first_res/allCnt * 100, 1) AS first_handi_lose_under_per
+                 FROM
+                   (SELECT LEAGUE,
+                           A_TEAM,
+                           COUNT(1) AS allCnt
+                    FROM sport.basketball_data
+                    WHERE <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]>
+                      AND FIRSTQ_HANDI_CAP_RESULT != '적특'
+                    GROUP BY A_TEAM) A
+                 LEFT OUTER JOIN
+                   (SELECT LEAGUE,
+                           A_TEAM,
+                           COUNT(1) AS first_res
+                    FROM sport.basketball_data
+                    WHERE FIRSTQ_HANDI_CAP_RESULT = '패배'
+                      AND FIRSTQ_POINT_LINE_RESULT IN('언더',
+                                                      '적특')
+                      AND <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]>
+                    GROUP BY A_TEAM) B ON A.A_TEAM = B.A_TEAM) A2
+              LEFT OUTER JOIN
+                (SELECT A.LEAGUE,
+                        A.A_TEAM,
+                        allCnt ,
+                        second_res,
+                        ROUND(second_res/allCnt * 100, 1) AS second_handi_lose_under_per
+                 FROM
+                   (SELECT LEAGUE,
+                           A_TEAM,
+                           COUNT(1) AS allCnt
+                    FROM sport.basketball_data
+                    WHERE <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]>
+                      AND SECONDQ_HANDI_CAP_RESULT != '적특'
+                    GROUP BY A_TEAM) A
+                 LEFT OUTER JOIN
+                   (SELECT LEAGUE,
+                           A_TEAM,
+                           COUNT(1) AS second_res
+                    FROM sport.basketball_data
+                    WHERE SECONDQ_HANDI_CAP_RESULT = '패배'
+                      AND SECONDQ_POINT_LINE_RESULT IN('언더',
+                                                       '적특')
+                      AND <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]>
+                    GROUP BY A_TEAM) B ON A.A_TEAM = B.A_TEAM) B2 ON A2.A_TEAM = B2.A_TEAM
+              LEFT OUTER JOIN
+                (SELECT A.LEAGUE,
+                        A.A_TEAM,
+                        allCnt ,
+                        third_res,
+                        ROUND(third_res/allCnt * 100, 1) AS third_handi_lose_under_per
+                 FROM
+                   (SELECT LEAGUE,
+                           A_TEAM,
+                           COUNT(1) AS allCnt
+                    FROM sport.basketball_data
+                    WHERE <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]>
+                      AND THIRDQ_HANDI_CAP_RESULT != '적특'
+                    GROUP BY A_TEAM) A
+                 LEFT OUTER JOIN
+                   (SELECT LEAGUE,
+                           A_TEAM,
+                           COUNT(1) AS third_res
+                    FROM sport.basketball_data
+                    WHERE THIRDQ_HANDI_CAP_RESULT = '패배'
+                      AND THIRDQ_POINT_LINE_RESULT IN('언더',
+                                                      '적특')
+                      AND <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]>
+                    GROUP BY A_TEAM) B ON A.A_TEAM = B.A_TEAM) C2 ON A2.A_TEAM = C2.A_TEAM
+              LEFT OUTER JOIN
+                (SELECT A.LEAGUE,
+                        A.A_TEAM,
+                        allCnt ,
+                        fourth_res,
+                        ROUND(fourth_res/allCnt * 100, 1) AS fourth_handi_lose_under_per
+                 FROM
+                   (SELECT LEAGUE,
+                           A_TEAM,
+                           COUNT(1) AS allCnt
+                    FROM sport.basketball_data
+                    WHERE <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]>
+                      AND FOURTHQ_HANDI_CAP_RESULT != '적특'
+                    GROUP BY A_TEAM) A
+                 LEFT OUTER JOIN
+                   (SELECT LEAGUE,
+                           A_TEAM,
+                           COUNT(1) AS fourth_res
+                    FROM sport.basketball_data
+                    WHERE FOURTHQ_HANDI_CAP_RESULT = '패배'
+                      AND FOURTHQ_POINT_LINE_RESULT IN('언더',
+                                                       '적특')
+                      AND <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]>
+                    GROUP BY A_TEAM) B ON A.A_TEAM = B.A_TEAM) D2 ON A2.A_TEAM = D2.A_TEAM) A2 ON A.A_TEAM = A2.A_TEAM) A3 ON A.A_TEAM = A3.A_TEAM
     </insert>
 </mapper>

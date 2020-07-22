@@ -27,10 +27,11 @@ public class NamedBasketballUpdateMatchWriter implements ItemWriter<List<Basketb
             }
         }
 
-
         basketballMapper.truncateBasketballSpecialSummary();
         basketballMapper.truncateBasketHandiOverSummary();
         basketballMapper.truncateBasketQuarterHandiOverSummary();
+        basketballMapper.truncateBasketSpecialComboSummary();
+        basketballMapper.truncateBasketQuarterHandiComboSummary();
 
         for (int i = 0; i < 4; i++) {
             FilterConditionModel filterConditionModel = new FilterConditionModel();
@@ -48,5 +49,7 @@ public class NamedBasketballUpdateMatchWriter implements ItemWriter<List<Basketb
             basketballMapper.insertBasketQuarterHandiOverSummary(filterConditionModel);
         }
 
+        basketballMapper.insertBasketSpecialComboSummary();
+        basketballMapper.insertBasketQuarterHandiComboSummary();
     }
 }

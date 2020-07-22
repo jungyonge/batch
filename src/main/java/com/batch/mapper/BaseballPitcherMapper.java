@@ -10,10 +10,10 @@ import java.util.List;
 @Repository
 public interface BaseballPitcherMapper {
 
-    public List selectBaseballPitcherStat();
+    List selectBaseballPitcherStat();
 
-    public int insertBaseballPitcherStat(BaseballModel baseballModel);
+    int insertBaseballPitcherStat(BaseballModel baseballModel);
 
-    public int checkGameIdCount(BaseballModel baseballModel);
+    int checkGameIdCount(BaseballModel baseballModel);
 
 }

@@ -30,25 +30,20 @@ public class NamedBaseballUpdateMatchWriter implements ItemWriter< List<Baseball
 
         baseballMapper.truncateBaseballSummary();
 
-        FilterConditionModel filterConditionModel = new FilterConditionModel();
-        filterConditionModel.setGround(true);
-        baseballMapper.insertBaseballSummary(filterConditionModel);
+        for (int i = 0; i < 4; i++) {
+            FilterConditionModel filterConditionModel = new FilterConditionModel();
+            if (i == 0) {
+                filterConditionModel.setAll(true);
+            } else if (i == 1) {
+                filterConditionModel.setGround(true);
+            } else if (i == 2) {
+                filterConditionModel.setOdd(true);
+            } else {
+                filterConditionModel.setWeek(true);
+            }
+            baseballMapper.insertBaseballSummary(filterConditionModel);
+        }
 
-        filterConditionModel = new FilterConditionModel();
-        filterConditionModel.setAll(true);
-        baseballMapper.insertBaseballSummary(filterConditionModel);
-
-        filterConditionModel = new FilterConditionModel();
-        filterConditionModel.setOdd(true);
-        baseballMapper.insertBaseballSummary(filterConditionModel);
-
-        filterConditionModel = new FilterConditionModel();
-        filterConditionModel.setWeek(true);
-        baseballMapper.insertBaseballSummary(filterConditionModel);
-
-        filterConditionModel = new FilterConditionModel();
-        filterConditionModel.setPitcher(true);
-        baseballMapper.insertBaseballSummary(filterConditionModel);
 
     }
 }

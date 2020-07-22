@@ -11,24 +11,32 @@ import java.util.List;
 @Repository
 public interface BasketballMapper {
 
-    public void insertBasketMatch(BasketballModel basketballModel);
+    void insertBasketMatch(BasketballModel basketballModel);
 
-    public int checkGameIdCount(BasketballModel basketballModel);
+    int checkGameIdCount(BasketballModel basketballModel);
 
-    public void updateBasketStat(BasketballModel basketballModel);
+    void updateBasketStat(BasketballModel basketballModel);
 
-    public List selectBasketballStat();
+    List selectBasketballStat();
 
-    public void insertBasketballSpecialSummary(FilterConditionModel filterConditionModel);
+    void insertBasketballSpecialSummary(FilterConditionModel filterConditionModel);
 
-    public void truncateBasketballSpecialSummary();
+    void truncateBasketballSpecialSummary();
 
-    public void insertBasketHandiOverSummary(FilterConditionModel filterConditionModel);
+    void insertBasketHandiOverSummary(FilterConditionModel filterConditionModel);
 
-    public void truncateBasketHandiOverSummary();
+    void truncateBasketHandiOverSummary();
 
-    public void insertBasketQuarterHandiOverSummary(FilterConditionModel filterConditionModel);
+    void insertBasketQuarterHandiOverSummary(FilterConditionModel filterConditionModel);
 
-    public void truncateBasketQuarterHandiOverSummary();
+    void truncateBasketQuarterHandiOverSummary();
+
+    void insertBasketSpecialComboSummary();
+
+    void truncateBasketSpecialComboSummary();
+
+    void insertBasketQuarterHandiComboSummary();
+
+    void truncateBasketQuarterHandiComboSummary();
 
 }
