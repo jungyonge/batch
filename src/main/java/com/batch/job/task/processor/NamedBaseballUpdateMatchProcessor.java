@@ -66,8 +66,8 @@ public class NamedBaseballUpdateMatchProcessor implements ItemProcessor<String, 
 
             startDate.add(Calendar.DATE, addDate);
             String matchDate = df.format(startDate.getTime());
-            if(df.format(startDate.getTime()).equals(df.format(startDate.getTime()))){
-                log.info("야구 Update Match 완료 : " + df.format(startDate.getTime()));
+            if(df.format(startDate.getTime()).equals(df.format(curDate.getTime()))){
+                log.info("야구 Update Match 완료 : " + df.format(curDate.getTime()));
                 break;
             }
 
@@ -369,8 +369,16 @@ public class NamedBaseballUpdateMatchProcessor implements ItemProcessor<String, 
         aTeamModel.setFourthScore(homeTeamScore.getJSONObject(3).getInt("score"));
         aTeamModel.setFifthScore(homeTeamScore.getJSONObject(4).getInt("score"));
         aTeamModel.setSixthScore(homeTeamScore.getJSONObject(5).getInt("score"));
-        aTeamModel.setSeventhScore(homeTeamScore.getJSONObject(6).getInt("score"));
-        aTeamModel.setEighthScore(homeTeamScore.getJSONObject(7).getInt("score"));
+        if (homeTeamScore.length() > 6) {
+            aTeamModel.setSeventhScore(homeTeamScore.getJSONObject(6).getInt("score"));
+        } else {
+            aTeamModel.setSeventhScore(0);
+        }
+        if (homeTeamScore.length() > 7) {
+            aTeamModel.setEighthScore(homeTeamScore.getJSONObject(7).getInt("score"));
+        } else {
+            aTeamModel.setEighthScore(0);
+        }
         if (homeTeamScore.length() > 8) {
             aTeamModel.setNinthScore(homeTeamScore.getJSONObject(8).getInt("score"));
         } else {
@@ -383,8 +391,16 @@ public class NamedBaseballUpdateMatchProcessor implements ItemProcessor<String, 
         bTeamModel.setFourthScore(awayTeamScore.getJSONObject(3).getInt("score"));
         bTeamModel.setFifthScore(awayTeamScore.getJSONObject(4).getInt("score"));
         bTeamModel.setSixthScore(awayTeamScore.getJSONObject(5).getInt("score"));
-        bTeamModel.setSeventhScore(awayTeamScore.getJSONObject(6).getInt("score"));
-        bTeamModel.setEighthScore(awayTeamScore.getJSONObject(7).getInt("score"));
+        if (homeTeamScore.length() > 6) {
+            bTeamModel.setSeventhScore(awayTeamScore.getJSONObject(6).getInt("score"));
+        } else {
+            bTeamModel.setSeventhScore(0);
+        }
+        if (homeTeamScore.length() > 7) {
+            bTeamModel.setEighthScore(awayTeamScore.getJSONObject(7).getInt("score"));
+        } else {
+            bTeamModel.setEighthScore(0);
+        }
         if (awayTeamScore.length() > 8) {
             bTeamModel.setNinthScore(awayTeamScore.getJSONObject(8).getInt("score"));
         } else {
