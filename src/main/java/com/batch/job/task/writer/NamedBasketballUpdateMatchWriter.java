@@ -4,6 +4,7 @@ import com.batch.mapper.BasketballMapper;
 import com.batch.model.BasketballModel;
 import com.batch.model.FilterConditionModel;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.stereotype.Component;
 
@@ -11,6 +12,7 @@ import java.util.List;
 
 @Component
 @Slf4j
+@StepScope
 public class NamedBasketballUpdateMatchWriter implements ItemWriter<List<BasketballModel>> {
 
     private final BasketballMapper basketballMapper;

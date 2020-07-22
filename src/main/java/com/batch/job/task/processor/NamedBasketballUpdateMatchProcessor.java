@@ -10,8 +10,10 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -25,6 +27,7 @@ import java.util.List;
 
 @Component
 @Slf4j
+@StepScope
 public class NamedBasketballUpdateMatchProcessor implements ItemProcessor<String, List<BasketballModel>> {
 
     private String initSeasonDate;
@@ -32,6 +35,9 @@ public class NamedBasketballUpdateMatchProcessor implements ItemProcessor<String
 
     @Autowired
     private NamedUtil namedUtil;
+
+    @Value("#{jobParameters[mode]}")
+    private String mode;
 
     @Override
     public List<BasketballModel> process(String s) throws Exception {
@@ -57,8 +63,11 @@ public class NamedBasketballUpdateMatchProcessor implements ItemProcessor<String
 
             Calendar startDate = Calendar.getInstance();
             startDate.setTime(new Date());
-//            startDate.set(2019, 9, 03);
-            startDate.add(Calendar.DATE, -2);
+            if(mode.equals("all")){
+                startDate.set(2019, 9, 03);
+            }else {
+                startDate.add(Calendar.DATE, -2);
+            }
             DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
             startDate.add(Calendar.DATE, addDate);

@@ -6,8 +6,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -23,11 +25,15 @@ import static java.lang.Math.round;
 
 @Component
 @Slf4j
+@StepScope
 public class NamedBaseballUpdateMatchProcessor implements ItemProcessor<String, List<BaseballModel>> {
 
     private String initSeasonDate;
     private String finishSeasonDate = "2020-12-14";
     private String baseBall_Url = "https://api.picksmatch.com/v1.0/sports/baseball/games?date=";
+
+    @Value("#{jobParameters[mode]}")
+    private String mode;
 
     @Autowired
     private NamedUtil namedUtil;
@@ -50,15 +56,17 @@ public class NamedBaseballUpdateMatchProcessor implements ItemProcessor<String, 
         while (true){
             Calendar startDate = Calendar.getInstance();
             startDate.setTime(new Date());
-
-//            startDate.set(2020, 4, 01);
-            startDate.add(Calendar.DATE, -2);
+            if(mode.equals("all")){
+                startDate.set(2020, 4, 01);
+             }else {
+                 startDate.add(Calendar.DATE, -2);
+             }
 
             DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
             startDate.add(Calendar.DATE, addDate);
             String matchDate = df.format(startDate.getTime());
-            if(df.format(startDate.getTime()).equals("2020-07-14")){
+            if(df.format(startDate.getTime()).equals(df.format(startDate.getTime()))){
                 log.info("야구 Update Match 완료 : " + df.format(startDate.getTime()));
                 break;
             }

@@ -2,6 +2,7 @@ package com.batch.util;
 
 import com.batch.mapper.CommonMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.activation.DataHandler;
@@ -23,8 +24,8 @@ public class EmailUtil {
     private static final String SMTP_PORT = "465";
     private static final String SSL_FACTORY = "javax.net.ssl.SSLSocketFactory";
 
-    private static final String excelOutputPath = "/Users/imc053/Desktop/xmlFile/";
-
+    @Value("${excel.output-path}")
+    private String excelOutputPath;
 
     public void sendSSLMessage(String recipient, List excelDataList, String from) throws MessagingException, UnsupportedEncodingException {
 
@@ -43,7 +44,6 @@ public class EmailUtil {
 
         Session session = Session.getDefaultInstance(props,
                 new javax.mail.Authenticator() {
-
                     protected PasswordAuthentication getPasswordAuthentication() {
                         return new PasswordAuthentication("jungyongee@gmail.com", "ghzkrp153");
                     }
@@ -60,7 +60,6 @@ public class EmailUtil {
 
         // Setting the Subject and Content Type
         msg.setSubject(df.format(cal.getTime()) + " 스포츠 데이터 입니다.");
-
         BodyPart messageBodyPart = new MimeBodyPart();
 
         // Fill the message
@@ -69,7 +68,6 @@ public class EmailUtil {
         multipart.addBodyPart(messageBodyPart);
 
         // Part two is attachment
-
         DateFormat df1 = new SimpleDateFormat("yyyyMMdd");
         for(int i = 0 ; i < excelDataList.size() ; i++){
             messageBodyPart = new MimeBodyPart();

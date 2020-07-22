@@ -29,9 +29,9 @@ public class JobLauncherController {
         return jobScheduleService.startJob(jobRunModel);
     }
 
-    @RequestMapping(value = "/batch/schedule/startJob/{jobName}", method = RequestMethod.GET)
-    public Long startJob(@PathVariable String jobName) throws JobParametersInvalidException, JobInstanceAlreadyExistsException, NoSuchJobException {
-        return jobScheduleService.startJob(jobName);
+    @RequestMapping(value = "/batch/schedule/startJob/{jobName}/{jobParameters}", method = RequestMethod.GET)
+    public Long startJob(@PathVariable String jobName, @PathVariable String jobParameters) throws JobParametersInvalidException, JobInstanceAlreadyExistsException, NoSuchJobException {
+        return jobScheduleService.startJob(jobName,jobParameters);
     }
 
 

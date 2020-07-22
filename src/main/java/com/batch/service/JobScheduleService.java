@@ -36,8 +36,8 @@ public class JobScheduleService implements SchedulingConfigurer {
         return startJobWithDateParameter(jobRunModel.getJobName(), jobRunModel.getJobParameter());
     }
 
-    public Long startJob(String jobName) throws JobInstanceAlreadyExistsException, JobParametersInvalidException, NoSuchJobException {
-        return startJobWithDateParameter(jobName, "");
+    public Long startJob(String jobName,String jobParameters) throws JobInstanceAlreadyExistsException, JobParametersInvalidException, NoSuchJobException {
+        return startJobWithDateParameter(jobName, jobParameters);
     }
 
 
