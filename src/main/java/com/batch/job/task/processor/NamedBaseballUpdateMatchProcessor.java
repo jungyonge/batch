@@ -138,7 +138,7 @@ public class NamedBaseballUpdateMatchProcessor implements ItemProcessor<String, 
 
                 }
             } catch (Exception e) {
-                log.error(String.valueOf(e));
+                e.printStackTrace();
             }
             addDate++;
 
@@ -367,8 +367,16 @@ public class NamedBaseballUpdateMatchProcessor implements ItemProcessor<String, 
         aTeamModel.setSecondScore(homeTeamScore.getJSONObject(1).getInt("score"));
         aTeamModel.setThirdScore(homeTeamScore.getJSONObject(2).getInt("score"));
         aTeamModel.setFourthScore(homeTeamScore.getJSONObject(3).getInt("score"));
-        aTeamModel.setFifthScore(homeTeamScore.getJSONObject(4).getInt("score"));
-        aTeamModel.setSixthScore(homeTeamScore.getJSONObject(5).getInt("score"));
+        if (homeTeamScore.length() > 4) {
+            aTeamModel.setFifthScore(homeTeamScore.getJSONObject(4).getInt("score"));
+        } else {
+            aTeamModel.setFifthScore(0);
+        }
+        if (homeTeamScore.length() > 5) {
+            aTeamModel.setSixthScore(homeTeamScore.getJSONObject(5).getInt("score"));
+        } else {
+            aTeamModel.setSixthScore(0);
+        }
         if (homeTeamScore.length() > 6) {
             aTeamModel.setSeventhScore(homeTeamScore.getJSONObject(6).getInt("score"));
         } else {
@@ -389,8 +397,16 @@ public class NamedBaseballUpdateMatchProcessor implements ItemProcessor<String, 
         bTeamModel.setSecondScore(awayTeamScore.getJSONObject(1).getInt("score"));
         bTeamModel.setThirdScore(awayTeamScore.getJSONObject(2).getInt("score"));
         bTeamModel.setFourthScore(awayTeamScore.getJSONObject(3).getInt("score"));
-        bTeamModel.setFifthScore(awayTeamScore.getJSONObject(4).getInt("score"));
-        bTeamModel.setSixthScore(awayTeamScore.getJSONObject(5).getInt("score"));
+        if (homeTeamScore.length() > 4) {
+            bTeamModel.setFifthScore(awayTeamScore.getJSONObject(4).getInt("score"));
+        } else {
+            bTeamModel.setFifthScore(0);
+        }
+        if (homeTeamScore.length() > 5) {
+            bTeamModel.setSixthScore(awayTeamScore.getJSONObject(5).getInt("score"));
+        } else {
+            bTeamModel.setSixthScore(0);
+        }
         if (homeTeamScore.length() > 6) {
             bTeamModel.setSeventhScore(awayTeamScore.getJSONObject(6).getInt("score"));
         } else {
