@@ -49,23 +49,23 @@ public class MakeExcelTasklet implements Tasklet {
 
 
 
-        basketballMapper.truncateBasketballSpecialSummary();
+        basketballMapper.truncateBasketQuarterHandiOverSummary();
 
         FilterConditionModel filterConditionModel = new FilterConditionModel();
         filterConditionModel.setGround(true);
-        basketballMapper.insertBasketballSpecialSummary(filterConditionModel);
+        basketballMapper.insertBasketQuarterHandiOverSummary(filterConditionModel);
 
         filterConditionModel = new FilterConditionModel();
         filterConditionModel.setAll(true);
-        basketballMapper.insertBasketballSpecialSummary(filterConditionModel);
+        basketballMapper.insertBasketQuarterHandiOverSummary(filterConditionModel);
 
         filterConditionModel = new FilterConditionModel();
         filterConditionModel.setOdd(true);
-        basketballMapper.insertBasketballSpecialSummary(filterConditionModel);
+        basketballMapper.insertBasketQuarterHandiOverSummary(filterConditionModel);
 
         filterConditionModel = new FilterConditionModel();
         filterConditionModel.setWeek(true);
-        basketballMapper.insertBasketballSpecialSummary(filterConditionModel);
+        basketballMapper.insertBasketQuarterHandiOverSummary(filterConditionModel);
 
 //        sportMakeExcelList = commonMapper.selectSportMakeExcelList();
 //        for (int i = 0 ; i < sportMakeExcelList.size() ; i++){
