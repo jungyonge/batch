@@ -102,8 +102,8 @@ public class NamedBaseballUpdateMatchProcessor implements ItemProcessor<String, 
                     parseBaseData(matchObject,aTeamModel,bTeamModel);
 
                     //우취, 콜드일 경우 점수 99로 설정
-                    String gameStatus = matchObject.getJSONObject("broadcast").getString("playText");
-                    if (gameStatus.contains("취소") || gameStatus.contains("콜드") || gameStatus.contains("우천")) {
+                    String gameStatus = matchObject.getString("gameStatus");
+                    if (!gameStatus.contains("FINAL")) {
                         aTeamModel.setATeamTotalPoint(99);
                         aTeamModel.setBTeamTotalPoint(99);
 
