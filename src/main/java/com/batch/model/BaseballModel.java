@@ -73,7 +73,6 @@ public class BaseballModel {
     Integer extendScore;
 
     Boolean extendYn;
-
     //투수정보
     Integer pitchCount;
 

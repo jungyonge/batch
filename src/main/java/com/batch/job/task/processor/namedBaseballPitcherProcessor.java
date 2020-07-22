@@ -152,7 +152,7 @@ public class namedBaseballPitcherProcessor implements ItemProcessor<String, List
             if(text == null){
                 log.info(text);
             }
-            String[] textArr = text.split(" ");
+            String[] textArr = text.split(",");
             if (cnt != textArr.length) {
                 log.info(bb.toString());
             }
@@ -396,16 +396,24 @@ public class namedBaseballPitcherProcessor implements ItemProcessor<String, List
             awayTeamScore = matchObject.getJSONArray("gameTeams").getJSONObject(0).getJSONArray("scores");
         }
 
-        aTeamModel.setFirstInningRun(homeTeamScore.getJSONObject(0).getInt("score"));
-        bTeamModel.setFirstInningRun(awayTeamScore.getJSONObject(0).getInt("score"));
+        aTeamModel.setFirstInningRun(awayTeamScore.getJSONObject(0).getInt("score"));
+        bTeamModel.setFirstInningRun(homeTeamScore.getJSONObject(0).getInt("score"));
 
         for (int i = 0; i < 4; i++) {
             homeFourthRun = homeFourthRun + homeTeamScore.getJSONObject(i).getInt("score");
             awayFourthRun = awayFourthRun + awayTeamScore.getJSONObject(i).getInt("score");
         }
 
-        aTeamModel.setFourthInningRun(homeFourthRun);
-        bTeamModel.setFourthInningRun(awayFourthRun);
+        aTeamModel.setFourthInningRun(awayFourthRun);
+        bTeamModel.setFourthInningRun(homeFourthRun);
+
+        if(aTeamModel.getFirstInningRun() > awayFourthRun){
+            log.info(aTeamModel.toString());
+        }
+
+        if(bTeamModel.getFirstInningRun() > homeFourthRun){
+            log.info(bTeamModel.toString());
+        }
 
     }
 }
