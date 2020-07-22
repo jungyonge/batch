@@ -2542,4 +2542,152 @@
     <insert id="truncateBasketQuarterHandiOverSummary">
         TRUNCATE sport.basketball_quarter_handi_over_summary
     </insert>
+
+    <insert id="insertBasketSpecialComboSummary">
+        INSERT INTO sport.basketball_special_combo_summary
+                    (LEAGUE,
+                     TEAM,
+                     FIRST_HANDI_THREE_PER,
+                     SECOND_HANDI_THREE_PER,
+                     THIRD_HANDI_THREE_PER,
+                     FOURTH_HANDI_THREE_PER,
+                     FIRST_HANDI_FREE_PER,
+                     SECOND_HANDI_FREE_PER,
+                     THIRD_HANDI_FREE_PER,
+                     FOURTH_HANDI_FREE_PER,
+                     FIRST_THREE_FREE_PER,
+                     SECOND_THREE_FREE_PER,
+                     THIRD_THREE_FREE_PER,
+                     FOURTH_THREE_FREE_PER,
+                     RDATE)
+        SELECT A.LEAGUE,
+               A.A_TEAM,
+               ROUND(FIRST_HANDI_THREE_RES / ALLCNT * 100, 1) AS first_handi_three_per,
+               ROUND(SECOND_HANDI_THREE_RES / ALLCNT * 100, 1) AS second_handi_three_per ,
+               ROUND(THIRD_HANDI_THREE_RES / ALLCNT * 100, 1) AS third_handi_three_per,
+               ROUND(FOURTH_HANDI_THREE_RES / ALLCNT * 100, 1) AS fourth_handi_three_per ,
+               ROUND(FIRST_HANDI_FREE_RES / ALLCNT * 100, 1) AS first_handi_free_per,
+               ROUND(SECOND_HANDI_FREE_RES / ALLCNT * 100, 1) AS second_handi_free_per,
+               ROUND(THIRD_HANDI_FREE_RES / ALLCNT * 100, 1) AS third_handi_free_per,
+               ROUND(FOURTH_HANDI_FREE_RES / ALLCNT * 100, 1) AS fourth_handi_free_per,
+               ROUND(FIRST_THREE_FREE_RES / ALLCNT * 100, 1) AS first_three_free_per,
+               ROUND(SECOND_THREE_FREE_RES / ALLCNT * 100, 1) AS second_three_free_per,
+               ROUND(THIRD_THREE_FREE_RES / ALLCNT * 100, 1) AS third_three_free_per,
+               ROUND(FOURTH_THREE_FREE_RES / ALLCNT * 100, 1) AS fourth_three_free_per,
+               NOW()
+        FROM
+          (SELECT LEAGUE,
+                  A_TEAM,
+                  COUNT(1) AS allCnt
+           FROM sport.basketball_data
+           WHERE <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]> GROUP  BY A_TEAM) A
+        LEFT OUTER JOIN
+          (SELECT LEAGUE,
+                  A_TEAM,
+                  COUNT(1) AS first_handi_three_res
+           FROM sport.basketball_data
+           WHERE FIRSTQ_FIRST_THREE_POINT = '승리'
+             AND FIRSTQ_HANDI_CAP_RESULT IN ('승리',
+                                             '적특')
+             AND <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]> GROUP  BY A_TEAM) B ON A.A_TEAM = B.A_TEAM
+        LEFT OUTER JOIN
+          (SELECT LEAGUE,
+                  A_TEAM,
+                  COUNT(1) AS second_handi_three_res
+           FROM sport.basketball_data
+           WHERE SECONDQ_FIRST_THREE_POINT = '승리'
+             AND SECONDQ_HANDI_CAP_RESULT IN ('승리',
+                                              '적특')
+             AND <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]> GROUP  BY A_TEAM) C ON A.A_TEAM = C.A_TEAM
+        LEFT OUTER JOIN
+          (SELECT LEAGUE,
+                  A_TEAM,
+                  COUNT(1) AS third_handi_three_res
+           FROM sport.basketball_data
+           WHERE THIRDQ_FIRST_THREE_POINT = '승리'
+             AND THIRDQ_HANDI_CAP_RESULT IN ('승리',
+                                             '적특')
+             AND <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]> GROUP  BY A_TEAM) D ON A.A_TEAM = D.A_TEAM
+        LEFT OUTER JOIN
+          (SELECT LEAGUE,
+                  A_TEAM,
+                  COUNT(1) AS fourth_handi_three_res
+           FROM sport.basketball_data
+           WHERE SECONDQ_FIRST_THREE_POINT = '승리'
+             AND FOURTHQ_HANDI_CAP_RESULT IN ('승리',
+                                              '적특')
+             AND <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]> GROUP  BY A_TEAM) E ON A.A_TEAM = E.A_TEAM
+        LEFT OUTER JOIN
+          (SELECT LEAGUE,
+                  A_TEAM,
+                  COUNT(1) AS first_handi_free_res
+           FROM sport.basketball_data
+           WHERE FIRSTQ_FIRST_FREE_TWO = '승리'
+             AND FIRSTQ_HANDI_CAP_RESULT IN ('승리',
+                                             '적특')
+             AND <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]> GROUP  BY A_TEAM) B2 ON A.A_TEAM = B2.A_TEAM
+        LEFT OUTER JOIN
+          (SELECT LEAGUE,
+                  A_TEAM,
+                  COUNT(1) AS second_handi_free_res
+           FROM sport.basketball_data
+           WHERE SECONDQ_FIRST_FREE_TWO = '승리'
+             AND SECONDQ_HANDI_CAP_RESULT IN ('승리',
+                                              '적특')
+             AND <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]> GROUP  BY A_TEAM) C2 ON A.A_TEAM = C2.A_TEAM
+        LEFT OUTER JOIN
+          (SELECT LEAGUE,
+                  A_TEAM,
+                  COUNT(1) AS third_handi_free_res
+           FROM sport.basketball_data
+           WHERE THIRDQ_FIRST_FREE_TWO = '승리'
+             AND THIRDQ_HANDI_CAP_RESULT IN ('승리',
+                                             '적특')
+             AND <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]> GROUP  BY A_TEAM) D2 ON A.A_TEAM = D2.A_TEAM
+        LEFT OUTER JOIN
+          (SELECT LEAGUE,
+                  A_TEAM,
+                  COUNT(1) AS fourth_handi_free_res
+           FROM sport.basketball_data
+           WHERE SECONDQ_FIRST_FREE_TWO = '승리'
+             AND FOURTHQ_HANDI_CAP_RESULT IN ('승리',
+                                              '적특')
+             AND <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]> GROUP  BY A_TEAM) E2 ON A.A_TEAM = E2.A_TEAM
+        LEFT OUTER JOIN
+          (SELECT LEAGUE,
+                  A_TEAM,
+                  COUNT(1) AS first_three_free_res
+           FROM sport.basketball_data
+           WHERE FIRSTQ_FIRST_FREE_TWO = '승리'
+             AND FIRSTQ_FIRST_THREE_POINT = '승리'
+             AND <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]> GROUP  BY A_TEAM) B3 ON A.A_TEAM = B3.A_TEAM
+        LEFT OUTER JOIN
+          (SELECT LEAGUE,
+                  A_TEAM,
+                  COUNT(1) AS second_three_free_res
+           FROM sport.basketball_data
+           WHERE SECONDQ_FIRST_FREE_TWO = '승리'
+             AND SECONDQ_FIRST_THREE_POINT = '승리'
+             AND <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]> GROUP  BY A_TEAM) C3 ON A.A_TEAM = C3.A_TEAM
+        LEFT OUTER JOIN
+          (SELECT LEAGUE,
+                  A_TEAM,
+                  COUNT(1) AS third_three_free_res
+           FROM sport.basketball_data
+           WHERE THIRDQ_FIRST_FREE_TWO = '승리'
+             AND THIRDQ_FIRST_THREE_POINT = '승리'
+             AND <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]> GROUP  BY A_TEAM) D3 ON A.A_TEAM = D3.A_TEAM
+        LEFT OUTER JOIN
+          (SELECT LEAGUE,
+                  A_TEAM,
+                  COUNT(1) AS fourth_three_free_res
+           FROM sport.basketball_data
+           WHERE FOURTHQ_FIRST_FREE_TWO = '승리'
+             AND FOURTHQ_FIRST_THREE_POINT = '승리'
+             AND <![CDATA[  MATCH_DATE < DATE_ADD(NOW(), INTERVAL - 1 DAY)   ]]> GROUP  BY A_TEAM) E3 ON A.A_TEAM = E3.A_TEAM;
+    </insert>
+
+    <insert id="truncateBasketSpecialComboSummary">
+        TRUNCATE  sport.basketball_special_combo_summary;
+    </insert>
 </mapper>

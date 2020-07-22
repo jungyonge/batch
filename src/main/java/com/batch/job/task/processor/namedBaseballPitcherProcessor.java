@@ -269,10 +269,6 @@ public class namedBaseballPitcherProcessor implements ItemProcessor<String, List
 
     private void parseBaseOnBall(JSONObject matchObject, BaseballModel aTeamModel, BaseballModel bTeamModel) throws JSONException, ParseException {
         JSONArray broadCasts = matchObject.getJSONArray("broadcasts");
-        double homeInningPitched = aTeamModel.getInningPitched();
-        double awayInningPitched = bTeamModel.getInningPitched();
-        double checkInning = 0;
-        double checkBaseOnBall = 0;
         int currentInning = 0;
         String playText;
         StringBuilder homeBaseOnBallTexts = new StringBuilder();
@@ -325,6 +321,11 @@ public class namedBaseballPitcherProcessor implements ItemProcessor<String, List
                 homeBaseOnBallTexts.append(currentInning).append("(I),");
             }
 
+            if(playText.contains("몸에 맞는 볼") && aTeamModel.getLeague().equals("NPB")){
+                int tempBaseOnBall = aTeamModel.getBaseOnBalls() - 1;
+                aTeamModel.setBaseOnBalls(tempBaseOnBall);
+            }
+
         }
 
 
@@ -359,7 +360,6 @@ public class namedBaseballPitcherProcessor implements ItemProcessor<String, List
                     }
                 }
 
-
                 if(checkSB){
                     awayBaseOnBallTexts.append(currentInning).append("(S),");
                 }else {
@@ -369,6 +369,11 @@ public class namedBaseballPitcherProcessor implements ItemProcessor<String, List
             }
             if (playText.contains("고의4구")) {
                 awayBaseOnBallTexts.append(currentInning).append("(I),");
+            }
+
+            if(playText.contains("몸에 맞는 볼") && bTeamModel.getLeague().equals("NPB")){
+                int tempBaseOnBall = bTeamModel.getBaseOnBalls() - 1;
+                bTeamModel.setBaseOnBalls(tempBaseOnBall);
             }
 
         }
@@ -395,8 +400,8 @@ public class namedBaseballPitcherProcessor implements ItemProcessor<String, List
         bTeamModel.setFirstInningRun(awayTeamScore.getJSONObject(0).getInt("score"));
 
         for (int i = 0; i < 4; i++) {
-            homeFourthRun = +homeTeamScore.getJSONObject(i).getInt("score");
-            awayFourthRun = +awayTeamScore.getJSONObject(i).getInt("score");
+            homeFourthRun = homeFourthRun + homeTeamScore.getJSONObject(i).getInt("score");
+            awayFourthRun = awayFourthRun + awayTeamScore.getJSONObject(i).getInt("score");
         }
 
         aTeamModel.setFourthInningRun(homeFourthRun);
