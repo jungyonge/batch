@@ -12,8 +12,9 @@ public interface BaseballPitcherMapper {
 
     List selectBaseballPitcherStat();
 
-    int insertBaseballPitcherStat(BaseballModel baseballModel);
+    void insertBaseballPitcherStat(BaseballModel baseballModel);
 
     int checkGameIdCount(BaseballModel baseballModel);
 
+    void updateBaseballPitcherStat(BaseballModel baseballModel);
 }

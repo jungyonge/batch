@@ -18,7 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Component
-@Slf4j
+@Slf4j()
 public class MakeExcelUtil {
     private static final String FILE_EXT1 = ".xls";
     private static final String FILE_EXT2 = ".xlsx";

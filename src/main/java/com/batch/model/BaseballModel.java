@@ -92,7 +92,6 @@ public class BaseballModel {
     Integer firstInningRun;
     Integer fourthInningRun;
 
-
     public int getTotalScore(){
         return firstScore +  secondScore + thirdScore +  fourthScore +   fifthScore + sixthScore + seventhScore + eighthScore + ninthScore + extendScore;
     }

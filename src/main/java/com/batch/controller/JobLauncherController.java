@@ -8,10 +8,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.JobParametersInvalidException;
 import org.springframework.batch.core.launch.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @RestController
 @Slf4j
+@EnableScheduling
 public class JobLauncherController {
     @Autowired
     private JobScheduleService jobScheduleService;
@@ -31,7 +37,21 @@ public class JobLauncherController {
 
     @RequestMapping(value = "/batch/schedule/startJob/{jobName}/{jobParameters}", method = RequestMethod.GET)
     public Long startJob(@PathVariable String jobName, @PathVariable String jobParameters) throws JobParametersInvalidException, JobInstanceAlreadyExistsException, NoSuchJobException {
-        return jobScheduleService.startJob(jobName,jobParameters);
+        return jobScheduleService.startJob(jobName, jobParameters);
+    }
+
+    @RequestMapping(value = "jobs/allSports")
+    @Scheduled(cron = "0 15 11 ? * *")
+    public void runJob() throws Exception {
+        String _jobParameters = "mode=update";
+
+        jobScheduleService.startJob("namedBaseballPitcherJob", _jobParameters);
+        Thread.sleep(1000 * 60 * 2);
+        jobScheduleService.startJob("namedBaseballUpdateMatchJob", _jobParameters);
+        Thread.sleep(1000 * 60 * 2);
+        jobScheduleService.startJob("namedBasketballUpdateMatchJob", _jobParameters);
+        Thread.sleep(1000 * 60 * 2);
+        jobScheduleService.startJob("makeExcelJob", _jobParameters);
     }
 
 

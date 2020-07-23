@@ -27,6 +27,8 @@ public class NamedBaseballPitcherWriter  implements ItemWriter<List<BaseballMode
                 int cnt = baseballPitcherMapper.checkGameIdCount(baseballModel);
                 if(cnt < 2){
                     baseballPitcherMapper.insertBaseballPitcherStat(baseballModel);
+                }else if(cnt == 2){
+                    baseballPitcherMapper.updateBaseballPitcherStat(baseballModel);
                 }
             }
 

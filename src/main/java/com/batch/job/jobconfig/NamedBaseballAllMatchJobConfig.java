@@ -57,16 +57,6 @@ public class NamedBaseballAllMatchJobConfig {
         this.namedBaseballAllMatchWriter = namedBaseballAllMatchWriter;
     }
 
-
-    //    @Scheduled(cron = "* * * * * ?")
-    @RequestMapping(value = "jobs/baseballAllMatch")
-    public void runJob() throws Exception{
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
-        String _jobParameters = "now=" + sdf.format(new Date());
-
-        simpleJobOperator.start("namedBaseBallAllMatchJob", _jobParameters);
-     }
-
     @Bean
     public Job namedBaseBallAllMatchJob(){
         return jobBuilderFactory.get("namedBaseBallAllMatchJob")

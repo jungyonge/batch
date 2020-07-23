@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.batch.mapper.BaseballPitcherMapper">
 
-    <select id="selectBaseballPitcherStat" parameterType="com.batch.model.BaseballModel">
+    <select id="selectBaseballPitcherStat" resultType="hashMap">
             SELECT
                 IDX,
                GAME_ID,
@@ -18,6 +18,7 @@
                SEASON_WINS,
                SEASON_LOSSES,
                INNING_PITCHED,
+               PITCH_COUNT,
                HIT,
                HOMERUN,
                BASEONBALL_TEXTS,
@@ -37,7 +38,7 @@
                       GAME_ID;
     </select>
 
-   <insert id="insertBaseballPitcherStat" parameterType="com.batch.model.BaseballModel">
+    <insert id="insertBaseballPitcherStat" parameterType="com.batch.model.BaseballModel">
       INSERT INTO sport.baseball_pitcher_data
             (
              GAME_ID,
@@ -95,7 +96,42 @@
              );
    </insert>
 
-   <select id="checkGameIdCount" parameterType="com.batch.model.BaseballModel" resultType="int">
+    <update id="updateBaseballPitcherStat" parameterType="com.batch.model.BaseballModel">
+        UPDATE sport.baseball_pitcher_data
+             SET GAME_ID = #{gameId},
+                 LEAGUE = #{league},
+                 GROUND = #{ground},
+                 STADIUM = #{stadium},
+                 MATCH_DATE = #{date},
+                 DAY_OF_WEEK = #{dayOfWeek},
+                 MATCH_TIME = #{time},
+                 A_TEAM = #{aTeam},
+                 A_TEAM_PITCHER = #{aTeamPitcher},
+                 B_TEAM = #{bTeam},
+                 SEASON_WINS = #{seasonWins},
+                 SEASON_LOSSES = #{seasonLosses},
+                 INNING_PITCHED = #{inningPitched},
+                 PITCH_COUNT = #{pitchCount},
+                 HIT = #{hit},
+                 HOMERUN = #{homeRun},
+                 BASEONBALL_TEXTS = #{baseOnBallTexts},
+                 BASEONBALLS = #{baseOnBalls},
+                 STRIKEOUTS = #{strikeOuts},
+                 RUN = #{run},
+                 EARNED_RUN = #{earnedRun},
+                 TODAY_EARNED_RUN_AVG = #{todayEarnedRunAverage},
+                 SEASON_EARNED_RUN_AVG = #{seasonEarnedRunAverage},
+                 FIRST_INNING_RUN = #{firstInningRun},
+                 FOURTH_INNING_RUN = #{fourthInningRun}
+        WHERE       GAME_ID = #{gameId}
+                AND LEAGUE = #{league}
+                AND GROUND = #{ground}
+                AND A_TEAM = #{aTeam}
+                AND MATCH_DATE = #{date}
+                AND UPDATE_YN = 1;
+    </update>
+
+    <select id="checkGameIdCount" parameterType="com.batch.model.BaseballModel" resultType="int">
      SELECT COUNT(1)
            FROM sport.baseball_pitcher_data
         WHERE GAME_ID = #{gameId};

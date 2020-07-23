@@ -6,8 +6,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.text.DateFormat;
@@ -20,6 +22,7 @@ import java.util.List;
 
 @Component
 @Slf4j
+@StepScope
 public class namedBaseballPitcherProcessor implements ItemProcessor<String, List<BaseballModel>> {
     private final static String BASEBALL_MATCH_URL = "https://sports-api.picksmatch.com/named/v1/sports/baseball/games/";
     private final static String BASEBALL_PITCHER_URL = "https://sports-api.picksmatch.com/named/v1/sports/games/";
@@ -28,10 +31,11 @@ public class namedBaseballPitcherProcessor implements ItemProcessor<String, List
     private final static String PITCHER_PARAM = "?broadcast=true&odds=true&scores=true&specials=true&lineups=true&seasonTeamLeagueRankingStat=true&broadcastDesc=true&v=";
 
 
+    @Value("#{jobParameters[mode]}")
+    private String mode;
+
     @Autowired
     private NamedUtil namedUtil;
-
-//20200714&endDate=20200714&v=
 
     @Override
     public List<BaseballModel> process(String s) throws Exception {
@@ -55,21 +59,26 @@ public class namedBaseballPitcherProcessor implements ItemProcessor<String, List
 
         int addDate = 0;
 
+        Calendar curDate = Calendar.getInstance();
+        curDate.setTime(new Date());
+        curDate.add(Calendar.DATE, 1);
+
         List<BaseballModel> baseballModelList = new ArrayList<>();
 
         while (true) {
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(new Date());
-
-            cal.set(2020, 4, 04);
-//            cal.set(2020, 6, 01);
-
+            Calendar startDate = Calendar.getInstance();
+            startDate.setTime(new Date());
+            if (mode.equals("all")) {
+                startDate.set(2020, 4, 01);
+            } else {
+                startDate.add(Calendar.DATE, -2);
+            }
             DateFormat df = new SimpleDateFormat("yyyyMMdd");
 
-            cal.add(Calendar.DATE, addDate);
-            String matchDate = df.format(cal.getTime());
-            if (df.format(cal.getTime()).equals("20200718")) {
-                log.info("설정한 시즌 마김 기한까지 파싱 완료 : " + "2020-07-18");
+            startDate.add(Calendar.DATE, addDate);
+            String matchDate = df.format(startDate.getTime());
+            if (df.format(startDate.getTime()).equals(df.format(curDate.getTime()))) {
+                log.info("야구 투수 Update Match 완료 : " + df.format(curDate.getTime()));
                 break;
             }
 
@@ -85,10 +94,10 @@ public class namedBaseballPitcherProcessor implements ItemProcessor<String, List
 
             for (int i = 0; i < jsonArray.length(); i++) {
                 matchObject = jsonArray.getJSONObject(i);
-                if (matchObject.getBoolean("isBoardShow")) {
+//                if (matchObject.getBoolean("isBoardShow")) {
                     String gameId = matchObject.getString("id");
                     matchArr[i] = gameId;
-                }
+//                }
             }
 
             for (String gameId : matchArr) {
@@ -96,7 +105,7 @@ public class namedBaseballPitcherProcessor implements ItemProcessor<String, List
                 BaseballModel bTeamModel = new BaseballModel();
 
                 unixTime = String.valueOf(System.currentTimeMillis() / 1000);
-                if(gameId == null){
+                if (gameId == null) {
                     continue;
                 }
                 json = namedUtil.getPitcherApiResponse(BASEBALL_PITCHER_URL + gameId + PITCHER_PARAM + unixTime, "");
@@ -112,7 +121,7 @@ public class namedBaseballPitcherProcessor implements ItemProcessor<String, List
                 bTeamModel.setGameId(String.valueOf(matchObject.getInt("id")));
                 aTeamModel.setLeague(matchObject.getJSONObject("league").getString("displayName"));
                 bTeamModel.setLeague(matchObject.getJSONObject("league").getString("displayName"));
-                if(!matchObject.isNull("venue")){
+                if (!matchObject.isNull("venue")) {
                     aTeamModel.setStadium(matchObject.getJSONObject("venue").getString("name"));
                     bTeamModel.setStadium(matchObject.getJSONObject("venue").getString("name"));
                 }
@@ -124,16 +133,17 @@ public class namedBaseballPitcherProcessor implements ItemProcessor<String, List
 
                 //기본 데이터 파싱
                 parseBaseData(matchObject, aTeamModel, bTeamModel);
+                if (matchObject.getBoolean("isBoardShow")) {
 
-                //투수 정보 파싱
-                parsePitcherData(matchObject, aTeamModel, bTeamModel);
+                    //투수 정보 파싱
+                    parsePitcherData(matchObject, aTeamModel, bTeamModel);
 
-                //볼 정보 파싱
-                parseBaseOnBall(matchObject, aTeamModel, bTeamModel);
+                    //볼 정보 파싱
+                    parseBaseOnBall(matchObject, aTeamModel, bTeamModel);
 
-                //이닝스코어 파싱
-                parseInningScore(matchObject, aTeamModel, bTeamModel);
-
+                    //이닝스코어 파싱
+                    parseInningScore(matchObject, aTeamModel, bTeamModel);
+                }
                 baseballModelList.add(aTeamModel);
                 baseballModelList.add(bTeamModel);
             }
@@ -142,21 +152,6 @@ public class namedBaseballPitcherProcessor implements ItemProcessor<String, List
 
         }
 
-
-        for (BaseballModel bb : baseballModelList) {
-            int cnt = bb.getBaseOnBalls();
-            if (cnt == 0) {
-                continue;
-            }
-            String text = bb.getBaseOnBallTexts();
-            if(text == null){
-                log.info(text);
-            }
-            String[] textArr = text.split(",");
-            if (cnt != textArr.length) {
-                log.info(bb.toString());
-            }
-        }
         return baseballModelList;
     }
 
@@ -301,17 +296,17 @@ public class namedBaseballPitcherProcessor implements ItemProcessor<String, List
 
             if (playText.contains("볼넷")) {
                 boolean checkSB = true;
-                for (int j = 1 ; j < 5 ; j++){
+                for (int j = 1; j < 5; j++) {
                     broadCastObject = broadCasts.getJSONObject(i + j);
                     playText = broadCastObject.getString("playText");
-                    if(!playText.contains("볼")){
+                    if (!playText.contains("볼")) {
                         checkSB = false;
                     }
                 }
 
-                if(checkSB){
+                if (checkSB) {
                     homeBaseOnBallTexts.append(currentInning).append("(S),");
-                }else {
+                } else {
                     homeBaseOnBallTexts.append(currentInning).append(",");
                 }
 
@@ -321,7 +316,7 @@ public class namedBaseballPitcherProcessor implements ItemProcessor<String, List
                 homeBaseOnBallTexts.append(currentInning).append("(I),");
             }
 
-            if(playText.contains("몸에 맞는 볼") && aTeamModel.getLeague().equals("NPB")){
+            if (playText.contains("몸에 맞는 볼") && aTeamModel.getLeague().equals("NPB")) {
                 int tempBaseOnBall = aTeamModel.getBaseOnBalls() - 1;
                 aTeamModel.setBaseOnBalls(tempBaseOnBall);
             }
@@ -336,7 +331,7 @@ public class namedBaseballPitcherProcessor implements ItemProcessor<String, List
             currentInning = broadCastObject.getInt("period");
             teamLocationType = broadCastObject.getString("teamLocationType");
 
-            if ( playText.contains("경기종료")) {
+            if (playText.contains("경기종료")) {
                 bTeamModel.setBaseOnBallTexts(awayBaseOnBallTexts.toString());
                 break;
             }
@@ -352,17 +347,17 @@ public class namedBaseballPitcherProcessor implements ItemProcessor<String, List
 
             if (playText.contains("볼넷")) {
                 boolean checkSB = true;
-                for (int j = 1 ; j < 5 ; j++){
+                for (int j = 1; j < 5; j++) {
                     broadCastObject = broadCasts.getJSONObject(i + j);
                     playText = broadCastObject.getString("playText");
-                    if(!playText.contains("볼")){
+                    if (!playText.contains("볼")) {
                         checkSB = false;
                     }
                 }
 
-                if(checkSB){
+                if (checkSB) {
                     awayBaseOnBallTexts.append(currentInning).append("(S),");
-                }else {
+                } else {
                     awayBaseOnBallTexts.append(currentInning).append(",");
                 }
 
@@ -371,7 +366,7 @@ public class namedBaseballPitcherProcessor implements ItemProcessor<String, List
                 awayBaseOnBallTexts.append(currentInning).append("(I),");
             }
 
-            if(playText.contains("몸에 맞는 볼") && bTeamModel.getLeague().equals("NPB")){
+            if (playText.contains("몸에 맞는 볼") && bTeamModel.getLeague().equals("NPB")) {
                 int tempBaseOnBall = bTeamModel.getBaseOnBalls() - 1;
                 bTeamModel.setBaseOnBalls(tempBaseOnBall);
             }
@@ -407,11 +402,11 @@ public class namedBaseballPitcherProcessor implements ItemProcessor<String, List
         aTeamModel.setFourthInningRun(awayFourthRun);
         bTeamModel.setFourthInningRun(homeFourthRun);
 
-        if(aTeamModel.getFirstInningRun() > awayFourthRun){
+        if (aTeamModel.getFirstInningRun() > awayFourthRun) {
             log.info(aTeamModel.toString());
         }
 
-        if(bTeamModel.getFirstInningRun() > homeFourthRun){
+        if (bTeamModel.getFirstInningRun() > homeFourthRun) {
             log.info(bTeamModel.toString());
         }
 

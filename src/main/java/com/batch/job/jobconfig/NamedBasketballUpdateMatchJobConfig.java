@@ -50,7 +50,7 @@ public class NamedBasketballUpdateMatchJobConfig {
 
     @Bean
     public Job NamedBasketballUpdateMatchJob(){
-        return jobBuilderFactory.get("NamedBasketballUpdateMatchJob")
+        return jobBuilderFactory.get("namedBasketballUpdateMatchJob")
                 .preventRestart()
                 .listener(notificationListener)
                 .flow(NamedBasketballUpdateMatchStep())
@@ -60,7 +60,7 @@ public class NamedBasketballUpdateMatchJobConfig {
 
     @Bean
     public Step NamedBasketballUpdateMatchStep(){
-        return stepBuilderFactory.get("NamedBasketballUpdateMatchStep")
+        return stepBuilderFactory.get("namedBasketballUpdateMatchStep")
                 .<String, List<BasketballModel>> chunk(1)
                 .reader(dummyReader)
                 .processor(namedBasketballUpdateMatchProcessor)
