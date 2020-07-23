@@ -15,6 +15,7 @@ import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -24,7 +25,6 @@ public class MakeExcelTasklet implements Tasklet {
 
     private final BaseballMapper baseballMapper;
     private final BaseballPitcherMapper baseballPitcherMapper;
-
     private final BasketballMapper basketballMapper;
     private final CommonMapper commonMapper;
     private final MakeExcelUtil makeExcelUtil;
@@ -43,12 +43,16 @@ public class MakeExcelTasklet implements Tasklet {
     @Override
     public RepeatStatus execute(StepContribution stepContribution, ChunkContext chunkContext) throws Exception {
         List sportMakeExcelList = new ArrayList<>();
+        List sportMakeExcelListWithoutPitcher = new ArrayList<>();
         List sportDataList = new ArrayList<>();
+        List memberList = new ArrayList<>();
+        HashMap pitcherMap = new HashMap();
+        pitcherMap.put("SPORT","baseball_pitcher");
 
         String sport;
 
-
         sportMakeExcelList = commonMapper.selectSportMakeExcelList();
+        sportMakeExcelListWithoutPitcher = commonMapper.selectSportMakeExcelListWithoutPitcher();
         for (int i = 0 ; i < sportMakeExcelList.size() ; i++){
             HashMap sportMap = (HashMap) sportMakeExcelList.get(i);
             sport = String.valueOf(sportMap.get("SPORT"));
@@ -57,7 +61,19 @@ public class MakeExcelTasklet implements Tasklet {
                 makeExcelUtil.statXlsDown(sport, sportDataList);
             }
         }
-        emailUtil.sendSSLMessage("qjsro1204@naver.com",sportMakeExcelList,"jungyongee@gmail.com");
+
+        memberList = commonMapper.selectMemberList();
+
+        for (int i = 0 ; i < memberList.size() ; i++){
+            HashMap memberMap = (HashMap) memberList.get(i);
+            if(memberMap.get("SPORT_YN").toString().equals("true") && memberMap.get("PITCHER_YN").toString().equals("true")){
+                emailUtil.sendSSLMessage(memberMap.get("EMAIL").toString(),sportMakeExcelList,"jungyongee@gmail.com");
+            }else if (memberMap.get("SPORT_YN").toString().equals("true") && memberMap.get("PITCHER_YN").toString().equals("false")){
+                emailUtil.sendSSLMessage(memberMap.get("EMAIL").toString(),sportMakeExcelListWithoutPitcher,"jungyongee@gmail.com");
+            }else if (memberMap.get("SPORT_YN").toString().equals("false") && memberMap.get("PITCHER_YN").toString().equals("true")){
+                emailUtil.sendSSLMessage(memberMap.get("EMAIL").toString(), Collections.singletonList(pitcherMap),"jungyongee@gmail.com");
+            }
+        }
 
         return RepeatStatus.FINISHED;
     }

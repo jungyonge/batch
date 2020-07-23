@@ -12,4 +12,6 @@ public interface CommonMapper {
     List selectSportMakeExcelList();
 
     List selectMemberList();
+
+    List selectSportMakeExcelListWithoutPitcher();
 }

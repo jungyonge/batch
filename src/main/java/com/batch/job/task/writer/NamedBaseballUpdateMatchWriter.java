@@ -13,7 +13,7 @@ import java.util.List;
 @Component
 @Slf4j
 @StepScope
-public class NamedBaseballUpdateMatchWriter implements ItemWriter< List<BaseballModel>> {
+public class NamedBaseballUpdateMatchWriter implements ItemWriter<List<BaseballModel>> {
 
     private final BaseballMapper baseballMapper;
 
@@ -24,9 +24,9 @@ public class NamedBaseballUpdateMatchWriter implements ItemWriter< List<Baseball
     @Override
     public void write(List<? extends List<BaseballModel>> list) throws Exception {
 
-        for(List<BaseballModel> baseballModels : list){
-            for(BaseballModel baseballModel : baseballModels){
-                    baseballMapper.updateBaseballStat(baseballModel);
+        for (List<BaseballModel> baseballModels : list) {
+            for (BaseballModel baseballModel : baseballModels) {
+                baseballMapper.updateBaseballStat(baseballModel);
             }
         }
 

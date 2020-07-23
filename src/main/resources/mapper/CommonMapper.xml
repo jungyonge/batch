@@ -9,8 +9,17 @@
             WHERE EXCEL_YN = 1;
     </select>
 
+    <select id="selectSportMakeExcelListWithoutPitcher" resultType="hashMap">
+        SELECT
+            SPORT
+        FROM sport.crawling_sport
+            WHERE EXCEL_YN = 1 AND SPORT != 'baseball_pitcher';
+    </select>
+
     <select id="selectMemberList"  resultType="HashMap">
-        SELECT EMAIL
+        SELECT EMAIL,
+                SPORT_YN,
+                PITCHER_YN
             FROM sport.member
         WHERE END_DATE > NOW();
     </select>

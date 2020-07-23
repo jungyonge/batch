@@ -68,73 +68,73 @@
              FOURTH_INNING_RUN
              )
      VALUES (
-             #{gameId},
-             #{league},
-             #{ground},
-             #{stadium},
-             #{date},
-             #{dayOfWeek},
-             #{time},
-             #{aTeam},
-             #{aTeamPitcher},
-             #{bTeam},
-             #{seasonWins},
-             #{seasonLosses},
-             #{inningPitched},
-             #{pitchCount},
-             #{hit},
-             #{homeRun},
-             #{baseOnBallTexts},
-             #{baseOnBalls},
-             #{strikeOuts},
-             #{run},
-             #{earnedRun},
-             #{todayEarnedRunAverage},
-             #{seasonEarnedRunAverage},
-             #{firstInningRun},
-             #{fourthInningRun}
+             IFNULL(#{gameId},''),
+             IFNULL(#{league},''),
+             IFNULL(#{ground},''),
+             IFNULL(#{stadium},''),
+             IFNULL(#{date},''),
+             IFNULL(#{dayOfWeek},''),
+             IFNULL(#{time},''),
+             IFNULL(#{aTeam},''),
+             IFNULL(#{aTeamPitcher},''),
+             IFNULL(#{bTeam},''),
+             IFNULL(#{seasonWins},0),
+             IFNULL(#{seasonLosses},0),
+             IFNULL(#{inningPitched},0),
+             IFNULL(#{pitchCount},0),
+             IFNULL(#{hit},0),
+             IFNULL(#{homeRun},0),
+             IFNULL(#{baseOnBallTexts},0),
+             IFNULL(#{baseOnBalls},0),
+             IFNULL(#{strikeOuts},0),
+             IFNULL(#{run},0),
+             IFNULL(#{earnedRun},0),
+             IFNULL(#{todayEarnedRunAverage},0),
+             IFNULL(#{seasonEarnedRunAverage},0),
+             IFNULL(#{firstInningRun},0),
+             IFNULL(#{fourthInningRun},0)
              );
    </insert>
 
     <update id="updateBaseballPitcherStat" parameterType="com.batch.model.BaseballModel">
         UPDATE sport.baseball_pitcher_data
-             SET GAME_ID = #{gameId},
-                 LEAGUE = #{league},
-                 GROUND = #{ground},
-                 STADIUM = #{stadium},
-                 MATCH_DATE = #{date},
-                 DAY_OF_WEEK = #{dayOfWeek},
-                 MATCH_TIME = #{time},
-                 A_TEAM = #{aTeam},
-                 A_TEAM_PITCHER = #{aTeamPitcher},
-                 B_TEAM = #{bTeam},
-                 SEASON_WINS = #{seasonWins},
-                 SEASON_LOSSES = #{seasonLosses},
-                 INNING_PITCHED = #{inningPitched},
-                 PITCH_COUNT = #{pitchCount},
-                 HIT = #{hit},
-                 HOMERUN = #{homeRun},
-                 BASEONBALL_TEXTS = #{baseOnBallTexts},
-                 BASEONBALLS = #{baseOnBalls},
-                 STRIKEOUTS = #{strikeOuts},
-                 RUN = #{run},
-                 EARNED_RUN = #{earnedRun},
-                 TODAY_EARNED_RUN_AVG = #{todayEarnedRunAverage},
-                 SEASON_EARNED_RUN_AVG = #{seasonEarnedRunAverage},
-                 FIRST_INNING_RUN = #{firstInningRun},
-                 FOURTH_INNING_RUN = #{fourthInningRun}
-        WHERE       GAME_ID = #{gameId}
-                AND LEAGUE = #{league}
-                AND GROUND = #{ground}
-                AND A_TEAM = #{aTeam}
-                AND MATCH_DATE = #{date}
+             SET GAME_ID = IFNULL(#{gameId},''),
+                 LEAGUE = IFNULL(#{league},''),
+                 GROUND = IFNULL(#{ground},''),
+                 STADIUM = IFNULL(#{stadium},''),
+                 MATCH_DATE = IFNULL(#{date},''),
+                 DAY_OF_WEEK = IFNULL(#{dayOfWeek},''),
+                 MATCH_TIME = IFNULL(#{time},''),
+                 A_TEAM = IFNULL(#{aTeam},''),
+                 A_TEAM_PITCHER = IFNULL(#{aTeamPitcher},''),
+                 B_TEAM = IFNULL(#{bTeam},''),
+                 SEASON_WINS = IFNULL(#{seasonWins},0),
+                 SEASON_LOSSES = IFNULL(#{seasonLosses},0),
+                 INNING_PITCHED = IFNULL(#{inningPitched},0),
+                 PITCH_COUNT = IFNULL(#{pitchCount},0),
+                 HIT = IFNULL(#{hit},0),
+                 HOMERUN = IFNULL(#{homeRun},0),
+                 BASEONBALL_TEXTS = IFNULL(#{baseOnBallTexts},0),
+                 BASEONBALLS = IFNULL(#{baseOnBalls},0),
+                 STRIKEOUTS = IFNULL(#{strikeOuts},0),
+                 RUN = IFNULL(#{run},0),
+                 EARNED_RUN = IFNULL(#{earnedRun},0),
+                 TODAY_EARNED_RUN_AVG = IFNULL(#{todayEarnedRunAverage},0),
+                 SEASON_EARNED_RUN_AVG = IFNULL(#{seasonEarnedRunAverage},0),
+                 FIRST_INNING_RUN = IFNULL(#{firstInningRun},0),
+                 FOURTH_INNING_RUN = IFNULL(#{fourthInningRun},0)
+        WHERE       GAME_ID = IFNULL(#{gameId},'')
+                AND LEAGUE = IFNULL(#{league},'')
+                AND GROUND = IFNULL(#{ground},'')
+                AND A_TEAM = IFNULL(#{aTeam},'')
+                AND MATCH_DATE = IFNULL(#{date},'')
                 AND UPDATE_YN = 1;
     </update>
 
     <select id="checkGameIdCount" parameterType="com.batch.model.BaseballModel" resultType="int">
      SELECT COUNT(1)
            FROM sport.baseball_pitcher_data
-        WHERE GAME_ID = #{gameId};
+        WHERE GAME_ID = IFNULL(#{gameId},'');
    </select>
 
 </mapper>

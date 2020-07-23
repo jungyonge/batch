@@ -41,7 +41,7 @@ public class JobLauncherController {
     }
 
     @RequestMapping(value = "jobs/allSports")
-    @Scheduled(cron = "0 15 11 ? * *")
+    @Scheduled(cron = "0 48 11 ? * *")
     public void runJob() throws Exception {
         String _jobParameters = "mode=update";
 

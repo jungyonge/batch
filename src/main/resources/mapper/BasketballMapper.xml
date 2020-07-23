@@ -14,91 +14,91 @@
                 A_TEAM, B_TEAM,
                 B_TEAM_REST_DAY)
         VALUES (
-                #{gameId},
-                #{league},
-                #{ground},
-                #{date},
-                #{dayOfWeek},
-                #{time},
-                IFNULL((SELECT  DATEDIFF(#{date} ,(SELECT MATCH_DATE FROM  sport.basketball_data A WHERE A_TEAM = #{aTeam} ORDER BY idx DESC LIMIT 1))) -1,0),
-                #{aTeam},
-                #{bTeam},
-                IFNULL((SELECT  DATEDIFF(#{date} ,(SELECT MATCH_DATE FROM  sport.basketball_data B WHERE B_TEAM = #{bTeam} ORDER BY idx DESC LIMIT 1))) -1,0)
+                IFNULL(#{gameId},''),
+                IFNULL(#{league},''),
+                IFNULL(#{ground},''),
+                IFNULL(#{date},''),
+                IFNULL(#{dayOfWeek},''),
+                IFNULL(#{time},''),
+                IFNULL((SELECT  DATEDIFF(IFNULL(#{date},'') ,(SELECT MATCH_DATE FROM  sport.basketball_data A WHERE A_TEAM = IFNULL(#{aTeam},'') ORDER BY idx DESC LIMIT 1))) -1,0),
+                IFNULL(#{aTeam},''),
+                IFNULL(#{bTeam},''),
+                IFNULL((SELECT  DATEDIFF(IFNULL(#{date},'') ,(SELECT MATCH_DATE FROM  sport.basketball_data B WHERE B_TEAM = IFNULL(#{bTeam},'') ORDER BY idx DESC LIMIT 1))) -1,0)
             )
     </insert>
 
     <select id="checkGameIdCount" parameterType="com.batch.model.BasketballModel" resultType="int">
        SELECT COUNT(1)
            FROM sport.basketball_data
-        WHERE GAME_ID = #{gameId};
+        WHERE GAME_ID = IFNULL(#{gameId},'');
     </select>
 
     <update id="updateBasketStat" parameterType="com.batch.model.BasketballModel">
     UPDATE sport.basketball_data
             SET
-                A_TEAM_TOTAL_POINT   =     #{aTeamTotalPoint},
-                B_TEAM_TOTAL_POINT   =     #{bTeamTotalPoint},
-                HANDI_CAP   =     #{handiCap},
-                HANDI_CAP_RESULT   =     #{handiCapResult},
-                ODD            = #{odd},
-                POINT_LINE   =     #{pointLine},
-                POINT_LINE_RESULT   =     #{pointLineResult},
-                A_TEAM_FIRSTQ_POINT   =     #{aTeamFirstQPoint},
-                B_TEAM_FIRSTQ_POINT   =     #{bTeamFirstQPoint},
-                FIRSTQ_HANDI_CAP   =     #{firstQHandiCap},
-                FIRSTQ_HANDI_CAP_RESULT   =     #{firstQHandiCapResult},
-                FIRSTQ_POINT_LINE   =     #{firstQPointLine},
-                FIRSTQ_POINT_LINE_RESULT   =     #{firstQPointLineResult},
-                A_TEAM_SECONDQ_POINT   =     #{aTeamSecondQPoint},
-	            B_TEAM_SECONDQ_POINT   =     #{bTeamSecondQPoint},
-	            SECONDQ_HANDI_CAP_RESULT   =     #{secondQHandiCapResult},
-	            SECONDQ_POINT_LINE_RESULT   =     #{secondQPointLineResult},
-	            A_TEAM_THIRDQ_POINT   =     #{aTeamThirdQPoint},
-	            B_TEAM_THIRDQ_POINT   =     #{bTeamThirdQPoint},
-	            THIRDQ_HANDI_CAP_RESULT   =     #{thirdQHandiCapResult},
-	            THIRDQ_POINT_LINE_RESULT   =     #{thirdQPointLineResult},
-	            A_TEAM_FOURTHQ_POINT   =     #{aTeamFourthQPoint},
-	            B_TEAM_FOURTHQ_POINT   =     #{bTeamFourthQPoint},
-	            FOURTHQ_HANDI_CAP_RESULT   =     #{fourthQHandiCapResult},
-	            FOURTHQ_POINT_LINE_RESULT   =     #{fourthQPointLineResult},
-	            A_TEAM_FIRST_HALF_POINT     =     #{aTeamFirstHalfPoint},
-                B_TEAM_FIRST_HALF_POINT     =     #{bTeamFirstHalfPoint},
-                HALF_HANDI_CAP      =     #{halfHandiCap},
-                FIRST_HALF_HANDI_CAP_RESULT     =     #{firstHalfHandiCapResult},
-                HALF_POINT_LINE     =     #{halfPointLine},
-                FIRST_HALF_POINT_LINE_RESULT        =     #{firstHalfPointLineResult},
-                A_TEAM_SECOND_HALF_POINT        =     #{aTeamSecondHalfPoint},
-                B_TEAM_SECOND_HALF_POINT        =     #{bTeamSecondHalfPoint},
-                SECOND_HALF_HANDI_CAP_RESULT        =     #{secondHalfHandiCapResult},
-                SECOND_HALF_POINT_LINE_RESULT       =     #{secondHalfPointLineResult},
-                FIRSTQ_FIRST_POINT   =     #{firstQFirstPoint},
-                FIRSTQ_FIRST_FREE_TWO   =     #{firstQFirstFreeTwo},
-                FIRSTQ_FIRST_TWO_POINT   =     #{firstQFirstTwoPoint},
-                FIRSTQ_FIRST_THREE_POINT   =     #{firstQFirstThreePoint},
-                SECONDQ_FIRST_POINT   =     #{secondQFirstPoint},
-                SECONDQ_FIRST_FREE_TWO   =     #{secondQFirstFreeTwo},
-                SECONDQ_FIRST_TWO_POINT   =     #{secondQFirstTwoPoint},
-                SECONDQ_FIRST_THREE_POINT   =     #{secondQFirstThreePoint},
-                THIRDQ_FIRST_POINT   =     #{thirdQFirstPoint},
-                THIRDQ_FIRST_FREE_TWO   =     #{thirdQFirstFreeTwo},
-                THIRDQ_FIRST_TWO_POINT   =     #{thirdQFirstTwoPoint},
-                THIRDQ_FIRST_THREE_POINT   =     #{thirdQFirstThreePoint},
-                FOURTHQ_FIRST_POINT   =     #{fourthQFirstPoint},
-                FOURTHQ_FIRST_FREE_TWO   =     #{fourthQFirstFreeTwo},
-                FOURTHQ_FIRST_TWO_POINT   =     #{fourthQFirstTwoPoint},
-                FOURTHQ_FIRST_THREE_POINT   =     #{fourthQFirstThreePoint},
-                FIRSTQ_TOTAL_POINT   =     #{firstQTotalPoint},
-                SECONDQ_TOTAL_POINT   =     #{secondQTotalPoint},
-                THIRDQ_TOTAL_POINT   =     #{thirdQTotalPoint},
-                FOURTHQ_TOTAL_POINT   =     #{fourthQTotalPoint},
-                EXTENDQ_TOTAL_POINT   =     #{extendQTotalPoint}
+                A_TEAM_TOTAL_POINT   =     IFNULL(#{aTeamTotalPoint},0),
+                B_TEAM_TOTAL_POINT   =     IFNULL(#{bTeamTotalPoint},0),
+                HANDI_CAP   =     IFNULL(#{handiCap},0),
+                HANDI_CAP_RESULT   =     IFNULL(#{handiCapResult},''),
+                ODD            = IFNULL(#{odd},''),
+                POINT_LINE   =     IFNULL(#{pointLine},0),
+                POINT_LINE_RESULT   =     IFNULL(#{pointLineResult},''),
+                A_TEAM_FIRSTQ_POINT   =     IFNULL(#{aTeamFirstQPoint},0),
+                B_TEAM_FIRSTQ_POINT   =     IFNULL(#{bTeamFirstQPoint},0),
+                FIRSTQ_HANDI_CAP   =     IFNULL(#{firstQHandiCap},0),
+                FIRSTQ_HANDI_CAP_RESULT   =     IFNULL(#{firstQHandiCapResult},''),
+                FIRSTQ_POINT_LINE   =     IFNULL(#{firstQPointLine},0),
+                FIRSTQ_POINT_LINE_RESULT   =     IFNULL(#{firstQPointLineResult},''),
+                A_TEAM_SECONDQ_POINT   =     IFNULL(#{aTeamSecondQPoint},0),
+	            B_TEAM_SECONDQ_POINT   =     IFNULL(#{bTeamSecondQPoint},0),
+	            SECONDQ_HANDI_CAP_RESULT   =     IFNULL(#{secondQHandiCapResult},''),
+	            SECONDQ_POINT_LINE_RESULT   =     IFNULL(#{secondQPointLineResult},''),
+	            A_TEAM_THIRDQ_POINT   =     IFNULL(#{aTeamThirdQPoint},0),
+	            B_TEAM_THIRDQ_POINT   =     IFNULL(#{bTeamThirdQPoint},0),
+	            THIRDQ_HANDI_CAP_RESULT   =     IFNULL(#{thirdQHandiCapResult},''),
+	            THIRDQ_POINT_LINE_RESULT   =     IFNULL(#{thirdQPointLineResult},''),
+	            A_TEAM_FOURTHQ_POINT   =     IFNULL(#{aTeamFourthQPoint},0),
+	            B_TEAM_FOURTHQ_POINT   =     IFNULL(#{bTeamFourthQPoint},0),
+	            FOURTHQ_HANDI_CAP_RESULT   =     IFNULL(#{fourthQHandiCapResult},''),
+	            FOURTHQ_POINT_LINE_RESULT   =     IFNULL(#{fourthQPointLineResult},''),
+	            A_TEAM_FIRST_HALF_POINT     =     IFNULL(#{aTeamFirstHalfPoint},0),
+                B_TEAM_FIRST_HALF_POINT     =     IFNULL(#{bTeamFirstHalfPoint},0),
+                HALF_HANDI_CAP      =     IFNULL(#{halfHandiCap},0),
+                FIRST_HALF_HANDI_CAP_RESULT     =     IFNULL(#{firstHalfHandiCapResult},''),
+                HALF_POINT_LINE     =     IFNULL(#{halfPointLine},0),
+                FIRST_HALF_POINT_LINE_RESULT        =     IFNULL(#{firstHalfPointLineResult},''),
+                A_TEAM_SECOND_HALF_POINT        =     IFNULL(#{aTeamSecondHalfPoint},0),
+                B_TEAM_SECOND_HALF_POINT        =     IFNULL(#{bTeamSecondHalfPoint},0),
+                SECOND_HALF_HANDI_CAP_RESULT        =     IFNULL(#{secondHalfHandiCapResult},''),
+                SECOND_HALF_POINT_LINE_RESULT       =     IFNULL(#{secondHalfPointLineResult},''),
+                FIRSTQ_FIRST_POINT   =     IFNULL(#{firstQFirstPoint},''),
+                FIRSTQ_FIRST_FREE_TWO   =     IFNULL(#{firstQFirstFreeTwo},''),
+                FIRSTQ_FIRST_TWO_POINT   =     IFNULL(#{firstQFirstTwoPoint},''),
+                FIRSTQ_FIRST_THREE_POINT   =     IFNULL(#{firstQFirstThreePoint},''),
+                SECONDQ_FIRST_POINT   =     IFNULL(#{secondQFirstPoint},''),
+                SECONDQ_FIRST_FREE_TWO   =     IFNULL(#{secondQFirstFreeTwo},''),
+                SECONDQ_FIRST_TWO_POINT   =     IFNULL(#{secondQFirstTwoPoint},''),
+                SECONDQ_FIRST_THREE_POINT   =     IFNULL(#{secondQFirstThreePoint},''),
+                THIRDQ_FIRST_POINT   =     IFNULL(#{thirdQFirstPoint},''),
+                THIRDQ_FIRST_FREE_TWO   =     IFNULL(#{thirdQFirstFreeTwo},''),
+                THIRDQ_FIRST_TWO_POINT   =     IFNULL(#{thirdQFirstTwoPoint},''),
+                THIRDQ_FIRST_THREE_POINT   =     IFNULL(#{thirdQFirstThreePoint},''),
+                FOURTHQ_FIRST_POINT   =     IFNULL(#{fourthQFirstPoint},''),
+                FOURTHQ_FIRST_FREE_TWO   =     IFNULL(#{fourthQFirstFreeTwo},''),
+                FOURTHQ_FIRST_TWO_POINT   =     IFNULL(#{fourthQFirstTwoPoint},''),
+                FOURTHQ_FIRST_THREE_POINT   =     IFNULL(#{fourthQFirstThreePoint},''),
+                FIRSTQ_TOTAL_POINT   =     IFNULL(#{firstQTotalPoint},0),
+                SECONDQ_TOTAL_POINT   =     IFNULL(#{secondQTotalPoint},0),
+                THIRDQ_TOTAL_POINT   =     IFNULL(#{thirdQTotalPoint},0),
+                FOURTHQ_TOTAL_POINT   =     IFNULL(#{fourthQTotalPoint},0),
+                EXTENDQ_TOTAL_POINT   =     IFNULL(#{extendQTotalPoint},0)
             WHERE
-                GAME_ID   =     #{gameId} AND
-                LEAGUE   =     #{league} AND
-                GROUND   =     #{ground} AND
-                MATCH_DATE   =     #{date} AND
-                A_TEAM   =     #{aTeam} AND
-                B_TEAM   =     #{bTeam} AND
+                GAME_ID   =     IFNULL(#{gameId},'') AND
+                LEAGUE   =     IFNULL(#{league},'') AND
+                GROUND   =     IFNULL(#{ground},'') AND
+                MATCH_DATE   =     IFNULL(#{date},'') AND
+                A_TEAM   =     IFNULL(#{aTeam},'') AND
+                B_TEAM   =     IFNULL(#{bTeam},'') AND
                 UPDATE_YN = 1;
     </update>
 
