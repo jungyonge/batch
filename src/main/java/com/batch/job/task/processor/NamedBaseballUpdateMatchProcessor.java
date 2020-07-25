@@ -30,7 +30,7 @@ public class NamedBaseballUpdateMatchProcessor implements ItemProcessor<String, 
 
     private String initSeasonDate;
     private String finishSeasonDate = "2020-12-14";
-    private String baseBall_Url = "https://api.picksmatch.com/v1.0/sports/baseball/games?date=";
+    private String baseBall_Url = "https://sports-api.named.com/v1.0/sports/baseball/games?date=";
 
     @Value("#{jobParameters[mode]}")
     private String mode;
