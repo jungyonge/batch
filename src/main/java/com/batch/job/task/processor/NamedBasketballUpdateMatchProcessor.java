@@ -45,7 +45,7 @@ public class NamedBasketballUpdateMatchProcessor implements ItemProcessor<String
     }
 
 
-    public List<BasketballModel> updateBasketballMatch() throws IOException, ParseException, JSONException {
+    public List<BasketballModel> updateBasketballMatch() throws IOException, ParseException, JSONException, InterruptedException {
 
         List<BasketballModel> basketballModelList = new ArrayList<>();
         JSONArray jsonArray = new JSONArray();
@@ -83,6 +83,7 @@ public class NamedBasketballUpdateMatchProcessor implements ItemProcessor<String
             int dayNum = startDate.get(Calendar.DAY_OF_WEEK);
             String dayOfWeek = namedUtil.getDayoOfWeek(dayNum);
 
+            Thread.sleep(1000);
             rootHtml = namedUtil.liveScoreUrlToString(url + df.format(startDate.getTime()));
 
             Document rootDoc = Jsoup.parse(rootHtml);
@@ -97,6 +98,12 @@ public class NamedBasketballUpdateMatchProcessor implements ItemProcessor<String
                 String league = element.select("thead tr th.reague").text();
 
                 if (!league.contains("KBL") && !league.contains("NBA") && !league.contains("WKBL")) {
+                    continue;
+                }
+
+                String gameStatus = element.select("thead tr th.ping").text();
+
+                if (!gameStatus.equals("종료")){
                     continue;
                 }
 

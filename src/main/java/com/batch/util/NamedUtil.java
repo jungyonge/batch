@@ -135,7 +135,6 @@ public class NamedUtil {
     //http://named.com/main/sub/#/scorecenter/baseball/broadcast/10559593
     public String getPitcherApiResponse(String url, String gameId) throws IOException{
         //matchDate yyyyMMdd
-        String unixTime = String.valueOf(System.currentTimeMillis() / 1000);
 
         StringBuilder responseText = new StringBuilder(1024);
         URLConnection con;
@@ -143,7 +142,8 @@ public class NamedUtil {
 
         con.setRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36");
         con.setRequestProperty("Accept-Language", "ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7");
-        con.setRequestProperty("origin","https://sports.picksmatch.com");
+        con.setRequestProperty("origin","https://score.named.com");
+        con.setRequestProperty("referer","https://score.named.com/baseball/10559642");
         con.setRequestProperty("oki-api-key", API_KEY);
         con.setRequestProperty("oki-api-name", API_NAME);
 

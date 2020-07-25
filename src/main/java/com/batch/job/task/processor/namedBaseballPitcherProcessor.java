@@ -24,12 +24,11 @@ import java.util.List;
 @Slf4j
 @StepScope
 public class namedBaseballPitcherProcessor implements ItemProcessor<String, List<BaseballModel>> {
-    private final static String BASEBALL_MATCH_URL = "https://sports-api.picksmatch.com/named/v1/sports/baseball/games/";
-    private final static String BASEBALL_PITCHER_URL = "https://sports-api.picksmatch.com/named/v1/sports/games/";
+    private final static String BASEBALL_MATCH_URL = "https://score-api.named.com/named/v1/sports/baseball/games/";
+    private final static String BASEBALL_PITCHER_URL = "https://score-api.named.com/named/v1/sports/games/";
 
     private final static String BASEBALL_PARAM = "?broadcast=true&broadcastLatest=true&odds=true&scores=true&specials=true&seasonTeamStat=true&startDate=";
     private final static String PITCHER_PARAM = "?broadcast=true&odds=true&scores=true&specials=true&lineups=true&seasonTeamLeagueRankingStat=true&broadcastDesc=true&v=";
-
 
     @Value("#{jobParameters[mode]}")
     private String mode;
@@ -47,15 +46,6 @@ public class namedBaseballPitcherProcessor implements ItemProcessor<String, List
     // 경기 상세
 //    https://sports-api.picksmatch.com/named/v1/sports/games/10559594?broadcast=true&odds=true&scores=true&specials=true&lineups=true&seasonTeamLeagueRankingStat=true&broadcastDesc=true&v=1594951597
     public List<BaseballModel> insertPitcherStat() throws Exception {
-//
-//        List<BaseballModel> baseballModelList = new ArrayList<>();
-//
-//        Calendar cal = Calendar.getInstance();
-//        cal.setTime(new Date());
-//
-//        cal.set(2020, 6, 3);
-//        DateFormat df = new SimpleDateFormat("yyyyMMdd");
-//        String matchDate = df.format(cal.getTime());
 
         int addDate = 0;
 
@@ -68,11 +58,13 @@ public class namedBaseballPitcherProcessor implements ItemProcessor<String, List
         while (true) {
             Calendar startDate = Calendar.getInstance();
             startDate.setTime(new Date());
-            if (mode.equals("all")) {
-                startDate.set(2020, 4, 01);
-            } else {
+            if(mode.equals("all")){
+                startDate.set(2020, 4, 05);
+            }else {
                 startDate.add(Calendar.DATE, -2);
             }
+
+
             DateFormat df = new SimpleDateFormat("yyyyMMdd");
 
             startDate.add(Calendar.DATE, addDate);
@@ -83,7 +75,7 @@ public class namedBaseballPitcherProcessor implements ItemProcessor<String, List
             }
 
 
-            String unixTime = String.valueOf(System.currentTimeMillis() / 1000);
+            String unixTime = String.valueOf(System.currentTimeMillis());
 
             String json = namedUtil.getPitcherApiResponse(BASEBALL_MATCH_URL + BASEBALL_PARAM + matchDate + "&endDate=" + matchDate + "&v=" + unixTime, "");
 
@@ -91,13 +83,14 @@ public class namedBaseballPitcherProcessor implements ItemProcessor<String, List
             JSONObject matchObject;
             JSONArray jsonArray = jsonObject.getJSONArray("response");
             String[] matchArr = new String[jsonArray.length()];
-
+//            1595639303
+//            1595639127853
             for (int i = 0; i < jsonArray.length(); i++) {
                 matchObject = jsonArray.getJSONObject(i);
-//                if (matchObject.getBoolean("isBoardShow")) {
+                if (matchObject.getBoolean("isBoardShow")) {
                     String gameId = matchObject.getString("id");
                     matchArr[i] = gameId;
-//                }
+                }
             }
 
             for (String gameId : matchArr) {

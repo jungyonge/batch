@@ -47,7 +47,7 @@ public class NamedBaseballAllMatchProcessor implements ItemProcessor<String, Lis
             Calendar cal = Calendar.getInstance();
             cal.setTime(new Date());
 
-            cal.set(2020, 4, 01);
+            cal.set(2020, 4, 05);
             DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
             cal.add(Calendar.DATE, addDate);
