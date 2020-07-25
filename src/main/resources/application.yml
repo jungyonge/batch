@@ -28,8 +28,8 @@ mybatis:
   mapper-locations: classpath:mapper/*Mapper.xml
 
 excel:
-  template-path : /Users/imc053/IdeaProjects/batch/src/main/resources/excelTemplate/
-  output-path : /Users/imc053/Desktop/xmlFile/
+  template-path: /Users/imc053/IdeaProjects/batch/src/main/resources/excelTemplate/
+  output-path: /Users/imc053/Desktop/xmlFile/
 
 ---
 
@@ -62,10 +62,10 @@ mybatis:
   mapper-locations: classpath:mapper/*Mapper.xml
 
 excel:
-  template-path : C:\Users\qjsro\IdeaProjects\batch\src\main\resources\excelTemplate\
-  output-path : D:\test\
+  template-path: C:\Users\qjsro\IdeaProjects\batch\src\main\resources\excelTemplate\
+  output-path: D:\test\
 
-  ---
+---
 
   spring:
     profiles: prd
