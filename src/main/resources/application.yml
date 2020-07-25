@@ -67,34 +67,34 @@ excel:
 
 ---
 
-  spring:
-    profiles: prd
-    batch:
-      job:
-        enabled: false
-    datasource:
-      url: jdbc:mysql://localhost:3306/batch?autoReconnect=true&serverTimezone=UTC
-      username: root
-      password: ghzkrp153
-      driver-class-name: com.mysql.cj.jdbc.Driver
-      initialize: false
-      tomcat:
-        initial-size: 5
-        min-idle: 5
-        max-idle: 10
-        max-active: 10
-        validation-query: select 1 from dual
-        test-while-idle: true
-        max-wait: 10000
+spring:
+  profiles: prd
+  batch:
+    job:
+      enabled: false
+  datasource:
+    url: jdbc:mysql://localhost:3306/batch?autoReconnect=true&serverTimezone=UTC
+    username: root
+    password: ghzkrp153
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    initialize: false
+    tomcat:
+      initial-size: 5
+      min-idle: 5
+      max-idle: 10
+      max-active: 10
+      validation-query: select 1 from dual
+      test-while-idle: true
+      max-wait: 10000
 
-  server:
-    port: 8081
+server:
+  port: 8081
 
-  # MyBatis Configuration
-  mybatis:
-    config-location: classpath:mapper/mybatis-config.xml
-    mapper-locations: classpath:mapper/*Mapper.xml
+# MyBatis Configuration
+mybatis:
+  config-location: classpath:mapper/mybatis-config.xml
+  mapper-locations: classpath:mapper/*Mapper.xml
 
-  excel:
-    template-path: C:\Users\qjsro\IdeaProjects\batch\src\main\resources\excelTemplate\
-    output-path: D:\test\
+excel:
+  template-path: /Users/jungyong/IdeaProjects/batch/src/main/resources/excelTemplate/
+  output-path: /Users/jungyong/Desktop/sportExcel/
