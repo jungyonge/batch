@@ -23,4 +23,8 @@ public interface BaseballMapper {
 
    void truncateBaseballSummary();
 
+   void updateBaseballNextMatchStat(BaseballModel baseballModel);
+
+   List selectBaseballAllSummary();
+
 }

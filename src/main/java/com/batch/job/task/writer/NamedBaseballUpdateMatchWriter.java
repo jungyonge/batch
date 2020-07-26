@@ -32,7 +32,7 @@ public class NamedBaseballUpdateMatchWriter implements ItemWriter<List<BaseballM
 
         baseballMapper.truncateBaseballSummary();
 
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 5; i++) {
             FilterConditionModel filterConditionModel = new FilterConditionModel();
             if (i == 0) {
                 filterConditionModel.setAll(true);
@@ -40,6 +40,8 @@ public class NamedBaseballUpdateMatchWriter implements ItemWriter<List<BaseballM
                 filterConditionModel.setGround(true);
             } else if (i == 2) {
                 filterConditionModel.setOdd(true);
+            } else if (i == 3) {
+                filterConditionModel.setPitcher(true);
             } else {
                 filterConditionModel.setWeek(true);
             }

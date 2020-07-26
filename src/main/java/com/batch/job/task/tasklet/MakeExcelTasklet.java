@@ -87,8 +87,8 @@ public class MakeExcelTasklet implements Tasklet {
 //            excelDataList = setalarmDAO.selectVolleyStat();
         }else if (type.equals("hockey")){
 //            excelDataList = setalarmDAO.selectHockeyStat();
-        }else if (type.equals("soccer")){
-//            excelDataList = setalarmDAO.selectSoccerStat();
+        }else if (type.equals("baseball_summary")){
+            excelDataList = baseballMapper.selectBaseballAllSummary();
         }else if (type.equals("baseball")){
             excelDataList = baseballMapper.selectBaseballStat();
         }else if (type.equals("baseball_pitcher")){

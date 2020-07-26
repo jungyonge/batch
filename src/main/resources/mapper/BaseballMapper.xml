@@ -1985,6 +1985,433 @@
                                 ;
     </insert>
 
+    <update id="updateBaseballNextMatchStat" parameterType="com.batch.model.BaseballModel">
+        UPDATE sport.baseball_data
+            SET
+            ODD = #{odd},
+            A_TEAM_PITCHER = IFNULL(#{aTeamPitcher},'')
+        WHERE
+            GAME_ID = #{gameId} AND
+            LEAGUE = #{league} AND
+            GROUND = #{ground} AND
+            MATCH_DATE = #{date} AND
+            A_TEAM = #{aTeam} AND
+            B_TEAM = #{bTeam}
+    </update>
+
+    <select id="selectBaseballAllSummary" resultType="HashMap">
+            SELECT
+              A.idx,
+              A.MATCH_TIME,
+              A.GAME_ID,
+              A.MATCH_DATE,
+              A.A_TEAM,
+              B.CONDI,
+              CASE A.GROUND WHEN '홈' THEN 1 ELSE 2 END AS PRO,
+              TEAM,
+              FILTER,
+              CONDI,
+              WIN_PER,
+              LOSE_PER,
+              HANDI_WIN_PER,
+              HANDI_LOSE_PER,
+              OVER_PER,
+              UNDER_PER,
+              THIRD_HANDI_WIN_PER,
+              THIRD_HANDI_LOSE_PER,
+              THIRD_OVER_PER,
+              THIRD_UNDER_PER,
+              FOURTH_HANDI_WIN_PER,
+              FOURTH_HANDI_LOSE_PER,
+              FOURTH_OVER_PER,
+              FOURTH_UNDER_PER,
+              FIFTH_HANDI_WIN_PER,
+              FIFTH_HANDI_LOSE_PER,
+              FIFTH_OVER_PER,
+              FIFTH_UNDER_PER,
+              FIRST_STRIKE_PER,
+              FIRST_BALL_PER,
+              FIRST_HOMERUN_PER
+            FROM
+              (
+                SELECT
+                  idx,
+                  GAME_ID,
+                  GROUND,
+                  MATCH_DATE,
+                  MATCH_TIME,
+                  LEAGUE,
+                  A_TEAM
+                FROM
+                  sport.baseball_data
+                WHERE
+                  <![CDATA[  MATCH_DATE = DATE(DATE_ADD(NOW(),INTERVAL 1 DAY)   ]]>
+                  )
+              ) A
+              LEFT OUTER JOIN (
+                SELECT
+                  TEAM,
+                  FILTER,
+                  CONDI,
+                  WIN_PER,
+                  LOSE_PER,
+                  HANDI_WIN_PER,
+                  HANDI_LOSE_PER,
+                  OVER_PER,
+                  UNDER_PER,
+                  THIRD_HANDI_WIN_PER,
+                  THIRD_HANDI_LOSE_PER,
+                  THIRD_OVER_PER,
+                  THIRD_UNDER_PER,
+                  FOURTH_HANDI_WIN_PER,
+                  FOURTH_HANDI_LOSE_PER,
+                  FOURTH_OVER_PER,
+                  FOURTH_UNDER_PER,
+                  FIFTH_HANDI_WIN_PER,
+                  FIFTH_HANDI_LOSE_PER,
+                  FIFTH_OVER_PER,
+                  FIFTH_UNDER_PER,
+                  FIRST_STRIKE_PER,
+                  FIRST_BALL_PER,
+                  FIRST_HOMERUN_PER
+                FROM
+                  sport.baseball_summary
+                WHERE
+                  FILTER = '전체'
+              ) B ON A.A_TEAM = B.TEAM
+            UNION
+            SELECT
+              A.idx,
+              A.MATCH_TIME,
+              A.GAME_ID,
+              A.MATCH_DATE,
+              A.A_TEAM,
+              B.CONDI,
+              CASE A.GROUND WHEN '홈' THEN 3 ELSE 4 END AS PRO,
+              TEAM,
+              FILTER,
+              CONDI,
+              WIN_PER,
+              LOSE_PER,
+              HANDI_WIN_PER,
+              HANDI_LOSE_PER,
+              OVER_PER,
+              UNDER_PER,
+              THIRD_HANDI_WIN_PER,
+              THIRD_HANDI_LOSE_PER,
+              THIRD_OVER_PER,
+              THIRD_UNDER_PER,
+              FOURTH_HANDI_WIN_PER,
+              FOURTH_HANDI_LOSE_PER,
+              FOURTH_OVER_PER,
+              FOURTH_UNDER_PER,
+              FIFTH_HANDI_WIN_PER,
+              FIFTH_HANDI_LOSE_PER,
+              FIFTH_OVER_PER,
+              FIFTH_UNDER_PER,
+              FIRST_STRIKE_PER,
+              FIRST_BALL_PER,
+              FIRST_HOMERUN_PER
+            FROM
+              (
+                SELECT
+                  idx,
+                  GAME_ID,
+                  GROUND,
+                  ODD,
+                  MATCH_DATE,
+                  MATCH_TIME,
+                  LEAGUE,
+                  A_TEAM
+                FROM
+                  sport.baseball_data
+                WHERE
+                  <![CDATA[  MATCH_DATE = DATE(DATE_ADD(NOW(),INTERVAL 1 DAY)   ]]>
+                  )
+              ) A
+              LEFT OUTER JOIN (
+                SELECT
+                  TEAM,
+                  FILTER,
+                  CONDI,
+                  WIN_PER,
+                  LOSE_PER,
+                  HANDI_WIN_PER,
+                  HANDI_LOSE_PER,
+                  OVER_PER,
+                  UNDER_PER,
+                  THIRD_HANDI_WIN_PER,
+                  THIRD_HANDI_LOSE_PER,
+                  THIRD_OVER_PER,
+                  THIRD_UNDER_PER,
+                  FOURTH_HANDI_WIN_PER,
+                  FOURTH_HANDI_LOSE_PER,
+                  FOURTH_OVER_PER,
+                  FOURTH_UNDER_PER,
+                  FIFTH_HANDI_WIN_PER,
+                  FIFTH_HANDI_LOSE_PER,
+                  FIFTH_OVER_PER,
+                  FIFTH_UNDER_PER,
+                  FIRST_STRIKE_PER,
+                  FIRST_BALL_PER,
+                  FIRST_HOMERUN_PER
+                FROM
+                  sport.baseball_summary
+                WHERE
+                  FILTER = '정/역배'
+              ) B ON A.A_TEAM = B.TEAM
+              AND A.ODD = B.CONDI
+            UNION
+            SELECT
+              A.idx,
+              A.MATCH_TIME,
+              A.GAME_ID,
+              A.MATCH_DATE,
+              A.A_TEAM,
+              B.CONDI,
+              CASE A.GROUND WHEN '홈' THEN 5 ELSE 6 END AS PRO,
+              TEAM,
+              FILTER,
+              CONDI,
+              WIN_PER,
+              LOSE_PER,
+              HANDI_WIN_PER,
+              HANDI_LOSE_PER,
+              OVER_PER,
+              UNDER_PER,
+              THIRD_HANDI_WIN_PER,
+              THIRD_HANDI_LOSE_PER,
+              THIRD_OVER_PER,
+              THIRD_UNDER_PER,
+              FOURTH_HANDI_WIN_PER,
+              FOURTH_HANDI_LOSE_PER,
+              FOURTH_OVER_PER,
+              FOURTH_UNDER_PER,
+              FIFTH_HANDI_WIN_PER,
+              FIFTH_HANDI_LOSE_PER,
+              FIFTH_OVER_PER,
+              FIFTH_UNDER_PER,
+              FIRST_STRIKE_PER,
+              FIRST_BALL_PER,
+              FIRST_HOMERUN_PER
+            FROM
+              (
+                SELECT
+                  idx,
+                  GAME_ID,
+                  GROUND,
+                  MATCH_DATE,
+                  MATCH_TIME,
+                  LEAGUE,
+                  A_TEAM
+                FROM
+                  sport.baseball_data
+                WHERE
+                  <![CDATA[  MATCH_DATE = DATE(DATE_ADD(NOW(),INTERVAL 1 DAY)   ]]>
+                  )
+              ) A
+              LEFT OUTER JOIN (
+                SELECT
+                  TEAM,
+                  FILTER,
+                  CONDI,
+                  WIN_PER,
+                  LOSE_PER,
+                  HANDI_WIN_PER,
+                  HANDI_LOSE_PER,
+                  OVER_PER,
+                  UNDER_PER,
+                  THIRD_HANDI_WIN_PER,
+                  THIRD_HANDI_LOSE_PER,
+                  THIRD_OVER_PER,
+                  THIRD_UNDER_PER,
+                  FOURTH_HANDI_WIN_PER,
+                  FOURTH_HANDI_LOSE_PER,
+                  FOURTH_OVER_PER,
+                  FOURTH_UNDER_PER,
+                  FIFTH_HANDI_WIN_PER,
+                  FIFTH_HANDI_LOSE_PER,
+                  FIFTH_OVER_PER,
+                  FIFTH_UNDER_PER,
+                  FIRST_STRIKE_PER,
+                  FIRST_BALL_PER,
+                  FIRST_HOMERUN_PER
+                FROM
+                  sport.baseball_summary
+                WHERE
+                  FILTER = '홈/원정'
+              ) B ON A.A_TEAM = B.TEAM
+              AND A.GROUND = B.CONDI
+            UNION
+            SELECT
+              A.idx,
+              A.MATCH_TIME,
+              A.GAME_ID,
+              A.MATCH_DATE,
+              A.A_TEAM,
+              B.CONDI,
+              CASE A.GROUND WHEN '홈' THEN 7 ELSE 8 END AS PRO,
+              TEAM,
+              FILTER,
+              CONDI,
+              WIN_PER,
+              LOSE_PER,
+              HANDI_WIN_PER,
+              HANDI_LOSE_PER,
+              OVER_PER,
+              UNDER_PER,
+              THIRD_HANDI_WIN_PER,
+              THIRD_HANDI_LOSE_PER,
+              THIRD_OVER_PER,
+              THIRD_UNDER_PER,
+              FOURTH_HANDI_WIN_PER,
+              FOURTH_HANDI_LOSE_PER,
+              FOURTH_OVER_PER,
+              FOURTH_UNDER_PER,
+              FIFTH_HANDI_WIN_PER,
+              FIFTH_HANDI_LOSE_PER,
+              FIFTH_OVER_PER,
+              FIFTH_UNDER_PER,
+              FIRST_STRIKE_PER,
+              FIRST_BALL_PER,
+              FIRST_HOMERUN_PER
+            FROM
+              (
+                SELECT
+                  idx,
+                  GAME_ID,
+                  GROUND,
+                  A_TEAM_PITCHER,
+                  MATCH_DATE,
+                  MATCH_TIME,
+                  LEAGUE,
+                  A_TEAM
+                FROM
+                  sport.baseball_data
+                WHERE
+                  <![CDATA[  MATCH_DATE = DATE(DATE_ADD(NOW(),INTERVAL 1 DAY)   ]]>
+                  )
+              ) A
+              LEFT OUTER JOIN (
+                SELECT
+                  TEAM,
+                  FILTER,
+                  CONDI,
+                  WIN_PER,
+                  LOSE_PER,
+                  HANDI_WIN_PER,
+                  HANDI_LOSE_PER,
+                  OVER_PER,
+                  UNDER_PER,
+                  THIRD_HANDI_WIN_PER,
+                  THIRD_HANDI_LOSE_PER,
+                  THIRD_OVER_PER,
+                  THIRD_UNDER_PER,
+                  FOURTH_HANDI_WIN_PER,
+                  FOURTH_HANDI_LOSE_PER,
+                  FOURTH_OVER_PER,
+                  FOURTH_UNDER_PER,
+                  FIFTH_HANDI_WIN_PER,
+                  FIFTH_HANDI_LOSE_PER,
+                  FIFTH_OVER_PER,
+                  FIFTH_UNDER_PER,
+                  FIRST_STRIKE_PER,
+                  FIRST_BALL_PER,
+                  FIRST_HOMERUN_PER
+                FROM
+                  sport.baseball_summary
+                WHERE
+                  FILTER = '투수'
+              ) B ON A.A_TEAM = B.TEAM
+              AND A.A_TEAM_PITCHER = B.CONDI
+            UNION
+            SELECT
+              A.idx,
+              A.MATCH_TIME,
+              A.GAME_ID,
+              A.MATCH_DATE,
+              A.A_TEAM,
+             '' CONDI,
+              CASE A.GROUND WHEN '홈' THEN 0 ELSE 0 END AS PRO,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            FROM
+              (
+                SELECT
+                  idx,
+                  GAME_ID,
+                  GROUND,
+                  A_TEAM_PITCHER,
+                  MATCH_DATE,
+                  MATCH_TIME,
+                  LEAGUE,
+                  A_TEAM
+                FROM
+                  sport.baseball_data
+                WHERE
+                  <![CDATA[  MATCH_DATE = DATE(DATE_ADD(NOW(),INTERVAL 1 DAY)   ]]>
+                  )
+              ) A
+              LEFT OUTER JOIN (
+                SELECT
+                  TEAM,
+                  FILTER,
+                  CONDI,
+                  WIN_PER,
+                  LOSE_PER,
+                  HANDI_WIN_PER,
+                  HANDI_LOSE_PER,
+                  OVER_PER,
+                  UNDER_PER,
+                  THIRD_HANDI_WIN_PER,
+                  THIRD_HANDI_LOSE_PER,
+                  THIRD_OVER_PER,
+                  THIRD_UNDER_PER,
+                  FOURTH_HANDI_WIN_PER,
+                  FOURTH_HANDI_LOSE_PER,
+                  FOURTH_OVER_PER,
+                  FOURTH_UNDER_PER,
+                  FIFTH_HANDI_WIN_PER,
+                  FIFTH_HANDI_LOSE_PER,
+                  FIFTH_OVER_PER,
+                  FIFTH_UNDER_PER,
+                  FIRST_STRIKE_PER,
+                  FIRST_BALL_PER,
+                  FIRST_HOMERUN_PER
+                FROM
+                  sport.baseball_summary
+                WHERE
+                  FILTER = '전체'
+              ) B ON A.A_TEAM = B.TEAM
+            ORDER BY
+              MATCH_TIME,
+              GAME_ID DESC,
+              PRO;
+
+
+    </select>
 
 
 </mapper>
