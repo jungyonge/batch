@@ -41,7 +41,7 @@ public class JobLauncherController {
     }
 
     @RequestMapping(value = "jobs/allSports")
-    @Scheduled(cron = "0 36 9 ? * *")
+    @Scheduled(cron = "0 0 11 ? * *")
     public void runJob() throws Exception {
         String _jobParameters = "mode=update";
 
@@ -50,6 +50,8 @@ public class JobLauncherController {
         jobScheduleService.startJob("namedBaseballUpdateMatchJob", _jobParameters);
         Thread.sleep(1000 * 60 * 1);
         jobScheduleService.startJob("namedBasketballUpdateMatchJob", _jobParameters);
+        Thread.sleep(1000 * 60 * 1);
+        jobScheduleService.startJob("namedBaseballNextMatchJob", _jobParameters);
         Thread.sleep(1000 * 60 * 1);
         jobScheduleService.startJob("makeExcelJob", _jobParameters);
     }
