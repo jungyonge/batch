@@ -14,10 +14,7 @@ import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 @Component
 @Slf4j
@@ -67,11 +64,11 @@ public class MakeExcelTasklet implements Tasklet {
         for (int i = 0 ; i < memberList.size() ; i++){
             HashMap memberMap = (HashMap) memberList.get(i);
             if(memberMap.get("SPORT_YN").toString().equals("true") && memberMap.get("PITCHER_YN").toString().equals("true")){
-                emailUtil.sendSSLMessage(memberMap.get("EMAIL").toString(),sportMakeExcelList,"jungyongee@gmail.com");
+                emailUtil.sendSSLMessage(memberMap.get("EMAIL").toString(), (Date) memberMap.get("END_DATE"),sportMakeExcelList,"jungyongee@gmail.com");
             }else if (memberMap.get("SPORT_YN").toString().equals("true") && memberMap.get("PITCHER_YN").toString().equals("false")){
-                emailUtil.sendSSLMessage(memberMap.get("EMAIL").toString(),sportMakeExcelListWithoutPitcher,"jungyongee@gmail.com");
+                emailUtil.sendSSLMessage(memberMap.get("EMAIL").toString(), (Date) memberMap.get("END_DATE") ,sportMakeExcelListWithoutPitcher,"jungyongee@gmail.com");
             }else if (memberMap.get("SPORT_YN").toString().equals("false") && memberMap.get("PITCHER_YN").toString().equals("true")){
-                emailUtil.sendSSLMessage(memberMap.get("EMAIL").toString(), Collections.singletonList(pitcherMap),"jungyongee@gmail.com");
+                emailUtil.sendSSLMessage(memberMap.get("EMAIL").toString(), (Date) memberMap.get("END_DATE"),  Collections.singletonList(pitcherMap),"jungyongee@gmail.com");
             }
         }
 

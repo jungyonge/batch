@@ -27,7 +27,7 @@ public class EmailUtil {
     @Value("${excel.output-path}")
     private String excelOutputPath;
 
-    public void sendSSLMessage(String recipient, List excelDataList, String from) throws MessagingException, UnsupportedEncodingException {
+    public void sendSSLMessage(String recipient, Date endDate, List excelDataList, String from) throws MessagingException, UnsupportedEncodingException {
 
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
@@ -63,7 +63,8 @@ public class EmailUtil {
         BodyPart messageBodyPart = new MimeBodyPart();
 
         // Fill the message
-        messageBodyPart.setText(df.format(cal.getTime()) + " 스포츠 데이터 입니다.");
+        messageBodyPart.setText(df.format(cal.getTime()) + " 스포츠 데이터 입니다. \n"
+        + "데이터 사용만료 기간은 " + df.format(endDate) + " 입니다.");
         Multipart multipart = new MimeMultipart();
         multipart.addBodyPart(messageBodyPart);
 

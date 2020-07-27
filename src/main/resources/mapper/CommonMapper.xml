@@ -18,6 +18,7 @@
 
     <select id="selectMemberList"  resultType="HashMap">
         SELECT EMAIL,
+                END_DATE,
                 SPORT_YN,
                 PITCHER_YN
             FROM sport.member
