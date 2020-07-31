@@ -45,7 +45,15 @@ public class NamedBaseballNextMatchProcessor implements ItemProcessor<String, Li
 
         Calendar nextDate = Calendar.getInstance();
         nextDate.setTime(new Date());
-        nextDate.add(Calendar.DATE, 1);
+
+        DateFormat hourDf = new SimpleDateFormat("HH");
+        String checkHour = hourDf.format(nextDate.getTime());
+
+        if(checkHour.equals("23")){
+            nextDate.add(Calendar.DATE, 1);
+        } else {
+            nextDate.add(Calendar.DATE, 0);
+        }
 
         List<BaseballModel> baseballModelList = new ArrayList<>();
 
