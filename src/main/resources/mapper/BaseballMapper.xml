@@ -2050,9 +2050,9 @@
                         WHEN <![CDATA[ HOUR(NOW()) > 11 AND HOUR(NOW()) < 22 ]]>
                             THEN <![CDATA[  MATCH_DATE = DATE(NOW())   ]]>
                         WHEN <![CDATA[ HOUR(NOW()) > 23 AND HOUR(NOW()) < 24 ]]>
-                            THEN <![CDATA[  MATCH_DATE = DATE(DATE_ADD(NOW(),INTERVAL 1 DAY)   ]]>
+                            THEN <![CDATA[  MATCH_DATE = DATE(DATE_ADD(NOW(),INTERVAL 1 DAY))   ]]>
                         END
-                  )
+
               ) A
               LEFT OUTER JOIN (
                 SELECT
@@ -2137,9 +2137,9 @@
                         WHEN <![CDATA[ HOUR(NOW()) > 11 AND HOUR(NOW()) < 22 ]]>
                             THEN <![CDATA[  MATCH_DATE = DATE(NOW())   ]]>
                         WHEN <![CDATA[ HOUR(NOW()) > 23 AND HOUR(NOW()) < 24 ]]>
-                            THEN <![CDATA[  MATCH_DATE = DATE(DATE_ADD(NOW(),INTERVAL 1 DAY)   ]]>
+                            THEN <![CDATA[  MATCH_DATE = DATE(DATE_ADD(NOW(),INTERVAL 1 DAY))   ]]>
                         END
-                  )
+
               ) A
               LEFT OUTER JOIN (
                 SELECT
@@ -2224,9 +2224,9 @@
                         WHEN <![CDATA[ HOUR(NOW()) > 11 AND HOUR(NOW()) < 22 ]]>
                             THEN <![CDATA[  MATCH_DATE = DATE(NOW())   ]]>
                         WHEN <![CDATA[ HOUR(NOW()) > 23 AND HOUR(NOW()) < 24 ]]>
-                            THEN <![CDATA[  MATCH_DATE = DATE(DATE_ADD(NOW(),INTERVAL 1 DAY)   ]]>
+                            THEN <![CDATA[  MATCH_DATE = DATE(DATE_ADD(NOW(),INTERVAL 1 DAY))   ]]>
                         END
-                  )
+
               ) A
               LEFT OUTER JOIN (
                 SELECT
@@ -2312,9 +2312,8 @@
                         WHEN <![CDATA[ HOUR(NOW()) > 11 AND HOUR(NOW()) < 22 ]]>
                             THEN <![CDATA[  MATCH_DATE = DATE(NOW())   ]]>
                         WHEN <![CDATA[ HOUR(NOW()) > 23 AND HOUR(NOW()) < 24 ]]>
-                            THEN <![CDATA[  MATCH_DATE = DATE(DATE_ADD(NOW(),INTERVAL 1 DAY)   ]]>
+                            THEN <![CDATA[  MATCH_DATE = DATE(DATE_ADD(NOW(),INTERVAL 1 DAY))   ]]>
                         END
-                  )
               ) A
               LEFT OUTER JOIN (
                 SELECT
@@ -2400,9 +2399,9 @@
                         WHEN <![CDATA[ HOUR(NOW()) > 11 AND HOUR(NOW()) < 22 ]]>
                             THEN <![CDATA[  MATCH_DATE = DATE(NOW())   ]]>
                         WHEN <![CDATA[ HOUR(NOW()) > 23 AND HOUR(NOW()) < 24 ]]>
-                            THEN <![CDATA[  MATCH_DATE = DATE(DATE_ADD(NOW(),INTERVAL 1 DAY)   ]]>
+                            THEN <![CDATA[  MATCH_DATE = DATE(DATE_ADD(NOW(),INTERVAL 1 DAY))   ]]>
                         END
-                  )
+
               ) A
               LEFT OUTER JOIN (
                 SELECT
@@ -2440,25 +2439,10 @@
               GAME_ID DESC,
               PRO;
 
-   SELECT
-                  idx,
-                  GAME_ID,
-                  GROUND,
-                  A_TEAM_PITCHER,
-                  MATCH_DATE,
-                  MATCH_TIME,
-                  LEAGUE,
-                  A_TEAM
-                FROM
-                  sport.baseball_data
-                WHERE
-                    CASE
-                        WHEN <![CDATA[ HOUR(NOW()) > 11 AND HOUR(NOW()) < 22 ]]>
-                            THEN <![CDATA[  MATCH_DATE = DATE(NOW())   ]]>
-                        WHEN <![CDATA[ HOUR(NOW()) > 23 AND HOUR(NOW()) < 24 ]]>
-                            THEN <![CDATA[  MATCH_DATE = DATE(DATE_ADD(NOW(),INTERVAL 1 DAY)   ]]>
-                        END
-                  )
+
+
+
+
 
 
 
