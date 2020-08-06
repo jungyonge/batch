@@ -97,7 +97,7 @@ public class NamedBasketballUpdateMatchProcessor implements ItemProcessor<String
 
                 String league = element.select("thead tr th.reague").text();
 
-                if (!league.contains("KBL") && !league.contains("NBA") && !league.contains("WKBL")) {
+                if (!league.contains("KBL") && !league.equals("NBA") && !league.contains("WKBL")) {
                     continue;
                 }
 
