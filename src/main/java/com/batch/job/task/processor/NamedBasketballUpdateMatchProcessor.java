@@ -76,6 +76,7 @@ public class NamedBasketballUpdateMatchProcessor implements ItemProcessor<String
             //wkbl  2019년 10월 19일 (토) ~ 2020년 3월 19일 (목)
             //kbl 2019년 10월 5일 (토) ~ 2020년 3월 31일 (화)
             if (df.format(startDate.getTime()).equals(df.format(curDate.getTime()))) {
+//            if (df.format(startDate.getTime()).equals("2020-06-03")) {
                 log.info("농구 Update Match 완료 : " + df.format(startDate.getTime()));
                 break;
             }
@@ -83,7 +84,8 @@ public class NamedBasketballUpdateMatchProcessor implements ItemProcessor<String
             int dayNum = startDate.get(Calendar.DAY_OF_WEEK);
             String dayOfWeek = namedUtil.getDayoOfWeek(dayNum);
 
-            Thread.sleep(1000);
+            Thread.sleep(2000);
+
             rootHtml = namedUtil.liveScoreUrlToString(url + df.format(startDate.getTime()));
 
             Document rootDoc = Jsoup.parse(rootHtml);
@@ -97,7 +99,7 @@ public class NamedBasketballUpdateMatchProcessor implements ItemProcessor<String
 
                 String league = element.select("thead tr th.reague").text();
 
-                if (!league.contains("KBL") && !league.contains("NBA") && !league.contains("WKBL")) {
+                if (!league.contains("KBL") && !league.equals("NBA") && !league.contains("WKBL")) {
                     continue;
                 }
 
@@ -259,6 +261,7 @@ public class NamedBasketballUpdateMatchProcessor implements ItemProcessor<String
 
         String[] qTotalScoreArr = element.select("tfoot > tr > td.s").text().split(" ");
 
+        System.out.println(aTeamModel.getGameId());
 
         if (qTotalScoreArr.length > 1) {
             aTeamModel.setFirstQTotalPoint(Integer.valueOf(qTotalScoreArr[0]));
