@@ -169,6 +169,7 @@ public class NamedUtil {
     public String liveScoreUrlToString(String url) throws IOException {
 
         URL obj = new URL(url);
+        log.info(url);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
         con.setDoOutput(true);
         con.setRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36");
@@ -184,11 +185,20 @@ public class NamedUtil {
         BufferedReader in;
 
         in = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
-
+        int BUFFER_SIZE = 1024;
+        char[] buffer = new char[BUFFER_SIZE];
+        int charsRead = 0;
 
         while ((sInputLine = in.readLine()) != null) {
             sInputData.append(sInputLine).append("\n");
         }
+//
+//        while( ( charsRead = in.read(buffer,0,BUFFER_SIZE)) != -1){
+//            sInputData.append(buffer,0,charsRead).append("\n");
+//                        sInputData.append(charsRead).append("\n");
+//
+//        }
+
         in.close();
 
         return sInputData.toString();

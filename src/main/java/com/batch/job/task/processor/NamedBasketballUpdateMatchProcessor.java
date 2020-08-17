@@ -58,7 +58,7 @@ public class NamedBasketballUpdateMatchProcessor implements ItemProcessor<String
         curDate.setTime(new Date());
         curDate.add(Calendar.DATE, 1);
 
-
+        int tempCnt= 0 ;
         while (true) {
 
             Calendar startDate = Calendar.getInstance();
