@@ -55,7 +55,7 @@ public class NamedBasketballAllMatchProcessor implements ItemProcessor<String, L
 
             Calendar cal = Calendar.getInstance();
             cal.setTime(new Date());
-            cal.set(2019, 9, 03);
+            cal.set(2020, 7, 01);
 
             DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
