@@ -66,9 +66,9 @@ public class NamedBasketballAllMatchProcessor implements ItemProcessor<String, L
             Calendar startDate = Calendar.getInstance();
             startDate.setTime(new Date());
             if(mode.equals("all")) {
-                startDate.set(2020, 7, 01);
+                startDate.set(2020, 6, 01);
             }else {
-                startDate.add(Calendar.DATE, -5);
+                startDate.add(Calendar.DATE, -2);
 
             }
             DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
@@ -99,7 +99,7 @@ public class NamedBasketballAllMatchProcessor implements ItemProcessor<String, L
 
                 String league = element.select("thead tr th.reague").text();
 
-                if(!league.contains("KBL") && !league.contains("NBA") && !league.contains("WKBL") && !league.contains("WNBA")){
+                if(!league.contains("KBL") && !league.contains("NBA") && !league.contains("WKBL")){
                     continue;
                 }
 
@@ -129,10 +129,10 @@ public class NamedBasketballAllMatchProcessor implements ItemProcessor<String, L
 
 
                 if (aTeamModel.getGameId() != null && bTeamModel.getGameId() != null) {
-//                    if (checkTeam(aTeamModel.getATeam()) && checkTeam(bTeamModel.getATeam())) {
+                    if (checkTeam(aTeamModel.getATeam()) && checkTeam(bTeamModel.getATeam())) {
                         basketballModelList.add(aTeamModel);
                         basketballModelList.add(bTeamModel);
-//                    }
+                    }
                 }
 
             }

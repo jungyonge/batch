@@ -99,7 +99,7 @@ public class NamedBasketballUpdateMatchProcessor implements ItemProcessor<String
 
                 String league = element.select("thead tr th.reague").text();
 
-                if(!league.contains("KBL") && !league.contains("NBA") && !league.contains("WKBL") && !league.contains("WNBA")){
+                if(!league.contains("KBL") && !league.contains("NBA") && !league.contains("WKBL")){
                     continue;
                 }
 
@@ -147,10 +147,10 @@ public class NamedBasketballUpdateMatchProcessor implements ItemProcessor<String
                 parseSpecial(element, aTeamModel, bTeamModel);
 
                 if (aTeamModel.getGameId() != null && bTeamModel.getGameId() != null) {
-//                    if (checkTeam(aTeamModel.getATeam()) && checkTeam(bTeamModel.getATeam())) {
+                    if (checkTeam(aTeamModel.getATeam()) && checkTeam(bTeamModel.getATeam())) {
                         basketballModelList.add(aTeamModel);
                         basketballModelList.add(bTeamModel);
-//                    }
+                    }
                 }
 
             }
