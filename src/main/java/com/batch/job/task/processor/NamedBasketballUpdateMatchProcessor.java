@@ -64,7 +64,7 @@ public class NamedBasketballUpdateMatchProcessor implements ItemProcessor<String
             Calendar startDate = Calendar.getInstance();
             startDate.setTime(new Date());
             if(mode.equals("all")){
-                startDate.set(2020, 7, 01);
+                startDate.set(2020, 6, 01);
             }else {
                 startDate.add(Calendar.DATE, -2);
             }
