@@ -19,8 +19,10 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.text.SimpleDateFormat;
@@ -28,6 +30,7 @@ import java.util.*;
 
 @Component
 @Slf4j
+@StepScope
 public class NamedBasketballAllMatchProcessor implements ItemProcessor<String, List<BasketballModel>> {
 
     private String initSeasonDate;
@@ -35,6 +38,9 @@ public class NamedBasketballAllMatchProcessor implements ItemProcessor<String, L
 
     @Autowired
     private NamedUtil namedUtil;
+
+    @Value("#{jobParameters[mode]}")
+    private String mode;
 
     @Override
     public List<BasketballModel> process(String s) throws Exception {
@@ -51,29 +57,36 @@ public class NamedBasketballAllMatchProcessor implements ItemProcessor<String, L
         String url = "https://livescore.co.kr/sports/score_board/basket/view.php?date=";
         int addDate = 0;
 
+        Calendar curDate = Calendar.getInstance();
+        curDate.setTime(new Date());
+        curDate.add(Calendar.DATE, 4);
+
         while (true) {
 
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(new Date());
-            cal.set(2020, 7, 01);
+            Calendar startDate = Calendar.getInstance();
+            startDate.setTime(new Date());
+            if(mode.equals("all")) {
+                startDate.set(2020, 7, 01);
+            }else {
+                startDate.add(Calendar.DATE, -5);
 
+            }
             DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
-
-            cal.add(Calendar.DATE, addDate);
+            startDate.add(Calendar.DATE, addDate);
 
             //nba 10-22 ~ 2020.10.16
             //wkbl  2019년 10월 19일 (토) ~ 2020년 3월 19일 (목)
             //kbl 2019년 10월 5일 (토) ~ 2020년 3월 31일 (화)
-            if (df.format(cal.getTime()).equals(finishSeasonDate)) {
-                log.info("설정한 시즌 마김 기한까지 파싱 완료 : " + finishSeasonDate);
+            if(df.format(startDate.getTime()).equals(df.format(curDate.getTime()))){
+                log.info("설정한 시즌 마김 기한까지 파싱 완료 : " + df.format(startDate.getTime()));
                 break;
             }
 
-            int dayNum = cal.get(Calendar.DAY_OF_WEEK);
+            int dayNum = startDate.get(Calendar.DAY_OF_WEEK);
             String dayOfWeek = namedUtil.getDayoOfWeek(dayNum);
 
-            rootHtml = namedUtil.liveScoreUrlToString(url + df.format(cal.getTime()));
+            rootHtml = namedUtil.liveScoreUrlToString(url + df.format(startDate.getTime()));
 
             Document rootDoc = Jsoup.parse(rootHtml);
             Elements elements = rootDoc.select("div#score_board div.score_tbl_individual");
@@ -86,7 +99,7 @@ public class NamedBasketballAllMatchProcessor implements ItemProcessor<String, L
 
                 String league = element.select("thead tr th.reague").text();
 
-                if(!league.contains("KBL") && !league.contains("NBA") && !league.contains("WKBL")){
+                if(!league.contains("KBL") && !league.contains("NBA") && !league.contains("WKBL") && !league.contains("WNBA")){
                     continue;
                 }
 
@@ -103,8 +116,8 @@ public class NamedBasketballAllMatchProcessor implements ItemProcessor<String, L
                 aTeamModel.setTime(element.select("thead tr th.ptime").text().replaceAll("오전 ", "").replaceAll("오후 ", ""));
                 bTeamModel.setTime(element.select("thead tr th.ptime").text().replaceAll("오전 ", "").replaceAll("오후 ", ""));
 
-                aTeamModel.setDate(df.format(cal.getTime()));
-                bTeamModel.setDate(df.format(cal.getTime()));
+                aTeamModel.setDate(df.format(startDate.getTime()));
+                bTeamModel.setDate(df.format(startDate.getTime()));
 
                 aTeamModel.setGround("홈");
                 bTeamModel.setGround("원정");
@@ -116,10 +129,10 @@ public class NamedBasketballAllMatchProcessor implements ItemProcessor<String, L
 
 
                 if (aTeamModel.getGameId() != null && bTeamModel.getGameId() != null) {
-                    if (checkTeam(aTeamModel.getATeam()) && checkTeam(bTeamModel.getATeam())) {
+//                    if (checkTeam(aTeamModel.getATeam()) && checkTeam(bTeamModel.getATeam())) {
                         basketballModelList.add(aTeamModel);
                         basketballModelList.add(bTeamModel);
-                    }
+//                    }
                 }
 
             }

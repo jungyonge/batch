@@ -12,7 +12,9 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 @RestController
@@ -44,13 +46,24 @@ public class JobLauncherController {
     @Scheduled(cron = "0 0 14,23 ? * *")
     public void runJob() throws Exception {
         String _jobParameters = "mode=update";
+        Calendar nextDate = Calendar.getInstance();
+        nextDate.setTime(new Date());
+
+        DateFormat hourDf = new SimpleDateFormat("HH");
+        String checkHour = hourDf.format(nextDate.getTime());
 
         jobScheduleService.startJob("namedBaseballPitcherJob", _jobParameters);
         Thread.sleep(1000 * 60 * 1);
         jobScheduleService.startJob("namedBaseballUpdateMatchJob", _jobParameters);
         Thread.sleep(1000 * 60 * 1);
-        jobScheduleService.startJob("namedBasketballUpdateMatchJob", _jobParameters);
-        Thread.sleep(1000 * 60 * 1);
+
+        if(checkHour.equals("23")){
+            jobScheduleService.startJob("namedBasketballAllMatchJob", _jobParameters);
+            Thread.sleep(1000 * 60 * 1);
+            jobScheduleService.startJob("namedBasketballUpdateMatchJob", _jobParameters);
+            Thread.sleep(1000 * 60 * 1);
+        }
+
         jobScheduleService.startJob("namedBaseballNextMatchJob", _jobParameters);
         Thread.sleep(1000 * 60 * 1);
         jobScheduleService.startJob("makeExcelJob", _jobParameters);
