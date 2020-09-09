@@ -54,6 +54,8 @@ public class JobLauncherController {
 
         jobScheduleService.startJob("namedBaseballPitcherJob", _jobParameters);
         Thread.sleep(1000 * 60 * 1);
+        jobScheduleService.startJob("namedBaseBallAllMatchJob", _jobParameters);
+        Thread.sleep(1000 * 60 * 1);
         jobScheduleService.startJob("namedBaseballUpdateMatchJob", _jobParameters);
         Thread.sleep(1000 * 60 * 1);
 

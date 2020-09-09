@@ -7,8 +7,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -22,6 +24,7 @@ import java.util.List;
 
 @Component
 @Slf4j
+@StepScope
 public class NamedBaseballAllMatchProcessor implements ItemProcessor<String, List<BaseballModel>> {
 
     private String initSeasonDate;
@@ -29,6 +32,9 @@ public class NamedBaseballAllMatchProcessor implements ItemProcessor<String, Lis
     private String baseBall_Url = "https://sports-api.named.com/v1.0/sports/baseball/games?date=";
     @Autowired
     private NamedUtil namedUtil;
+
+    @Value("#{jobParameters[mode]}")
+    private String mode;
 
     @Override
     public  List<BaseballModel> process(String s) throws Exception {
@@ -47,7 +53,9 @@ public class NamedBaseballAllMatchProcessor implements ItemProcessor<String, Lis
             Calendar cal = Calendar.getInstance();
             cal.setTime(new Date());
 
-            cal.set(2020, 4, 05);
+//            cal.set(2020, 4, 05);
+            cal.set(2020, 7, 05);
+
             DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
             cal.add(Calendar.DATE, addDate);
