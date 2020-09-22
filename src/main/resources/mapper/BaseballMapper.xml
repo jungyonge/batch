@@ -165,7 +165,8 @@
             ORDER  BY MATCH_DATE,
                       MATCH_TIME,
                       LEAGUE,
-                      GAME_ID;
+                      GAME_ID,
+                      GROUND DESC;
     </select>
 
     <insert id="truncateBaseballSummary">
