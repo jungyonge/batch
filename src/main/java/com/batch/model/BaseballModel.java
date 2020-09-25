@@ -72,6 +72,10 @@ public class BaseballModel {
     Integer ninthScore;
     Integer extendScore;
 
+    Integer hitCount ;
+    Integer baseOnBallCount;
+    Integer errorCount;
+
     Boolean extendYn;
     //투수정보
     Integer pitchCount;

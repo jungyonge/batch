@@ -88,6 +88,11 @@
             SEVENTH_POINT       =IFNULL(#{seventhScore},0),
             EIGHTH_POINT        =IFNULL(#{eighthScore},0),
             NINTH_POINT     =IFNULL(#{ninthScore},0),
+
+            HIT_COUNT       =IFNULL(#{hitCount},0),
+            BASEONBALL_COUNT        =IFNULL(#{baseOnBallCount},0),
+            ERROR_COUNT     =IFNULL(#{errorCount},0),
+
             EXTEND_POINT     =IFNULL(#{extendScore},0),
             EXTEND_YN       =IFNULL(#{extendYn},0 )
 
@@ -158,6 +163,9 @@
                    SEVENTH_POINT,
                    EIGHTH_POINT,
                    NINTH_POINT,
+                   HIT_COUNT,
+                   BASEONBALL_COUNT,
+                   ERROR_COUNT,
                    EXTEND_POINT,
                    EXTEND_YN
             FROM   sport.baseball_data

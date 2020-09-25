@@ -363,6 +363,15 @@ public class NamedBaseballUpdateMatchProcessor implements ItemProcessor<String, 
         JSONArray homeTeamScore = matchObject.getJSONObject("teams").getJSONObject("home").getJSONArray("periodData");
         JSONArray awayTeamScore = matchObject.getJSONObject("teams").getJSONObject("away").getJSONArray("periodData");
 
+
+        aTeamModel.setHitCount(matchObject.getJSONObject("teams").getJSONObject("home").getInt("hitCount"));
+        aTeamModel.setBaseOnBallCount(matchObject.getJSONObject("teams").getJSONObject("home").getInt("baseOnBallCount"));
+        aTeamModel.setErrorCount(matchObject.getJSONObject("teams").getJSONObject("home").getInt("errorCount"));
+
+        bTeamModel.setHitCount(matchObject.getJSONObject("teams").getJSONObject("away").getInt("hitCount"));
+        bTeamModel.setBaseOnBallCount(matchObject.getJSONObject("teams").getJSONObject("away").getInt("baseOnBallCount"));
+        bTeamModel.setErrorCount(matchObject.getJSONObject("teams").getJSONObject("away").getInt("errorCount"));
+
         aTeamModel.setFirstScore(homeTeamScore.getJSONObject(0).getInt("score"));
         aTeamModel.setSecondScore(homeTeamScore.getJSONObject(1).getInt("score"));
         aTeamModel.setThirdScore(homeTeamScore.getJSONObject(2).getInt("score"));

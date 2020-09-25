@@ -62,8 +62,8 @@ mybatis:
   mapper-locations: classpath:mapper/*Mapper.xml
 
 excel:
-  template-path: C:\Users\qjsro\IdeaProjects\batch\src\main\resources\excelTemplate\
-  output-path: D:\test\
+  template-path: /Users/jungyong/IdeaProjects/batch/src/main/resources/excelTemplate/
+  output-path: /Users/jungyong/Desktop/
 
 ---
 
