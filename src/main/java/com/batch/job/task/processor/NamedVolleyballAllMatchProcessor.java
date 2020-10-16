@@ -33,9 +33,8 @@ import java.util.List;
 public class NamedVolleyballAllMatchProcessor implements ItemProcessor<String, List<VolleyballModel>> {
 
     private String initSeasonDate;
-    private String finishSeasonDate = "2020-10-15";
+    private String finishSeasonDate = "2021-04-15";
     private String baseBall_Url = "https://sports-api.named.com/v1.0/sports/volleyball/games?date=";
-
 
     @Autowired
     private NamedUtil namedUtil;
@@ -48,17 +47,17 @@ public class NamedVolleyballAllMatchProcessor implements ItemProcessor<String, L
         return allVolleyballMatch();
     }
 
-
     public List<VolleyballModel> allVolleyballMatch() throws IOException, ParseException, JSONException {
 
         List<VolleyballModel> volleeyModelList = new ArrayList<>();
         int addDate = 0;
+        NamedUtil namedUtil = new NamedUtil();
 
         while (true){
             Calendar cal = Calendar.getInstance();
             cal.setTime(new Date());
 
-            cal.set(2020, 9, 05);
+            cal.set(2020, 9, 15);
 
             DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -159,5 +158,9 @@ public class NamedVolleyballAllMatchProcessor implements ItemProcessor<String, L
         return volleeyModelList;
     }
 
+    public static void main(String[] args) throws ParseException, JSONException, IOException {
+        NamedVolleyballAllMatchProcessor namedVolleyballAllMatchProcessor = new NamedVolleyballAllMatchProcessor();
+        namedVolleyballAllMatchProcessor.allVolleyballMatch();
+    }
 }
 
