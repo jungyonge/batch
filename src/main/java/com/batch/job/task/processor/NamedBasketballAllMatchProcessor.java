@@ -66,9 +66,9 @@ public class NamedBasketballAllMatchProcessor implements ItemProcessor<String, L
             Calendar startDate = Calendar.getInstance();
             startDate.setTime(new Date());
             if(mode.equals("all")) {
-                startDate.set(2020, 6, 01);
+                startDate.set(2020, 9, 01);
             }else {
-                startDate.add(Calendar.DATE, -2);
+                startDate.add(Calendar.DATE, -5);
 
             }
             DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
