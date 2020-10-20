@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.batch.mapper.VolleyballMapper">
+
+    <insert id="insertVolleyMatch" parameterType="com.batch.model.BaseballModel">
+        INSERT INTO sport.volleyball_data(GAME_ID, LEAGUE, GROUND, MATCH_DATE, DAY_OF_WEEK, MATCH_TIME, A_TEAM_REST_DAY,  A_TEAM, B_TEAM, B_TEAM_REST_DAY)
+      VALUES (
+                #{gameId},
+                #{league},
+                #{ground},
+                #{date},
+                #{dayOfWeek},
+                #{time},
+                IFNULL((SELECT  DATEDIFF(#{date} ,(SELECT MATCH_DATE FROM  sport.volleyball_data A WHERE A_TEAM = #{aTeam} ORDER BY idx DESC LIMIT 1))) -1,0),
+                #{aTeam},
+                #{bTeam},
+                IFNULL((SELECT  DATEDIFF(#{date} ,(SELECT MATCH_DATE FROM  sport.volleyball_data B WHERE B_TEAM = #{bTeam} ORDER BY idx DESC LIMIT 1))) -1,0)
+            )
+    </insert>
+
+    <select id="checkGameIdCount" parameterType="com.batch.model.BaseballModel" resultType="int">
+       SELECT COUNT(1)
+           FROM sport.volleyball_data
+        WHERE GAME_ID = IFNULL(#{gameId},'');
+    </select>
+
+    <update id="updateVolleyStat" parameterType="blog.model.VolleyballModel">
+            UPDATE sport.volleyball_data
+                     SET
+                A_TEAM_SET_POINT        =           IFNULL(#{aTeamSetScore},0)    ,
+                A_TEAM_TOTAL_POINT      =           IFNULL(#{aTeamTotalPoint},0)  ,
+                B_TEAM_TOTAL_POINT      =           IFNULL(#{bTeamTotalPoint},0)  ,
+                B_TEAM_SET_POINT        =           IFNULL(#{bTeamSetScore},0)    ,
+                ODD                     =               IFNULL(#{odd},'') ,
+                HANDI_CAP               =           IFNULL(#{handiCap},0) ,
+                HANDI_CAP_RESULT        =           IFNULL(#{handiCapResult},'')   ,
+                SET_HANDI_CAP           =           IFNULL(#{setHandiCap},0)  ,
+                SET_HANDI_CAP_RESULT    =           IFNULL(#{setHandiCapResult},'')    ,
+                POINT_LINE              =           IFNULL(#{pointLine},0)    ,
+                POINT_LINE_RESULT       =           IFNULL(#{pointLineResult},0)  ,
+
+                A_TEAM_FIRSTQ_POINT     =           IFNULL(#{aTeamFirstQPoint},0) ,
+                B_TEAM_FIRSTQ_POINT     =           IFNULL(#{bTeamFirstQPoint},0) ,
+                FIRSTQ_RESULT           =           IFNULL(#{firstQResult},''),
+                FIRSTQ_HANDI_CAP        =           IFNULL(#{firstQHandiCap},0)   ,
+                FIRSTQ_HANDI_CAP_RESULT     =           IFNULL(#{firstQHandiCapResult},'') ,
+                FIRSTQ_POINT_LINE           =           IFNULL(#{firstQPointLine},0)  ,
+                FIRSTQ_POINT_LINE_RESULT    =           IFNULL(#{firstQPointLineResult},'')    ,
+
+                A_TEAM_SECONDQ_POINT    =     IFNULL(#{aTeamSecondQPoint},0),
+                B_TEAM_SECONDQ_POINT    =     IFNULL(#{bTeamSecondQPoint},0),
+                SECONDQ_RESULT           =           IFNULL(#{secondQResult},''),
+                SECONDQ_HANDI_CAP_RESULT   =     IFNULL(#{secondQHandiCapResult},''),
+                SECONDQ_POINT_LINE_RESULT   =     IFNULL(#{secondQPointLineResult},''),
+
+                A_TEAM_THIRDQ_POINT   =     IFNULL(#{aTeamThirdQPoint},0),
+                B_TEAM_THIRDQ_POINT   =     IFNULL(#{bTeamThirdQPoint},0),
+                THIRDQ_RESULT           =           IFNULL(#{thirdQResult},''),
+                THIRDQ_HANDI_CAP_RESULT   =     IFNULL(#{thirdQHandiCapResult},''),
+                THIRDQ_POINT_LINE_RESULT   =     IFNULL(#{thirdQPointLineResult},''),
+
+                A_TEAM_FOURTHQ_POINT       =     IFNULL(#{aTeamFourthQPoint},0),
+                B_TEAM_FOURTHQ_POINT       =     IFNULL(#{bTeamFourthQPoint},0),
+                FOURTHQ_RESULT             =           IFNULL(#{fourthQResult},''),
+                FOURTHQ_HANDI_CAP_RESULT   =     IFNULL(#{fourthQHandiCapResult},''),
+                FOURTHQ_POINT_LINE_RESULT  =     IFNULL(#{fourthQPointLineResult},''),
+
+                A_TEAM_FIFTHQ_POINT       =     IFNULL(#{aTeamFifthQPoint},0),
+                B_TEAM_FIFTHQ_POINT       =     IFNULL(#{bTeamFifthQPoint},0),
+                FIFTHQ_RESULT             =           IFNULL(#{fifthQResult},''),
+                FIFTHQ_HANDI_CAP_RESULT   =     IFNULL(#{fifthQHandiCapResult},''),
+
+                FIRST_POINT         =           IFNULL(#{firstPoint},0)   ,
+                FIRST_BLOCK         =            IFNULL(#{firstBlock},0)   ,
+                FIRST_SERVE         =           IFNULL(#{firstServe},0)   ,
+                FIRST_5POINT        =            IFNULL(#{first5Point},0)  ,
+                FIRST_7POINT        =           IFNULL(#{first7Point},0)  ,
+                FIRST_10POINT       =           IFNULL(#{first10Point},0) ,
+                FIRSTQ_POINT        =           IFNULL(#{firstQPoint},0)  ,
+                SECONDQ_POINT       =           IFNULL(#{secondQPoint},0) ,
+                THIRDQ_POINT        =           IFNULL(#{thirdQPoint},0)  ,
+                FOURTHQ_POINT       =           IFNULL(#{fourthQPoint},0) ,
+                FIFTHDQ_POINT       =           IFNULL(#{fifthQPoint},0)  ,
+                FIRSTQ_TOTAL_POINT      =           IFNULL(#{firstQTotalPoint},0) ,
+                SECONDQ_TOTAL_POINT     =           IFNULL(#{secondQTotalPoint},0)    ,
+                THIRDQ_TOTAL_POINT      =           IFNULL(#{thirdQTotalPoint},0) ,
+                FOURTHQ_TOTAL_POINT     =           IFNULL(#{fourthQTotalPoint},0)    ,
+                FIFTHDQ_TOTAL_POINT     =           IFNULL(#{fifthQTotalPoint},0)
+        WHERE
+            GAME_ID   =     IFNULL(#{gameId},'') AND
+            LEAGUE   =     IFNULL(#{league},'') AND
+            GROUND   =     IFNULL(#{ground},'') AND
+            MATCH_DATE   =  IFNULL(#{date},'') AND
+            A_TEAM   =     IFNULL(#{aTeam},'') AND
+            B_TEAM   =     IFNULL(#{bTeam},'') ;
+    </update>
+
+    <select id="selectVolleyStat"  resultType="HashMap">
+        SELECT LEAGUE,
+               GROUND,
+               MATCH_DATE,
+               DAY_OF_WEEK,
+               MATCH_TIME,
+               A_TEAM_REST_DAY,
+               A_TEAM,
+               A_TEAM_SET_POINT,
+               A_TEAM_TOTAL_POINT,
+               B_TEAM_TOTAL_POINT,
+               B_TEAM_SET_POINT,
+               B_TEAM,
+               B_TEAM_REST_DAY,
+               HANDI_CAP,
+               HANDI_CAP_RESULT,
+               ODD,
+               SET_HANDI_CAP,
+               SET_HANDI_CAP_RESULT,
+               POINT_LINE,
+               POINT_LINE_RESULT,
+               A_TEAM_FIRSTQ_POINT,
+               B_TEAM_FIRSTQ_POINT,
+               FIRSTQ_RESULT,
+               FIRSTQ_HANDI_CAP,
+               FIRSTQ_HANDI_CAP_RESULT,
+               FIRSTQ_POINT_LINE,
+               FIRSTQ_POINT_LINE_RESULT,
+               A_TEAM_SECONDQ_POINT,
+               B_TEAM_SECONDQ_POINT,
+               SECONDQ_RESULT,
+               SECONDQ_HANDI_CAP_RESULT,
+               SECONDQ_POINT_LINE_RESULT,
+               A_TEAM_THIRDQ_POINT,
+               B_TEAM_THIRDQ_POINT,
+               THIRDQ_RESULT,
+               THIRDQ_HANDI_CAP_RESULT,
+               THIRDQ_POINT_LINE_RESULT,
+               A_TEAM_FOURTHQ_POINT,
+               B_TEAM_FOURTHQ_POINT,
+               FOURTHQ_RESULT,
+               FOURTHQ_HANDI_CAP_RESULT,
+               FOURTHQ_POINT_LINE_RESULT,
+               A_TEAM_FIFTHQ_POINT,
+               B_TEAM_FIFTHQ_POINT,
+               FIFTHQ_RESULT,
+               FIFTHQ_HANDI_CAP_RESULT,
+               FIRST_POINT,
+               FIRST_BLOCK,
+               FIRST_SERVE,
+               FIRST_5POINT,
+               FIRST_7POINT,
+               FIRST_10POINT,
+               FIRSTQ_POINT,
+               SECONDQ_POINT,
+               THIRDQ_POINT,
+               FOURTHQ_POINT,
+               FIFTHDQ_POINT,
+               FIRSTQ_TOTAL_POINT,
+               SECONDQ_TOTAL_POINT,
+               THIRDQ_TOTAL_POINT,
+               FOURTHQ_TOTAL_POINT,
+               FIFTHDQ_TOTAL_POINT
+        FROM   sport.volleyball_data
+            ORDER  BY MATCH_DATE,
+                      MATCH_TIME,
+                      LEAGUE,
+                      GAME_ID,
+                      GROUND DESC;
+    </select>
+</mapper>

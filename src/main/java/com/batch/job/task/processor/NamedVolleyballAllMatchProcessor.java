@@ -1,12 +1,17 @@
 package com.batch.job.task.processor;
 
+
 import com.batch.model.BaseballModel;
+import com.batch.model.VolleyballModel;
 import com.batch.util.NamedUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import lombok.extern.slf4j.Slf4j;
-
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,11 +30,12 @@ import java.util.List;
 @Component
 @Slf4j
 @StepScope
-public class NamedBaseballAllMatchProcessor implements ItemProcessor<String, List<BaseballModel>> {
+public class NamedVolleyballAllMatchProcessor implements ItemProcessor<String, List<VolleyballModel>> {
 
     private String initSeasonDate;
-    private String finishSeasonDate = "2020-12-05";
-    private String baseBall_Url = "https://sports-api.named.com/v1.0/sports/baseball/games?date=";
+    private String finishSeasonDate = "2021-04-15";
+    private String baseBall_Url = "https://sports-api.named.com/v1.0/sports/volleyball/games?date=";
+
     @Autowired
     private NamedUtil namedUtil;
 
@@ -37,22 +43,21 @@ public class NamedBaseballAllMatchProcessor implements ItemProcessor<String, Lis
     private String mode;
 
     @Override
-    public  List<BaseballModel> process(String s) throws Exception {
-
-        return allBaseballMatch();
+    public List<VolleyballModel> process(String s) throws Exception {
+        return allVolleyballMatch();
     }
 
-    public List<BaseballModel> allBaseballMatch() throws IOException, ParseException, JSONException {
+    public List<VolleyballModel> allVolleyballMatch() throws IOException, ParseException, JSONException {
 
+        List<VolleyballModel> volleeyModelList = new ArrayList<>();
         int addDate = 0;
-        List<BaseballModel> baseballModelList = new ArrayList<>();
+        NamedUtil namedUtil = new NamedUtil();
 
         while (true){
             Calendar cal = Calendar.getInstance();
             cal.setTime(new Date());
 
-//            cal.set(2020, 4, 05);
-            cal.set(2020, 7, 05);
+            cal.set(2020, 9, 15);
 
             DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -63,10 +68,7 @@ public class NamedBaseballAllMatchProcessor implements ItemProcessor<String, Lis
                 break;
             }
 
-
             try {
-
-                //https://api.picksmatch.com/v1.0/sports/baseball/games?date=2020-07-14&status=ALL
                 String json = namedUtil.getNewApiResponse(baseBall_Url + matchDate + "&status=ALL","");
 
                 //JSON데이터를 넣어 JSON Object 로 만들어 준다.
@@ -77,8 +79,8 @@ public class NamedBaseballAllMatchProcessor implements ItemProcessor<String, Lis
 //                JSONArray matchArr = jsonObject.getJSONArray("response");
 
                 for (int i = 0; i < jsonArray.length(); i++) {
-                    BaseballModel aTeamModel = new BaseballModel();
-                    BaseballModel bTeamModel = new BaseballModel();
+                    VolleyballModel aTeamModel = new VolleyballModel();
+                    VolleyballModel bTeamModel = new VolleyballModel();
 
                     JSONObject matchObject = jsonArray.getJSONObject(i);
 
@@ -86,10 +88,8 @@ public class NamedBaseballAllMatchProcessor implements ItemProcessor<String, Lis
                     bTeamModel.setGameId(String.valueOf(matchObject.getInt("id")));
                     aTeamModel.setLeague(matchObject.getJSONObject("league").getString("shortName"));
                     bTeamModel.setLeague(matchObject.getJSONObject("league").getString("shortName"));
-                    aTeamModel.setStadium(matchObject.getString("venueName"));
-                    bTeamModel.setStadium(matchObject.getString("venueName"));
 
-                    if(!aTeamModel.getLeague().equals("KBO") && !aTeamModel.getLeague().equals("NPB") && !aTeamModel.getLeague().equals("MLB") && !aTeamModel.getLeague().equals("퓨처스") ){
+                    if(!aTeamModel.getLeague().equals("Vleague(여)") && !aTeamModel.getLeague().equals("Vleague(남)")){
                         continue;
                     }
 
@@ -144,8 +144,8 @@ public class NamedBaseballAllMatchProcessor implements ItemProcessor<String, Lis
                         continue;
                     }
 
-                    baseballModelList.add(aTeamModel);
-                    baseballModelList.add(bTeamModel);
+                    volleeyModelList.add(aTeamModel);
+                    volleeyModelList.add(bTeamModel);
 
                 }
             } catch (Exception e) {
@@ -154,9 +154,13 @@ public class NamedBaseballAllMatchProcessor implements ItemProcessor<String, Lis
             addDate++;
 
         }
-        return baseballModelList;
+
+        return volleeyModelList;
     }
 
-
-
+    public static void main(String[] args) throws ParseException, JSONException, IOException {
+        NamedVolleyballAllMatchProcessor namedVolleyballAllMatchProcessor = new NamedVolleyballAllMatchProcessor();
+        namedVolleyballAllMatchProcessor.allVolleyballMatch();
+    }
 }
+
