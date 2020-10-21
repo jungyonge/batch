@@ -53,7 +53,6 @@ public class NamedVolleyballAllMatchProcessor implements ItemProcessor<String, L
         String rootHtml = "";
         
         int addDate = 0;
-        NamedUtil namedUtil = new NamedUtil();
 
         while (true){
             Calendar cal = Calendar.getInstance();
@@ -106,12 +105,10 @@ public class NamedVolleyballAllMatchProcessor implements ItemProcessor<String, L
                         aTeamModel.setLeague(getDivision(aTeamModel.getBTeam()));
                         bTeamModel.setLeague(getDivision(aTeamModel.getBTeam()));
 
-                        if (aTeamModel.getATeam().equals("")){
-                            continue;
+                        if (!aTeamModel.getATeam().equals("") && !aTeamModel.getGameId().equals("")){
+                            volleyballModelList.add(aTeamModel);
+                            volleyballModelList.add(bTeamModel);
                         }
-
-                        volleyballModelList.add(aTeamModel);
-                        volleyballModelList.add(bTeamModel);
                     }
 
                 }

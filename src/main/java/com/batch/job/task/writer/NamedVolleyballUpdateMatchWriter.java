@@ -15,17 +15,17 @@ import java.util.List;
 @StepScope
 public class NamedVolleyballUpdateMatchWriter implements ItemWriter<List<VolleyballModel>> {
 
-    private final VolleyballMapper basketballMapper;
+    private final VolleyballMapper volleyballMapper;
 
-    public NamedVolleyballUpdateMatchWriter(VolleyballMapper basketballMapper) {
-        this.basketballMapper = basketballMapper;
+    public NamedVolleyballUpdateMatchWriter(VolleyballMapper volleyballMapper) {
+        this.volleyballMapper = volleyballMapper;
     }
 
     @Override
     public void write(List<? extends List<VolleyballModel>> list) throws Exception {
-        for (List<VolleyballModel> basketballModels : list) {
-            for (VolleyballModel basketballModel : basketballModels) {
-//                basketballMapper.updateBasketStat(basketballModel);
+        for (List<VolleyballModel> volleyballModels : list) {
+            for (VolleyballModel volleyballModel : volleyballModels) {
+                volleyballMapper.updateVolleyballStat(volleyballModel);
             }
         }
 
