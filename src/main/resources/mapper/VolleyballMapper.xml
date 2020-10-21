@@ -4,6 +4,8 @@
 <mapper namespace="com.batch.mapper.VolleyballMapper">
 
     <insert id="insertVolleyballMatch" parameterType="com.batch.model.BaseballModel">
+        <![CDATA[
+
         INSERT INTO sport.volleyball_data(GAME_ID, LEAGUE, GROUND, MATCH_DATE, DAY_OF_WEEK, MATCH_TIME, A_TEAM_REST_DAY,  A_TEAM, B_TEAM, B_TEAM_REST_DAY)
       VALUES (
                 #{gameId},
@@ -12,11 +14,14 @@
                 #{date},
                 #{dayOfWeek},
                 #{time},
-                IFNULL((SELECT  DATEDIFF(#{date} ,(SELECT MATCH_DATE FROM  sport.volleyball_data A WHERE A_TEAM = #{aTeam} ORDER BY idx DESC LIMIT 1))) -1,0),
+                IFNULL((SELECT  DATEDIFF(#{date} ,(SELECT MATCH_DATE FROM  sport.volleyball_data A WHERE A_TEAM = #{aTeam}  AND MATCH_DATE <  IFNULL(#{date},'') ORDER BY idx DESC LIMIT 1))) -1,0),
                 #{aTeam},
                 #{bTeam},
-                IFNULL((SELECT  DATEDIFF(#{date} ,(SELECT MATCH_DATE FROM  sport.volleyball_data B WHERE B_TEAM = #{bTeam} ORDER BY idx DESC LIMIT 1))) -1,0)
+                IFNULL((SELECT  DATEDIFF(#{date} ,(SELECT MATCH_DATE FROM  sport.volleyball_data B WHERE B_TEAM = #{bTeam}  AND MATCH_DATE <  IFNULL(#{date},'')ORDER BY idx DESC LIMIT 1))) -1,0)
             )
+
+        ]]>
+
     </insert>
 
     <select id="checkGameIdCount" parameterType="com.batch.model.BaseballModel" resultType="int">
@@ -165,5 +170,15 @@
                       LEAGUE,
                       GAME_ID,
                       GROUND DESC;
+    </select>
+
+    <select id="selectVolleyballStat"  resultType="HashMap">
+        SELECT  LEAGUE, GROUND, MATCH_DATE, DAY_OF_WEEK, MATCH_TIME, A_TEAM_REST_DAY, A_TEAM, A_TEAM_SET_POINT, A_TEAM_TOTAL_POINT, B_TEAM_TOTAL_POINT, B_TEAM_SET_POINT, B_TEAM, B_TEAM_REST_DAY, HANDI_CAP, HANDI_CAP_RESULT, ODD, SET_HANDI_CAP, SET_HANDI_CAP_RESULT, POINT_LINE, POINT_LINE_RESULT, A_TEAM_FIRSTQ_POINT, B_TEAM_FIRSTQ_POINT, FIRSTQ_RESULT, FIRSTQ_HANDI_CAP, FIRSTQ_HANDI_CAP_RESULT, FIRSTQ_POINT_LINE, FIRSTQ_POINT_LINE_RESULT, A_TEAM_SECONDQ_POINT, B_TEAM_SECONDQ_POINT, SECONDQ_RESULT, SECONDQ_HANDI_CAP_RESULT, SECONDQ_POINT_LINE_RESULT, A_TEAM_THIRDQ_POINT, B_TEAM_THIRDQ_POINT, THIRDQ_RESULT, THIRDQ_HANDI_CAP_RESULT, THIRDQ_POINT_LINE_RESULT, A_TEAM_FOURTHQ_POINT, B_TEAM_FOURTHQ_POINT, FOURTHQ_RESULT, FOURTHQ_HANDI_CAP_RESULT, FOURTHQ_POINT_LINE_RESULT, A_TEAM_FIFTHQ_POINT, B_TEAM_FIFTHQ_POINT, FIFTHQ_RESULT, FIFTHQ_HANDI_CAP_RESULT, FIRST_POINT, FIRST_BLOCK, FIRST_SERVE, FIRST_5POINT, FIRST_7POINT, FIRST_10POINT, FIRSTQ_POINT, SECONDQ_POINT, THIRDQ_POINT, FOURTHQ_POINT, FIFTHDQ_POINT, FIRSTQ_TOTAL_POINT, SECONDQ_TOTAL_POINT, THIRDQ_TOTAL_POINT, FOURTHQ_TOTAL_POINT, FIFTHDQ_TOTAL_POINT
+            FROM sport.volleyball_data
+        ORDER  BY MATCH_DATE,
+                  MATCH_TIME,
+                  LEAGUE,
+                  GAME_ID,
+                  GROUND DESC;
     </select>
 </mapper>

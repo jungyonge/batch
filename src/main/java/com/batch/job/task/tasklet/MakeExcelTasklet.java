@@ -1,10 +1,6 @@
 package com.batch.job.task.tasklet;
 
-import com.batch.mapper.BaseballMapper;
-import com.batch.mapper.BaseballPitcherMapper;
-import com.batch.mapper.BasketballMapper;
-import com.batch.mapper.CommonMapper;
-import com.batch.model.FilterConditionModel;
+import com.batch.mapper.*;
 import com.batch.util.EmailUtil;
 import com.batch.util.MakeExcelUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -23,15 +19,17 @@ public class MakeExcelTasklet implements Tasklet {
     private final BaseballMapper baseballMapper;
     private final BaseballPitcherMapper baseballPitcherMapper;
     private final BasketballMapper basketballMapper;
+    private final VolleyballMapper volleyballMapper;
     private final CommonMapper commonMapper;
     private final MakeExcelUtil makeExcelUtil;
     private final EmailUtil emailUtil;
 
 
-    public MakeExcelTasklet(BaseballMapper baseballMapper, BaseballPitcherMapper baseballPitcherMapper, BasketballMapper basketballMapper, CommonMapper commonMapper, MakeExcelUtil makeExcelUtil, EmailUtil emailUtil) {
+    public MakeExcelTasklet(BaseballMapper baseballMapper, BaseballPitcherMapper baseballPitcherMapper, BasketballMapper basketballMapper, VolleyballMapper volleyballMapper, CommonMapper commonMapper, MakeExcelUtil makeExcelUtil, EmailUtil emailUtil) {
         this.baseballMapper = baseballMapper;
         this.baseballPitcherMapper = baseballPitcherMapper;
         this.basketballMapper = basketballMapper;
+        this.volleyballMapper = volleyballMapper;
         this.commonMapper = commonMapper;
         this.makeExcelUtil = makeExcelUtil;
         this.emailUtil = emailUtil;
@@ -81,7 +79,7 @@ public class MakeExcelTasklet implements Tasklet {
         if(type.equals("basketball")){
             excelDataList = basketballMapper.selectBasketballStat();
         }else if (type.equals("volleyball")){
-//            excelDataList = setalarmDAO.selectVolleyStat();
+            excelDataList = volleyballMapper.selectVolleyballStat();
         }else if (type.equals("hockey")){
 //            excelDataList = setalarmDAO.selectHockeyStat();
         }else if (type.equals("baseball_summary")){
