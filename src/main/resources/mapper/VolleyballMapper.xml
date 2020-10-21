@@ -3,7 +3,7 @@
 
 <mapper namespace="com.batch.mapper.VolleyballMapper">
 
-    <insert id="insertVolleyMatch" parameterType="com.batch.model.BaseballModel">
+    <insert id="insertVolleyballMatch" parameterType="com.batch.model.BaseballModel">
         INSERT INTO sport.volleyball_data(GAME_ID, LEAGUE, GROUND, MATCH_DATE, DAY_OF_WEEK, MATCH_TIME, A_TEAM_REST_DAY,  A_TEAM, B_TEAM, B_TEAM_REST_DAY)
       VALUES (
                 #{gameId},
@@ -25,7 +25,7 @@
         WHERE GAME_ID = IFNULL(#{gameId},'');
     </select>
 
-    <update id="updateVolleyStat" parameterType="blog.model.VolleyballModel">
+    <update id="updateVolleyStat" parameterType="com.batch.model.VolleyballModel">
             UPDATE sport.volleyball_data
                      SET
                 A_TEAM_SET_POINT        =           IFNULL(#{aTeamSetScore},0)    ,

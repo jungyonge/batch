@@ -34,7 +34,7 @@ public class NamedVolleyballAllMatchProcessor implements ItemProcessor<String, L
 
     private String initSeasonDate;
     private String finishSeasonDate = "2021-04-15";
-    private String baseBall_Url = "https://sports-api.named.com/v1.0/sports/volleyball/games?date=";
+    private String baseBall_Url = "https://livescore.co.kr/sports/score_board/volley/view.php?date=";
 
     @Autowired
     private NamedUtil namedUtil;
@@ -49,7 +49,9 @@ public class NamedVolleyballAllMatchProcessor implements ItemProcessor<String, L
 
     public List<VolleyballModel> allVolleyballMatch() throws IOException, ParseException, JSONException {
 
-        List<VolleyballModel> volleeyModelList = new ArrayList<>();
+        List<VolleyballModel> volleyballModelList = new ArrayList<>();
+        String rootHtml = "";
+        
         int addDate = 0;
         NamedUtil namedUtil = new NamedUtil();
 
@@ -62,90 +64,55 @@ public class NamedVolleyballAllMatchProcessor implements ItemProcessor<String, L
             DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
             cal.add(Calendar.DATE, addDate);
-            String matchDate = df.format(cal.getTime());
             if(df.format(cal.getTime()).equals(finishSeasonDate)){
-                log.info("설정한 시즌 마김 기한까지 파싱 완료 : " + finishSeasonDate);
+                log.info("설정한 시즌 마감 기한까지 파싱 완료 : " + finishSeasonDate);
                 break;
             }
 
             try {
-                String json = namedUtil.getNewApiResponse(baseBall_Url + matchDate + "&status=ALL","");
+                int dayNum = cal.get(Calendar.DAY_OF_WEEK);
+                String dayOfWeek = namedUtil.getDayoOfWeek(dayNum);
+                rootHtml = namedUtil.liveScoreUrlToString(baseBall_Url + df.format(cal.getTime()));
+                Document rootDoc = Jsoup.parse(rootHtml);
 
-                //JSON데이터를 넣어 JSON Object 로 만들어 준다.
-//                JSONObject jsonObject = new JSONObject(json);
-
-                JSONArray jsonArray = new JSONArray(json);
-                //books의 배열을 추출
-//                JSONArray matchArr = jsonObject.getJSONArray("response");
-
-                for (int i = 0; i < jsonArray.length(); i++) {
+                for (Element element : rootDoc.select("div#score_board div.score_tbl_individual")) {
                     VolleyballModel aTeamModel = new VolleyballModel();
                     VolleyballModel bTeamModel = new VolleyballModel();
 
-                    JSONObject matchObject = jsonArray.getJSONObject(i);
+                    String league = element.select("thead tr th.reague").text();
+    
+                    if (league.equals("V-리그")) {
+    
+                        String gameId = element.select("div.score_tbl_individual").attr("id");
+    
+                        aTeamModel.setGameId(gameId);
+                        bTeamModel.setGameId(gameId);
+                        aTeamModel.setDayOfWeek(dayOfWeek);
+                        bTeamModel.setDayOfWeek(dayOfWeek);
 
-                    aTeamModel.setGameId(String.valueOf(matchObject.getInt("id")));
-                    bTeamModel.setGameId(String.valueOf(matchObject.getInt("id")));
-                    aTeamModel.setLeague(matchObject.getJSONObject("league").getString("shortName"));
-                    bTeamModel.setLeague(matchObject.getJSONObject("league").getString("shortName"));
+                        aTeamModel.setTime(element.select("thead tr th.ptime").text().replaceAll("오전 ", "").replaceAll("오후 ", ""));
+                        bTeamModel.setTime(element.select("thead tr th.ptime").text().replaceAll("오전 ", "").replaceAll("오후 ", ""));
+    
+                        aTeamModel.setDate(df.format(cal.getTime()));
+                        bTeamModel.setDate(df.format(cal.getTime()));
+    
+                        aTeamModel.setGround("홈");
+                        bTeamModel.setGround("원정");
+    
+                        aTeamModel.setBTeam(element.select("tbody tr > td.teaminfo.visitor strong").text());
+                        aTeamModel.setATeam(element.select("tbody tr > td.teaminfo.hometeam strong").text());
+                        bTeamModel.setATeam(element.select("tbody tr > td.teaminfo.visitor strong").text());
+                        bTeamModel.setBTeam(element.select("tbody tr > td.teaminfo.hometeam strong").text());
+                        aTeamModel.setLeague(getDivision(aTeamModel.getBTeam()));
+                        bTeamModel.setLeague(getDivision(aTeamModel.getBTeam()));
 
-                    if(!aTeamModel.getLeague().equals("Vleague(여)") && !aTeamModel.getLeague().equals("Vleague(남)")){
-                        continue;
+                        if (aTeamModel.getATeam().equals("")){
+                            continue;
+                        }
+
+                        volleyballModelList.add(aTeamModel);
+                        volleyballModelList.add(bTeamModel);
                     }
-
-                    String startDatetime = matchObject.getString("startDatetime");
-                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-
-                    String[] startDatetimeArr = startDatetime.split("T");
-
-                    cal = Calendar.getInstance();
-                    cal.setTime(format.parse(startDatetime));
-                    int dayNum = cal.get(Calendar.DAY_OF_WEEK);
-
-                    String date = startDatetimeArr[0];
-                    String dayOfWeek = namedUtil.getDayoOfWeek(dayNum);
-                    String time = startDatetimeArr[1].substring(0, 5);
-
-                    aTeamModel.setDate(date);
-                    aTeamModel.setDayOfWeek(dayOfWeek);
-                    aTeamModel.setTime(time);
-
-                    bTeamModel.setDate(date);
-                    bTeamModel.setDayOfWeek(dayOfWeek);
-                    bTeamModel.setTime(time);
-
-                    aTeamModel.setGround("홈");
-                    bTeamModel.setGround("원정");
-
-
-                    JSONObject homeTeam = matchObject.getJSONObject("teams").getJSONObject("home");
-                    JSONObject awayTeam = matchObject.getJSONObject("teams").getJSONObject("away");
-//                    if (groundArr.getJSONObject(0).getString("locationType").equals("AWAY")){
-//                        homeTeam = (JSONObject) matchObject.getJSONArray("gameTeams").get(1);
-//                        awayTeam = (JSONObject) matchObject.getJSONArray("gameTeams").get(0);
-//                    }else {
-//                        homeTeam = (JSONObject) matchObject.getJSONArray("gameTeams").get(0);
-//                        awayTeam = (JSONObject) matchObject.getJSONArray("gameTeams").get(1);
-//                    }
-
-                    aTeamModel.setATeam(homeTeam.getString("name"));
-                    aTeamModel.setBTeam(awayTeam.getString("name"));
-                    bTeamModel.setATeam(aTeamModel.getBTeam());
-                    bTeamModel.setBTeam(aTeamModel.getATeam());
-//                    if(aTeamModel.getLeague().contains("퓨처스") || aTeamModel.getLeague().contains("KBO")){
-//                        aTeamModel.setATeam(homeTeam.getJSONObject("team").getString("nickname"));
-//                        aTeamModel.setBTeam(awayTeam.getJSONObject("team").getString("nickname"));
-//                    } else {
-//                        aTeamModel.setATeam(homeTeam.getJSONObject("team").getString("name"));
-//                        aTeamModel.setBTeam(awayTeam.getJSONObject("team").getString("name"));
-//                    }
-
-                    if (aTeamModel.getATeam().equals("")){
-                        continue;
-                    }
-
-                    volleeyModelList.add(aTeamModel);
-                    volleeyModelList.add(bTeamModel);
 
                 }
             } catch (Exception e) {
@@ -155,7 +122,17 @@ public class NamedVolleyballAllMatchProcessor implements ItemProcessor<String, L
 
         }
 
-        return volleeyModelList;
+        return volleyballModelList;
+    }
+
+    private String getDivision (String team){
+        String result = "";
+        if(team.contains("현대건설") || team.contains("흥국생명") || team.contains("GS칼텍스") || team.contains("KGC인삼공사") || team.contains("한국도로공사") || team.contains("IBK기업은행")){
+            result = "여자배구";
+        } else {
+            result = "남자배구";
+        }
+        return result;
     }
 
     public static void main(String[] args) throws ParseException, JSONException, IOException {
