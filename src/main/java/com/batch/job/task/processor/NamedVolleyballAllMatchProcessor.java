@@ -58,7 +58,7 @@ public class NamedVolleyballAllMatchProcessor implements ItemProcessor<String, L
             Calendar cal = Calendar.getInstance();
             cal.setTime(new Date());
 
-            cal.set(2020, 9, 24);
+            cal.set(2020, 9, 10);
 
             DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -105,14 +105,10 @@ public class NamedVolleyballAllMatchProcessor implements ItemProcessor<String, L
                         aTeamModel.setLeague(getDivision(aTeamModel.getBTeam()));
                         bTeamModel.setLeague(getDivision(aTeamModel.getBTeam()));
 
-//                        if (!aTeamModel.getATeam().equals("") && !aTeamModel.getGameId().equals("")){
-                        log.info(aTeamModel.toString());
-                        log.info(bTeamModel.toString());
-
+                        if (!aTeamModel.getATeam().equals("") && !aTeamModel.getGameId().equals("")){
                             volleyballModelList.add(aTeamModel);
                             volleyballModelList.add(bTeamModel);
-
-//                        }
+                        }
                     }
 
                 }
