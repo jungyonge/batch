@@ -66,16 +66,15 @@ public class NamedVolleyballUpdateMatchProcessor implements ItemProcessor<String
         while (true){
             Calendar startDate = Calendar.getInstance();
             startDate.setTime(new Date());
-            if(mode.equals("all")){
+            if(mode.equals("all")) {
                 startDate.set(2020, 9, 15);
-             }else {
-                startDate.add(Calendar.DATE, -2);
-             }
+            }else {
+                startDate.add(Calendar.DATE, -5);
+            }
 
             DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
             startDate.add(Calendar.DATE, addDate);
-            String matchDate = df.format(startDate.getTime());
             if(df.format(startDate.getTime()).equals(df.format(curDate.getTime()))){
                 log.info("배 Update Match 완료 : " + df.format(curDate.getTime()));
                 break;

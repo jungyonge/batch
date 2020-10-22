@@ -1,8 +1,6 @@
 package com.batch.job.task.writer;
 
-import com.batch.mapper.BaseballMapper;
 import com.batch.mapper.VolleyballMapper;
-import com.batch.model.BaseballModel;
 import com.batch.model.VolleyballModel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.ItemWriter;

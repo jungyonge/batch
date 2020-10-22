@@ -55,23 +55,26 @@ public class NamedVolleyballAllMatchProcessor implements ItemProcessor<String, L
         int addDate = 0;
 
         while (true){
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(new Date());
-
-            cal.set(2020, 9, 10);
+            Calendar startDate = Calendar.getInstance();
+            startDate.setTime(new Date());
+            if(mode.equals("all")) {
+                startDate.set(2020, 9, 15);
+            }else {
+                startDate.add(Calendar.DATE, -5);
+            }
 
             DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
-            cal.add(Calendar.DATE, addDate);
-            if(df.format(cal.getTime()).equals(finishSeasonDate)){
+            startDate.add(Calendar.DATE, addDate);
+            if(df.format(startDate.getTime()).equals(finishSeasonDate)){
                 log.info("설정한 시즌 마감 기한까지 파싱 완료 : " + finishSeasonDate);
                 break;
             }
 
             try {
-                int dayNum = cal.get(Calendar.DAY_OF_WEEK);
+                int dayNum = startDate.get(Calendar.DAY_OF_WEEK);
                 String dayOfWeek = namedUtil.getDayoOfWeek(dayNum);
-                rootHtml = namedUtil.liveScoreUrlToString(baseBall_Url + df.format(cal.getTime()));
+                rootHtml = namedUtil.liveScoreUrlToString(baseBall_Url + df.format(startDate.getTime()));
                 Document rootDoc = Jsoup.parse(rootHtml);
 
                 for (Element element : rootDoc.select("div#score_board div.score_tbl_individual")) {
@@ -92,8 +95,8 @@ public class NamedVolleyballAllMatchProcessor implements ItemProcessor<String, L
                         aTeamModel.setTime(element.select("thead tr th.ptime").text().replaceAll("오전 ", "").replaceAll("오후 ", ""));
                         bTeamModel.setTime(element.select("thead tr th.ptime").text().replaceAll("오전 ", "").replaceAll("오후 ", ""));
     
-                        aTeamModel.setDate(df.format(cal.getTime()));
-                        bTeamModel.setDate(df.format(cal.getTime()));
+                        aTeamModel.setDate(df.format(startDate.getTime()));
+                        bTeamModel.setDate(df.format(startDate.getTime()));
     
                         aTeamModel.setGround("홈");
                         bTeamModel.setGround("원정");

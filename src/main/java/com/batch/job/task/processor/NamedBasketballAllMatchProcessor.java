@@ -69,7 +69,6 @@ public class NamedBasketballAllMatchProcessor implements ItemProcessor<String, L
                 startDate.set(2020, 9, 01);
             }else {
                 startDate.add(Calendar.DATE, -5);
-
             }
             DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
