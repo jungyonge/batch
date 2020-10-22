@@ -3,6 +3,8 @@
 <mapper namespace="com.batch.mapper.BasketballMapper">
 
     <insert id="insertBasketMatch" parameterType="com.batch.model.BasketballModel">
+        <![CDATA[
+
         INSERT INTO sport.basketball_data(
                 GAME_ID,
                 LEAGUE,
@@ -20,11 +22,13 @@
                 IFNULL(#{date},''),
                 IFNULL(#{dayOfWeek},''),
                 IFNULL(#{time},''),
-                IFNULL((SELECT  DATEDIFF(IFNULL(#{date},'') ,(SELECT MATCH_DATE FROM  sport.basketball_data A WHERE A_TEAM = IFNULL(#{aTeam},'') ORDER BY idx DESC LIMIT 1))) -1,0),
+                IFNULL((SELECT  DATEDIFF(IFNULL(#{date},'') ,(SELECT MATCH_DATE FROM  sport.basketball_data A WHERE A_TEAM = IFNULL(#{aTeam},'') AND MATCH_DATE <  IFNULL(#{date},'') ORDER BY idx DESC LIMIT 1))) -1,0),
                 IFNULL(#{aTeam},''),
                 IFNULL(#{bTeam},''),
-                IFNULL((SELECT  DATEDIFF(IFNULL(#{date},'') ,(SELECT MATCH_DATE FROM  sport.basketball_data B WHERE B_TEAM = IFNULL(#{bTeam},'') ORDER BY idx DESC LIMIT 1))) -1,0)
+                IFNULL((SELECT  DATEDIFF(IFNULL(#{date},'') ,(SELECT MATCH_DATE FROM  sport.basketball_data B WHERE B_TEAM = IFNULL(#{bTeam},'') AND MATCH_DATE <  IFNULL(#{date},'') ORDER BY idx DESC LIMIT 1))) -1,0)
             )
+        ]]>
+
     </insert>
 
     <select id="checkGameIdCount" parameterType="com.batch.model.BasketballModel" resultType="int">
