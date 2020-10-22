@@ -181,4 +181,55 @@
                   GAME_ID,
                   GROUND DESC;
     </select>
+
+    <select id="selectVolleyballAvgPoint"  resultType="HashMap">
+        <![CDATA[
+            SELECT A.A_TEAM TEAM,
+                   FIRSTQ_POINT,
+                   SECONDQ_POINT,
+                   THIRDQ_POINT,
+                   FOURTHQ_POINT,
+                   FIFTHDQ_POINT
+            FROM   (SELECT A_TEAM
+                    FROM   VOLLEYBALL_DATA
+                    GROUP  BY A_TEAM) A
+                   LEFT OUTER JOIN (SELECT A_TEAM,
+                                           AVG(FIRSTQ_POINT) FIRSTQ_POINT
+                                    FROM   VOLLEYBALL_DATA
+                                    WHERE  MATCH_DATE < NOW()
+                                           AND FIRSTQ_POINT != 0
+                                    GROUP  BY A_TEAM) B
+                                ON A.A_TEAM = B.A_TEAM
+                   LEFT OUTER JOIN (SELECT A_TEAM,
+                                           AVG(SECONDQ_POINT) SECONDQ_POINT
+                                    FROM   VOLLEYBALL_DATA
+                                    WHERE  MATCH_DATE < NOW()
+                                           AND SECONDQ_POINT != 0
+                                    GROUP  BY A_TEAM) C
+                                ON A.A_TEAM = C.A_TEAM
+                   LEFT OUTER JOIN (SELECT A_TEAM,
+                                           AVG(THIRDQ_POINT) THIRDQ_POINT
+                                    FROM   VOLLEYBALL_DATA
+                                    WHERE  MATCH_DATE < NOW()
+                                           AND THIRDQ_POINT != 0
+                                    GROUP  BY A_TEAM) D
+                                ON A.A_TEAM = D.A_TEAM
+                   LEFT OUTER JOIN (SELECT A_TEAM,
+                                           AVG(FOURTHQ_POINT) FOURTHQ_POINT
+                                    FROM   VOLLEYBALL_DATA
+                                    WHERE  MATCH_DATE < NOW()
+                                           AND FOURTHQ_POINT != 0
+                                    GROUP  BY A_TEAM) E
+                                ON A.A_TEAM = E.A_TEAM
+                   LEFT OUTER JOIN (SELECT A_TEAM,
+                                           AVG(FIFTHDQ_POINT) FIFTHDQ_POINT
+                                    FROM   VOLLEYBALL_DATA
+                                    WHERE  MATCH_DATE < NOW()
+                                           AND FIFTHDQ_POINT != 0
+                                    GROUP  BY A_TEAM) F
+                                ON A.A_TEAM = F.A_TEAM;
+        ]]>
+
+    </select>
+
 </mapper>
