@@ -3207,7 +3207,7 @@
                   LEAGUE,
                   A_TEAM
            FROM sport.basketball_data
-           WHERE <![CDATA[  MATCH_DATE = DATE(DATE_ADD(NOW(),INTERVAL 1 DAY)   ]]> ) A
+           WHERE <![CDATA[  MATCH_DATE = DATE(DATE_ADD(NOW(),INTERVAL 1 DAY)   ]]> )) A
         INNER JOIN
           (SELECT TEAM,
                   CONDI,
@@ -3317,7 +3317,7 @@
                   LEAGUE,
                   A_TEAM
            FROM sport.basketball_data
-           WHERE <![CDATA[  MATCH_DATE = DATE(DATE_ADD(NOW(),INTERVAL 1 DAY)   ]]> ) A
+           WHERE <![CDATA[  MATCH_DATE = DATE(DATE_ADD(NOW(),INTERVAL 1 DAY)   ]]> )) A
         INNER JOIN
           (SELECT TEAM,
                   CONDI,
@@ -3428,7 +3428,7 @@
                   A_TEAM,
                   ODD
            FROM sport.basketball_data
-           WHERE <![CDATA[  MATCH_DATE = DATE(DATE_ADD(NOW(),INTERVAL 1 DAY)   ]]> ) A
+           WHERE <![CDATA[  MATCH_DATE = DATE(DATE_ADD(NOW(),INTERVAL 1 DAY)   ]]> )) A
         INNER JOIN
           (SELECT TEAM,
                   CONDI,
@@ -3539,7 +3539,7 @@
                   A_TEAM,
                   A_TEAM_REST_DAY
            FROM sport.basketball_data
-           WHERE <![CDATA[  MATCH_DATE = DATE(DATE_ADD(NOW(),INTERVAL 1 DAY)   ]]> ) A
+           WHERE <![CDATA[  MATCH_DATE = DATE(DATE_ADD(NOW(),INTERVAL 1 DAY)   ]]> )) A
         INNER JOIN
           (SELECT TEAM,
                   CONDI,
@@ -3650,7 +3650,7 @@
                   A_TEAM,
                   DAY_OF_WEEK
            FROM sport.basketball_data
-           WHERE <![CDATA[  MATCH_DATE = DATE(DATE_ADD(NOW(),INTERVAL 1 DAY)   ]]> ) A
+           WHERE <![CDATA[  MATCH_DATE = DATE(DATE_ADD(NOW(),INTERVAL 1 DAY)   ]]> )) A
         INNER JOIN
           (SELECT TEAM,
                   CONDI,
@@ -3760,7 +3760,7 @@
                   LEAGUE,
                   A_TEAM
            FROM sport.basketball_data
-           WHERE <![CDATA[  MATCH_DATE = DATE(DATE_ADD(NOW(),INTERVAL 1 DAY)   ]]> ) A
+           WHERE <![CDATA[  MATCH_DATE = DATE(DATE_ADD(NOW(),INTERVAL 1 DAY)   ]]> )) A
         INNER JOIN
           (SELECT TEAM,
                   CONDI,

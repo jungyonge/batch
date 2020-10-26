@@ -88,6 +88,10 @@ public class MakeExcelTasklet implements Tasklet {
             excelDataList = baseballMapper.selectBaseballStat();
         }else if (type.equals("baseball_pitcher")){
             excelDataList = baseballPitcherMapper.selectBaseballPitcherStat();
+        }else if (type.equals("football")){
+            excelDataList = baseballPitcherMapper.selectBaseballPitcherStat();
+        } else if (type.equals("basketball_summary")) {
+            excelDataList = basketballMapper.selectBasketballAllSummary();
         }
         return excelDataList;
     }
