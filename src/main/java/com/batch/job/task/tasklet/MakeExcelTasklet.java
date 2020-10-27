@@ -42,16 +42,16 @@ public class MakeExcelTasklet implements Tasklet {
         List sportDataList = new ArrayList<>();
         List memberList = new ArrayList<>();
         HashMap pitcherMap = new HashMap();
-        pitcherMap.put("SPORT","baseball_pitcher");
+        pitcherMap.put("SPORT", "baseball_pitcher");
 
         String sport;
 
         sportMakeExcelList = commonMapper.selectSportMakeExcelList();
         sportMakeExcelListWithoutPitcher = commonMapper.selectSportMakeExcelListWithoutPitcher();
-        for (int i = 0 ; i < sportMakeExcelList.size() ; i++){
+        for (int i = 0; i < sportMakeExcelList.size(); i++) {
             HashMap sportMap = (HashMap) sportMakeExcelList.get(i);
             sport = String.valueOf(sportMap.get("SPORT"));
-            if(sport != null) {
+            if (sport != null) {
                 sportDataList = getExcelDataList(sport);
                 makeExcelUtil.statXlsDown(sport, sportDataList);
             }
@@ -59,39 +59,41 @@ public class MakeExcelTasklet implements Tasklet {
 
         memberList = commonMapper.selectMemberList();
 
-        for (int i = 0 ; i < memberList.size() ; i++){
+        for (int i = 0; i < memberList.size(); i++) {
             HashMap memberMap = (HashMap) memberList.get(i);
-            if(memberMap.get("SPORT_YN").toString().equals("true") && memberMap.get("PITCHER_YN").toString().equals("true")){
-                emailUtil.sendSSLMessage(memberMap.get("EMAIL").toString(), (Date) memberMap.get("END_DATE"),sportMakeExcelList,"jungyongee@gmail.com");
-            }else if (memberMap.get("SPORT_YN").toString().equals("true") && memberMap.get("PITCHER_YN").toString().equals("false")){
-                emailUtil.sendSSLMessage(memberMap.get("EMAIL").toString(), (Date) memberMap.get("END_DATE") ,sportMakeExcelListWithoutPitcher,"jungyongee@gmail.com");
-            }else if (memberMap.get("SPORT_YN").toString().equals("false") && memberMap.get("PITCHER_YN").toString().equals("true")){
-                emailUtil.sendSSLMessage(memberMap.get("EMAIL").toString(), (Date) memberMap.get("END_DATE"),  Collections.singletonList(pitcherMap),"jungyongee@gmail.com");
+            if (memberMap.get("SPORT_YN").toString().equals("true") && memberMap.get("PITCHER_YN").toString().equals("true")) {
+                emailUtil.sendSSLMessage(memberMap.get("EMAIL").toString(), (Date) memberMap.get("END_DATE"), sportMakeExcelList, "jungyongee@gmail.com");
+            } else if (memberMap.get("SPORT_YN").toString().equals("true") && memberMap.get("PITCHER_YN").toString().equals("false")) {
+                emailUtil.sendSSLMessage(memberMap.get("EMAIL").toString(), (Date) memberMap.get("END_DATE"), sportMakeExcelListWithoutPitcher, "jungyongee@gmail.com");
+            } else if (memberMap.get("SPORT_YN").toString().equals("false") && memberMap.get("PITCHER_YN").toString().equals("true")) {
+                emailUtil.sendSSLMessage(memberMap.get("EMAIL").toString(), (Date) memberMap.get("END_DATE"), Collections.singletonList(pitcherMap), "jungyongee@gmail.com");
             }
         }
 
         return RepeatStatus.FINISHED;
     }
 
-    private List getExcelDataList(String type){
+    private List getExcelDataList(String type) {
         List excelDataList = new ArrayList<>();
 
-        if(type.equals("basketball")){
+        if (type.equals("basketball")) {
             excelDataList = basketballMapper.selectBasketballStat();
-        }else if (type.equals("volleyball")){
+        } else if (type.equals("volleyball")) {
             excelDataList = volleyballMapper.selectVolleyballStat();
-        }else if (type.equals("hockey")){
+        } else if (type.equals("hockey")) {
 //            excelDataList = setalarmDAO.selectHockeyStat();
-        }else if (type.equals("baseball_summary")){
+        } else if (type.equals("baseball_summary")) {
             excelDataList = baseballMapper.selectBaseballAllSummary();
-        }else if (type.equals("baseball")){
+        } else if (type.equals("baseball")) {
             excelDataList = baseballMapper.selectBaseballStat();
-        }else if (type.equals("baseball_pitcher")){
+        } else if (type.equals("baseball_pitcher")) {
             excelDataList = baseballPitcherMapper.selectBaseballPitcherStat();
-        }else if (type.equals("football")){
+        } else if (type.equals("football")) {
             excelDataList = baseballPitcherMapper.selectBaseballPitcherStat();
         } else if (type.equals("basketball_summary")) {
             excelDataList = basketballMapper.selectBasketballAllSummary();
+        } else if (type.equals("volleyball_avg_point")) {
+            excelDataList = volleyballMapper.selectVolleyballAvgPoint();
         }
         return excelDataList;
     }

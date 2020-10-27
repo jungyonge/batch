@@ -184,14 +184,24 @@
 
     <select id="selectVolleyballAvgPoint"  resultType="HashMap">
         <![CDATA[
-            SELECT A.A_TEAM TEAM,
+            SELECT GAME_ID,
+                   A.A_TEAM TEAM,
+                   MATCH_DATE,
+                   MATCH_TIME,
                    FIRSTQ_POINT,
                    SECONDQ_POINT,
                    THIRDQ_POINT,
                    FOURTHQ_POINT,
                    FIFTHDQ_POINT
-            FROM   (SELECT A_TEAM
+            FROM   (SELECT GAME_ID,A_TEAM,MATCH_DATE,MATCH_TIME
                     FROM   VOLLEYBALL_DATA
+                    WHERE
+                        CASE
+                            WHEN  HOUR(NOW()) > 11 AND HOUR(NOW()) < 22
+                                THEN   MATCH_DATE = DATE(NOW())
+                            WHEN HOUR(NOW()) > 23 AND HOUR(NOW()) < 24
+                                THEN MATCH_DATE = DATE(DATE_ADD(NOW(),INTERVAL 1 DAY))
+                            END
                     GROUP  BY A_TEAM) A
                    LEFT OUTER JOIN (SELECT A_TEAM,
                                            AVG(FIRSTQ_POINT) FIRSTQ_POINT
@@ -227,7 +237,8 @@
                                     WHERE  MATCH_DATE < NOW()
                                            AND FIFTHDQ_POINT != 0
                                     GROUP  BY A_TEAM) F
-                                ON A.A_TEAM = F.A_TEAM;
+                                ON A.A_TEAM = F.A_TEAM
+                            ORDER BY GAME_ID;
         ]]>
 
     </select>

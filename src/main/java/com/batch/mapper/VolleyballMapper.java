@@ -25,6 +25,6 @@ public interface VolleyballMapper {
 
    void updateVolleyballNextMatchStat(VolleyballModel volleyballModel);
 
-   List selectVolleyballAllSummary();
+   List selectVolleyballAvgPoint();
 
 }
