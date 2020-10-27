@@ -194,7 +194,7 @@
                    FOURTHQ_POINT,
                    FIFTHDQ_POINT
             FROM   (SELECT GAME_ID,A_TEAM,MATCH_DATE,MATCH_TIME
-                    FROM   VOLLEYBALL_DATA
+                    FROM   sport.VOLLEYBALL_DATA
                     WHERE
                         CASE
                             WHEN  HOUR(NOW()) > 11 AND HOUR(NOW()) < 22
@@ -205,36 +205,36 @@
                     GROUP  BY A_TEAM) A
                    LEFT OUTER JOIN (SELECT A_TEAM,
                                            AVG(FIRSTQ_POINT) FIRSTQ_POINT
-                                    FROM   VOLLEYBALL_DATA
-                                    WHERE  MATCH_DATE < NOW()
+                    FROM   sport.VOLLEYBALL_DATA
+                                    WHERE  MATCH_DATE < DATE(DATE_ADD(NOW(),INTERVAL -1 DAY))
                                            AND FIRSTQ_POINT != 0
                                     GROUP  BY A_TEAM) B
                                 ON A.A_TEAM = B.A_TEAM
                    LEFT OUTER JOIN (SELECT A_TEAM,
                                            AVG(SECONDQ_POINT) SECONDQ_POINT
-                                    FROM   VOLLEYBALL_DATA
-                                    WHERE  MATCH_DATE < NOW()
+                    FROM   sport.VOLLEYBALL_DATA
+                                    WHERE  MATCH_DATE < DATE(DATE_ADD(NOW(),INTERVAL -1 DAY))
                                            AND SECONDQ_POINT != 0
                                     GROUP  BY A_TEAM) C
                                 ON A.A_TEAM = C.A_TEAM
                    LEFT OUTER JOIN (SELECT A_TEAM,
                                            AVG(THIRDQ_POINT) THIRDQ_POINT
-                                    FROM   VOLLEYBALL_DATA
-                                    WHERE  MATCH_DATE < NOW()
+                    FROM   sport.VOLLEYBALL_DATA
+                                    WHERE  MATCH_DATE < DATE(DATE_ADD(NOW(),INTERVAL -1 DAY))
                                            AND THIRDQ_POINT != 0
                                     GROUP  BY A_TEAM) D
                                 ON A.A_TEAM = D.A_TEAM
                    LEFT OUTER JOIN (SELECT A_TEAM,
                                            AVG(FOURTHQ_POINT) FOURTHQ_POINT
-                                    FROM   VOLLEYBALL_DATA
-                                    WHERE  MATCH_DATE < NOW()
+                    FROM   sport.VOLLEYBALL_DATA
+                                    WHERE  MATCH_DATE < DATE(DATE_ADD(NOW(),INTERVAL -1 DAY))
                                            AND FOURTHQ_POINT != 0
                                     GROUP  BY A_TEAM) E
                                 ON A.A_TEAM = E.A_TEAM
                    LEFT OUTER JOIN (SELECT A_TEAM,
                                            AVG(FIFTHDQ_POINT) FIFTHDQ_POINT
-                                    FROM   VOLLEYBALL_DATA
-                                    WHERE  MATCH_DATE < NOW()
+                    FROM   sport.VOLLEYBALL_DATA
+                                    WHERE  MATCH_DATE < DATE(DATE_ADD(NOW(),INTERVAL -1 DAY))
                                            AND FIFTHDQ_POINT != 0
                                     GROUP  BY A_TEAM) F
                                 ON A.A_TEAM = F.A_TEAM
