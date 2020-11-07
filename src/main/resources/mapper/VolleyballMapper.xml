@@ -199,7 +199,7 @@
                         CASE
                             WHEN  HOUR(NOW()) > 11 AND HOUR(NOW()) < 22
                                 THEN   MATCH_DATE = DATE(NOW())
-                            WHEN HOUR(NOW()) > 23 AND HOUR(NOW()) < 24
+                            WHEN HOUR(NOW()) > 22 AND HOUR(NOW()) < 24
                                 THEN MATCH_DATE = DATE(DATE_ADD(NOW(),INTERVAL 1 DAY))
                             END
                     GROUP  BY A_TEAM) A

@@ -2058,7 +2058,7 @@
                     CASE
                         WHEN <![CDATA[ HOUR(NOW()) > 11 AND HOUR(NOW()) < 22 ]]>
                             THEN <![CDATA[  MATCH_DATE = DATE(NOW())   ]]>
-                        WHEN <![CDATA[ HOUR(NOW()) > 23 AND HOUR(NOW()) < 24 ]]>
+                        WHEN <![CDATA[ HOUR(NOW()) > 22 AND HOUR(NOW()) < 24 ]]>
                             THEN <![CDATA[  MATCH_DATE = DATE(DATE_ADD(NOW(),INTERVAL 1 DAY))   ]]>
                         END
 
@@ -2145,7 +2145,7 @@
                     CASE
                         WHEN <![CDATA[ HOUR(NOW()) > 11 AND HOUR(NOW()) < 22 ]]>
                             THEN <![CDATA[  MATCH_DATE = DATE(NOW())   ]]>
-                        WHEN <![CDATA[ HOUR(NOW()) > 23 AND HOUR(NOW()) < 24 ]]>
+                        WHEN <![CDATA[ HOUR(NOW()) > 22 AND HOUR(NOW()) < 24 ]]>
                             THEN <![CDATA[  MATCH_DATE = DATE(DATE_ADD(NOW(),INTERVAL 1 DAY))   ]]>
                         END
 
@@ -2232,7 +2232,7 @@
                     CASE
                         WHEN <![CDATA[ HOUR(NOW()) > 11 AND HOUR(NOW()) < 22 ]]>
                             THEN <![CDATA[  MATCH_DATE = DATE(NOW())   ]]>
-                        WHEN <![CDATA[ HOUR(NOW()) > 23 AND HOUR(NOW()) < 24 ]]>
+                        WHEN <![CDATA[ HOUR(NOW()) > 22 AND HOUR(NOW()) < 24 ]]>
                             THEN <![CDATA[  MATCH_DATE = DATE(DATE_ADD(NOW(),INTERVAL 1 DAY))   ]]>
                         END
 
@@ -2320,7 +2320,7 @@
                     CASE
                         WHEN <![CDATA[ HOUR(NOW()) > 11 AND HOUR(NOW()) < 22 ]]>
                             THEN <![CDATA[  MATCH_DATE = DATE(NOW())   ]]>
-                        WHEN <![CDATA[ HOUR(NOW()) > 23 AND HOUR(NOW()) < 24 ]]>
+                        WHEN <![CDATA[ HOUR(NOW()) > 22 AND HOUR(NOW()) < 24 ]]>
                             THEN <![CDATA[  MATCH_DATE = DATE(DATE_ADD(NOW(),INTERVAL 1 DAY))   ]]>
                         END
               ) A
@@ -2407,7 +2407,7 @@
                     CASE
                         WHEN <![CDATA[ HOUR(NOW()) > 11 AND HOUR(NOW()) < 22 ]]>
                             THEN <![CDATA[  MATCH_DATE = DATE(NOW())   ]]>
-                        WHEN <![CDATA[ HOUR(NOW()) > 23 AND HOUR(NOW()) < 24 ]]>
+                        WHEN <![CDATA[ HOUR(NOW()) > 22 AND HOUR(NOW()) < 24 ]]>
                             THEN <![CDATA[  MATCH_DATE = DATE(DATE_ADD(NOW(),INTERVAL 1 DAY))   ]]>
                         END
 
