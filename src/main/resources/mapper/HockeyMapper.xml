@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.batch.mapper.HockeyMapper">
+
+    <insert id="insertHockeyMatch" parameterType="com.batch.model.HockeyModel">
+        <![CDATA[
+
+        INSERT INTO sport.hockey_data(GAME_ID, LEAGUE, GROUND, MATCH_DATE, DAY_OF_WEEK, MATCH_TIME, A_TEAM_REST_DAY,  A_TEAM, B_TEAM, B_TEAM_REST_DAY)
+      VALUES (
+                #{gameId},
+                #{league},
+                #{ground},
+                #{date},
+                #{dayOfWeek},
+                #{time},
+                IFNULL((SELECT  DATEDIFF(#{date} ,(SELECT MATCH_DATE FROM  sport.hockey_data A WHERE A_TEAM = #{aTeam}  AND MATCH_DATE <  IFNULL(#{date},'') ORDER BY idx DESC LIMIT 1))) -1,0),
+                #{aTeam},
+                #{bTeam},
+                IFNULL((SELECT  DATEDIFF(#{date} ,(SELECT MATCH_DATE FROM  sport.hockey_data B WHERE B_TEAM = #{bTeam}  AND MATCH_DATE <  IFNULL(#{date},'')ORDER BY idx DESC LIMIT 1))) -1,0)
+            )
+
+        ]]>
+
+    </insert>
+
+    <select id="checkGameIdCount" parameterType="com.batch.model.HockeyModel" resultType="int">
+       SELECT COUNT(1)
+           FROM sport.hockey_data
+        WHERE GAME_ID = IFNULL(#{gameId},'');
+    </select>
+
+    <update id="updateHockeyStat" parameterType="com.batch.model.HockeyModel">
+        UPDATE sport.hockey_data
+        SET
+            A_TEAM_TOTAL_POINT              =           #{aTeamTotalPoint},
+            B_TEAM_TOTAL_POINT              =           #{bTeamTotalPoint},
+            HANDI_CAP               =           #{handiCap},
+            HANDI_CAP_RESULT                =           #{handiCapResult},
+            ODD             =               #{odd},
+            POINT_LINE              =           #{pointLine},
+            POINT_LINE_RESULT               =           #{pointLineResult},
+            A_TEAM_FIRSTQ_POINT             =           #{aTeamFirstQPoint},
+            B_TEAM_FIRSTQ_POINT             =           #{bTeamFirstQPoint},
+            FIRSTQ_HANDI_CAP                =           #{firstQHandiCap},
+            FIRSTQ_HANDI_CAP_RESULT             =           #{firstQHandiCapResult},
+            FIRSTQ_POINT_LINE               =           #{firstQPointLine},
+            FIRSTQ_POINT_LINE_RESULT                =           #{firstQPointLineResult},
+            FIRST_POINT             =           #{firstPoint},
+            FIRSTQ_POINT                =           #{firstQPoint},
+            SECONDQ_POINT               =           #{secondQPoint},
+            THIRDQ_POINT                =           #{thirdQPoint},
+            EXTENDQ_POINT               =           #{extendQPoint},
+            SHOTOUTQ_POINT              =           #{shotoutQPoint},
+            FIRSTQ_TOTAL_POINT              =           #{firstQTotalPoint},
+            SECONDQ_TOTAL_POINT             =           #{secondQTotalPoint},
+            THIRDQ_TOTAL_POINT              =           #{thirdQTotalPoint},
+            EXTENDQ_TOTAL_POINT             =           #{extendQTotalPoint},
+            SHOTOUTQ_TOTAL_POINT                =           #{shotoutQTotalPoint}
+
+        WHERE
+            GAME_ID             =           #{gameId}   AND
+            LEAGUE              =           #{league}   AND
+            GROUND              =           #{ground}   AND
+            MATCH_DATE              =           #{date} AND
+            A_TEAM              =           #{aTeam}    AND
+            B_TEAM              =           #{bTeam}    AND
+            UPDATE_YN   = 1;
+
+    </update>
+
+
+    <select id="selectHockeyStat"  resultType="HashMap">
+        SELECT LEAGUE, GROUND, MATCH_DATE, DAY_OF_WEEK, MATCH_TIME, A_TEAM_REST_DAY, A_TEAM, A_TEAM_TOTAL_POINT, B_TEAM_TOTAL_POINT, B_TEAM, B_TEAM_REST_DAY, HANDI_CAP, HANDI_CAP_RESULT, ODD, POINT_LINE, POINT_LINE_RESULT, A_TEAM_FIRSTQ_POINT, B_TEAM_FIRSTQ_POINT, FIRSTQ_HANDI_CAP, FIRSTQ_HANDI_CAP_RESULT, FIRSTQ_POINT_LINE, FIRSTQ_POINT_LINE_RESULT, FIRST_POINT, FIRSTQ_POINT, SECONDQ_POINT, THIRDQ_POINT, EXTENDQ_POINT, SHOTOUTQ_POINT, FIRSTQ_TOTAL_POINT, SECONDQ_TOTAL_POINT, THIRDQ_TOTAL_POINT, EXTENDQ_TOTAL_POINT, SHOTOUTQ_TOTAL_POINT
+        FROM sport.hockey_data
+        ORDER  BY MATCH_DATE,
+                  MATCH_TIME,
+                  LEAGUE,
+                  GAME_ID,
+                  GROUND DESC;
+    </select>
+
+
+</mapper>
