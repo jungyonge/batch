@@ -87,9 +87,9 @@ public class NamedHockeyUpdateMatchProcessor implements ItemProcessor<String, Li
                     int i = 0;
 
                     String league = element.select("thead tr th.reague").text();
+                    String status = element.select("th.ping").text();
 
-                    if (league.equals("NHL")) {
-
+                    if (league.equals("NHL") && status.equals("종")) {
                         String gameId = element.select("div.score_tbl_individual").attr("id");
 
                         aTeamModel.setGameId(gameId);

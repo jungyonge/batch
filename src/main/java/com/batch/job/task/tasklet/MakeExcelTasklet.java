@@ -20,16 +20,18 @@ public class MakeExcelTasklet implements Tasklet {
     private final BaseballPitcherMapper baseballPitcherMapper;
     private final BasketballMapper basketballMapper;
     private final VolleyballMapper volleyballMapper;
+    private final HockeyMapper hockeyMapper;
     private final CommonMapper commonMapper;
     private final MakeExcelUtil makeExcelUtil;
     private final EmailUtil emailUtil;
 
 
-    public MakeExcelTasklet(BaseballMapper baseballMapper, BaseballPitcherMapper baseballPitcherMapper, BasketballMapper basketballMapper, VolleyballMapper volleyballMapper, CommonMapper commonMapper, MakeExcelUtil makeExcelUtil, EmailUtil emailUtil) {
+    public MakeExcelTasklet(BaseballMapper baseballMapper, BaseballPitcherMapper baseballPitcherMapper, BasketballMapper basketballMapper, VolleyballMapper volleyballMapper, HockeyMapper hockeyMapper, CommonMapper commonMapper, MakeExcelUtil makeExcelUtil, EmailUtil emailUtil) {
         this.baseballMapper = baseballMapper;
         this.baseballPitcherMapper = baseballPitcherMapper;
         this.basketballMapper = basketballMapper;
         this.volleyballMapper = volleyballMapper;
+        this.hockeyMapper = hockeyMapper;
         this.commonMapper = commonMapper;
         this.makeExcelUtil = makeExcelUtil;
         this.emailUtil = emailUtil;
@@ -81,7 +83,7 @@ public class MakeExcelTasklet implements Tasklet {
         } else if (type.equals("volleyball")) {
             excelDataList = volleyballMapper.selectVolleyballStat();
         } else if (type.equals("hockey")) {
-//            excelDataList = setalarmDAO.selectHockeyStat();
+            excelDataList = hockeyMapper.selectHockeyStat();
         } else if (type.equals("baseball_summary")) {
             excelDataList = baseballMapper.selectBaseballAllSummary();
         } else if (type.equals("baseball")) {
