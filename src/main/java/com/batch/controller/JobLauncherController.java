@@ -42,6 +42,12 @@ public class JobLauncherController {
         return jobScheduleService.startJob(jobName, jobParameters);
     }
 
+    @RequestMapping(value = "/index")
+    public String test() throws JobParametersInvalidException,  NoSuchJobException {
+        return "index";
+    }
+
+
     @RequestMapping(value = "jobs/allSports")
     @Scheduled(cron = "0 0 14,23 ? * *")
     public void runJob() throws Exception {

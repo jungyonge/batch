@@ -1,5 +1,9 @@
 spring:
   profiles: company
+  mvc:
+    view:
+      prefix: /WEB-INF/views
+      suffix: .jsp
   batch:
     job:
       enabled: false
@@ -9,6 +13,15 @@ spring:
     password: wjddyd.1204
     driver-class-name: com.mysql.cj.jdbc.Driver
     initialize: false
+    hikari:
+      pool-name: hikari-cp
+      maximum-pool-size: 30
+      minimum-idle: 2
+      data-source-properties:
+        cachePrepStmts: true
+        prepStmtCacheSize: 250
+        prepStmtCacheSqlLimit: 2048
+        useServerPrepStmts: true
     tomcat:
       initial-size: 5
       min-idle: 5
@@ -17,6 +30,7 @@ spring:
       validation-query: select 1 from dual
       test-while-idle: true
       max-wait: 10000
+
 
 server:
   port: 8081
@@ -35,6 +49,10 @@ excel:
 
 spring:
   profiles: home
+  mvc:
+    view:
+      prefix: /WEB-INF/views
+      suffix: .jsp
   batch:
     job:
       enabled: false
@@ -69,6 +87,10 @@ excel:
 
 spring:
   profiles: prd
+  mvc:
+    view:
+      prefix: /WEB-INF/views
+      suffix: .jsp
   batch:
     job:
       enabled: false
