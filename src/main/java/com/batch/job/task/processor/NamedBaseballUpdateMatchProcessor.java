@@ -105,8 +105,6 @@ public class NamedBaseballUpdateMatchProcessor implements ItemProcessor<String, 
                     String gameStatus = matchObject.getString("gameStatus");
                     String gameResult = matchObject.getString("result");
 
-                    System.out.println(matchObject);
-                    System.out.println(gameStatus);
                     if (!gameStatus.contains("FINAL") || gameResult.equals("CANCEL")) {
                         aTeamModel.setATeamTotalPoint(99);
                         aTeamModel.setBTeamTotalPoint(99);
