@@ -49,7 +49,7 @@ public class NamedBaseballAllMatchProcessor implements ItemProcessor<String, Lis
 
         Calendar curDate = Calendar.getInstance();
         curDate.setTime(new Date());
-        curDate.add(Calendar.DATE, 1);
+        curDate.add(Calendar.DATE, 5);
 
         while (true){
             Calendar startDate = Calendar.getInstance();
