@@ -59,9 +59,9 @@ public class namedBaseballPitcherProcessor implements ItemProcessor<String, List
             Calendar startDate = Calendar.getInstance();
             startDate.setTime(new Date());
             if(mode.equals("all")){
-                startDate.set(2020, 4, 05);
+                startDate.set(2021, 2, 25);
             }else {
-                startDate.add(Calendar.DATE, -2);
+                startDate.add(Calendar.DATE, -4);
             }
 
 

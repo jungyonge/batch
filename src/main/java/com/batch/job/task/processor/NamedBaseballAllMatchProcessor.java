@@ -28,7 +28,7 @@ import java.util.List;
 public class NamedBaseballAllMatchProcessor implements ItemProcessor<String, List<BaseballModel>> {
 
     private String initSeasonDate;
-    private String finishSeasonDate = "2020-12-05";
+    private String finishSeasonDate = "2021-12-31";
     private String baseBall_Url = "https://sports-api.named.com/v1.0/sports/baseball/games?date=";
     @Autowired
     private NamedUtil namedUtil;
@@ -52,7 +52,7 @@ public class NamedBaseballAllMatchProcessor implements ItemProcessor<String, Lis
             cal.setTime(new Date());
 
 //            cal.set(2020, 4, 05);
-            cal.set(2020, 7, 05);
+            cal.set(2021, 2, 25);
 
             DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 

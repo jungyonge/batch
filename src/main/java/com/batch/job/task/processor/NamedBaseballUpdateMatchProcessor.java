@@ -29,7 +29,7 @@ import static java.lang.Math.round;
 public class NamedBaseballUpdateMatchProcessor implements ItemProcessor<String, List<BaseballModel>> {
 
     private String initSeasonDate;
-    private String finishSeasonDate = "2020-12-14";
+    private String finishSeasonDate = "2021-12-31";
     private String baseBall_Url = "https://sports-api.named.com/v1.0/sports/baseball/games?date=";
 
     @Value("#{jobParameters[mode]}")
@@ -57,9 +57,9 @@ public class NamedBaseballUpdateMatchProcessor implements ItemProcessor<String, 
             Calendar startDate = Calendar.getInstance();
             startDate.setTime(new Date());
             if(mode.equals("all")){
-                startDate.set(2020, 4, 01);
+                startDate.set(2021, 2, 25);
              }else {
-                 startDate.add(Calendar.DATE, -2);
+                startDate.add(Calendar.DATE, -2);
              }
 
             DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
@@ -103,7 +103,11 @@ public class NamedBaseballUpdateMatchProcessor implements ItemProcessor<String, 
 
                     //우취, 콜드일 경우 점수 99로 설정
                     String gameStatus = matchObject.getString("gameStatus");
-                    if (!gameStatus.contains("FINAL")) {
+                    String gameResult = matchObject.getString("result");
+
+                    System.out.println(matchObject);
+                    System.out.println(gameStatus);
+                    if (!gameStatus.contains("FINAL") || gameResult.equals("CANCEL")) {
                         aTeamModel.setATeamTotalPoint(99);
                         aTeamModel.setBTeamTotalPoint(99);
 
@@ -114,20 +118,20 @@ public class NamedBaseballUpdateMatchProcessor implements ItemProcessor<String, 
                         baseballModelList.add(bTeamModel);
 
                         continue;
+                    }else {
+
+                        //선발투수, 정역배, 핸디, 언오버, 3,4,5이닝 기준점 설정
+                        parsePitcherAndOdd(matchObject, aTeamModel, bTeamModel);
+
+                        //이닝 스코어 설정
+                        parseScore(matchObject, aTeamModel, bTeamModel);
+
+                        //이닝별 핸디 언오버 결과 설정
+                        parseInningHandiUnover(matchObject, aTeamModel, bTeamModel);
+
+                        //스폐셜 설정
+                        parseSpecial(matchObject, aTeamModel, bTeamModel);
                     }
-
-                    //선발투수, 정역배, 핸디, 언오버, 3,4,5이닝 기준점 설정
-                    parsePitcherAndOdd(matchObject,aTeamModel,bTeamModel);
-
-                    //이닝 스코어 설정
-                    parseScore(matchObject,aTeamModel,bTeamModel);
-
-                    //이닝별 핸디 언오버 결과 설정
-                    parseInningHandiUnover(matchObject,aTeamModel,bTeamModel);
-
-                    //스폐셜 설정
-                    parseSpecial(matchObject,aTeamModel,bTeamModel);
-
 
                     if(validationData(aTeamModel)){
                         continue;
