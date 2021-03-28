@@ -47,18 +47,27 @@ public class NamedBaseballAllMatchProcessor implements ItemProcessor<String, Lis
         int addDate = 0;
         List<BaseballModel> baseballModelList = new ArrayList<>();
 
-        while (true){
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(new Date());
+        Calendar curDate = Calendar.getInstance();
+        curDate.setTime(new Date());
+        curDate.add(Calendar.DATE, 1);
 
-//            cal.set(2020, 4, 05);
-            cal.set(2021, 2, 25);
+        while (true){
+            Calendar startDate = Calendar.getInstance();
+            startDate.setTime(new Date());
+
+            if(mode.equals("all")) {
+                startDate.set(2021, 2, 25);
+            }else {
+                startDate.add(Calendar.DATE, -5);
+            }
 
             DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+            startDate.add(Calendar.DATE, addDate);
 
-            cal.add(Calendar.DATE, addDate);
-            String matchDate = df.format(cal.getTime());
-            if(df.format(cal.getTime()).equals(finishSeasonDate)){
+            startDate.add(Calendar.DATE, addDate);
+            String matchDate = df.format(startDate.getTime());
+
+            if (df.format(startDate.getTime()).equals(df.format(curDate.getTime()))) {
                 log.info("설정한 시즌 마김 기한까지 파싱 완료 : " + finishSeasonDate);
                 break;
             }
@@ -98,9 +107,9 @@ public class NamedBaseballAllMatchProcessor implements ItemProcessor<String, Lis
 
                     String[] startDatetimeArr = startDatetime.split("T");
 
-                    cal = Calendar.getInstance();
-                    cal.setTime(format.parse(startDatetime));
-                    int dayNum = cal.get(Calendar.DAY_OF_WEEK);
+                    startDate = Calendar.getInstance();
+                    startDate.setTime(format.parse(startDatetime));
+                    int dayNum = startDate.get(Calendar.DAY_OF_WEEK);
 
                     String date = startDatetimeArr[0];
                     String dayOfWeek = namedUtil.getDayoOfWeek(dayNum);
