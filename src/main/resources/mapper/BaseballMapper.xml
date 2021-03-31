@@ -170,6 +170,7 @@
                    EXTEND_YN
             FROM   sport.baseball_data
             WHERE  A_TEAM_TOTAL_POINT != 99
+                   AND EXCEPT_YN = 0
             ORDER  BY MATCH_DATE,
                       MATCH_TIME,
                       LEAGUE,
