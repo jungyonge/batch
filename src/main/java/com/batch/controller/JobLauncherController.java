@@ -65,20 +65,20 @@ public class JobLauncherController {
         jobScheduleService.startJob("namedBaseballUpdateMatchJob", _jobParameters);
         Thread.sleep(1000 * 60 * 1);
 
-        if(checkHour.equals("23")){
-            jobScheduleService.startJob("namedBasketballAllMatchJob", _jobParameters);
-            Thread.sleep(1000 * 60 * 1);
-            jobScheduleService.startJob("namedBasketballUpdateMatchJob", _jobParameters);
-            Thread.sleep(1000 * 60 * 1);
-            jobScheduleService.startJob("namedVolleyballAllMatchJob", _jobParameters);
-            Thread.sleep(1000 * 60 * 1);
-            jobScheduleService.startJob("namedVolleyballUpdateMatchJob", _jobParameters);
-            Thread.sleep(1000 * 60 * 1);
-            jobScheduleService.startJob("namedHockeyAllMatchJob", _jobParameters);
-            Thread.sleep(1000 * 60 * 1);
-            jobScheduleService.startJob("namedHockeyUpdateMatchJob", _jobParameters);
-            Thread.sleep(1000 * 60 * 1);
-        }
+//        if(checkHour.equals("23")){
+//            jobScheduleService.startJob("namedBasketballAllMatchJob", _jobParameters);
+//            Thread.sleep(1000 * 60 * 1);
+//            jobScheduleService.startJob("namedBasketballUpdateMatchJob", _jobParameters);
+//            Thread.sleep(1000 * 60 * 1);
+//            jobScheduleService.startJob("namedVolleyballAllMatchJob", _jobParameters);
+//            Thread.sleep(1000 * 60 * 1);
+//            jobScheduleService.startJob("namedVolleyballUpdateMatchJob", _jobParameters);
+//            Thread.sleep(1000 * 60 * 1);
+//            jobScheduleService.startJob("namedHockeyAllMatchJob", _jobParameters);
+//            Thread.sleep(1000 * 60 * 1);
+//            jobScheduleService.startJob("namedHockeyUpdateMatchJob", _jobParameters);
+//            Thread.sleep(1000 * 60 * 1);
+//        }
 
         jobScheduleService.startJob("namedBaseballNextMatchJob", _jobParameters);
         Thread.sleep(1000 * 60 * 1);
