@@ -23,12 +23,13 @@ import java.util.List;
 @Component
 @Slf4j
 @StepScope
-public class namedBaseballPitcherProcessor implements ItemProcessor<String, List<BaseballModel>> {
-    private final static String BASEBALL_MATCH_URL = "https://score-api.named.com/named/v1/sports/baseball/games/";
-    private final static String BASEBALL_PITCHER_URL = "https://score-api.named.com/named/v1/sports/games/";
+public class NamedBaseballPitcherProcessor implements ItemProcessor<String, List<BaseballModel>> {
 
-    private final static String BASEBALL_PARAM = "?broadcast=true&broadcastLatest=true&odds=true&scores=true&specials=true&seasonTeamStat=true&startDate=";
-    private final static String PITCHER_PARAM = "?broadcast=true&odds=true&scores=true&specials=true&lineups=true&seasonTeamLeagueRankingStat=true&broadcastDesc=true&v=";
+    private static final String BASEBALL_MATCH_URL = "https://score-api.named.com/named/v1/sports/baseball/games/";
+    private static final String BASEBALL_PITCHER_URL = "https://score-api.named.com/named/v1/sports/games/";
+
+    private static final String BASEBALL_PARAM = "?broadcast=true&broadcastLatest=true&odds=true&scores=true&specials=true&seasonTeamStat=true&startDate=";
+    private static final String PITCHER_PARAM = "?broadcast=true&odds=true&scores=true&specials=true&lineups=true&seasonTeamLeagueRankingStat=true&broadcastDesc=true&v=";
 
     @Value("#{jobParameters[mode]}")
     private String mode;

@@ -5,6 +5,7 @@ import com.batch.job.task.processor.NamedBasketballAllMatchProcessor;
 import com.batch.job.task.reader.DummyReader;
 import com.batch.job.task.writer.NamedBasketballAllMatchWriter;
 import com.batch.model.BasketballModel;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -12,42 +13,23 @@ import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Controller;
-
-import java.util.List;
 
 
 @EnableBatchProcessing
 @Slf4j
 @RequiredArgsConstructor
 @Configuration
-@Controller
 public class NamedBasketballAllMatchJobConfig {
-
 
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
 
-    private JobCompletionNotificationListener notificationListener;
-    private DummyReader dummyReader;
-    private NamedBasketballAllMatchProcessor namedBasketballAllMatchProcessor;
-    private NamedBasketballAllMatchWriter namedBasketballAllMatchWriter;
-
-
-    @Autowired
-    public NamedBasketballAllMatchJobConfig(JobBuilderFactory jobBuilderFactory, StepBuilderFactory stepBuilderFactory,
-                                            JobCompletionNotificationListener notificationListener, DummyReader dummyReader, NamedBasketballAllMatchProcessor namedBasketballAllMatchProcessor, NamedBasketballAllMatchWriter namedBasketballAllMatchWriter) {
-        this.jobBuilderFactory = jobBuilderFactory;
-        this.stepBuilderFactory = stepBuilderFactory;
-        this.notificationListener = notificationListener;
-        this.dummyReader = dummyReader;
-
-        this.namedBasketballAllMatchProcessor = namedBasketballAllMatchProcessor;
-        this.namedBasketballAllMatchWriter = namedBasketballAllMatchWriter;
-    }
+    private final JobCompletionNotificationListener notificationListener;
+    private final DummyReader dummyReader;
+    private final NamedBasketballAllMatchProcessor namedBasketballAllMatchProcessor;
+    private final NamedBasketballAllMatchWriter namedBasketballAllMatchWriter;
 
     @Bean
     public Job namedBasketballAllMatchJob(){

@@ -5,26 +5,22 @@ import com.batch.job.task.processor.NamedBasketballUpdateMatchProcessor;
 import com.batch.job.task.reader.DummyReader;
 import com.batch.job.task.writer.NamedBasketballUpdateMatchWriter;
 import com.batch.model.BasketballModel;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
-import org.springframework.batch.core.configuration.annotation.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
+import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
+import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
-
-import java.util.List;
 
 
 @EnableBatchProcessing
 @Slf4j
 @RequiredArgsConstructor
 @Configuration
-@Component
 public class NamedBasketballUpdateMatchJobConfig {
 
 
@@ -37,17 +33,17 @@ public class NamedBasketballUpdateMatchJobConfig {
     private final NamedBasketballUpdateMatchWriter namedBasketballUpdateMatchWriter;
 
     @Bean
-    public Job NamedBasketballUpdateMatchJob() {
+    public Job namedBasketballUpdateMatchJob() {
         return jobBuilderFactory.get("namedBasketballUpdateMatchJob")
             .preventRestart()
             .listener(notificationListener)
-            .flow(NamedBasketballUpdateMatchStep())
+            .flow(namedBasketballUpdateMatchStep())
             .end()
             .build();
     }
 
     @Bean
-    public Step NamedBasketballUpdateMatchStep() {
+    public Step namedBasketballUpdateMatchStep() {
         return stepBuilderFactory.get("namedBasketballUpdateMatchStep")
             .<String, List<BasketballModel>>chunk(1)
             .reader(dummyReader)

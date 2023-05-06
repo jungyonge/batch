@@ -12,10 +12,10 @@ import java.util.List;
 @Slf4j
 public class NamedHockeyAllMatchWriter implements ItemWriter< List<HockeyModel>> {
 
-    private final HockeyMapper HockeyMapper;
+    private final HockeyMapper hockeyMapper;
 
-    public NamedHockeyAllMatchWriter(HockeyMapper HockeyMapper) {
-        this.HockeyMapper = HockeyMapper;
+    public NamedHockeyAllMatchWriter(HockeyMapper hockeyMapper) {
+        this.hockeyMapper = hockeyMapper;
     }
 
     @Override
@@ -23,9 +23,9 @@ public class NamedHockeyAllMatchWriter implements ItemWriter< List<HockeyModel>>
 
         for(List<HockeyModel> HockeyModels : list){
             for(HockeyModel hockeyModel : HockeyModels){
-                int cnt = HockeyMapper.checkGameIdCount(hockeyModel);
+                int cnt = hockeyMapper.checkGameIdCount(hockeyModel);
                 if(cnt < 2){
-                    HockeyMapper.insertHockeyMatch(hockeyModel);
+                    hockeyMapper.insertHockeyMatch(hockeyModel);
                 }
             }
         }

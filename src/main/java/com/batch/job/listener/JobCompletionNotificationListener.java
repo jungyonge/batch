@@ -1,22 +1,20 @@
 package com.batch.job.listener;
 
+import java.util.Set;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.BatchStatus;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.launch.JobOperator;
 import org.springframework.batch.core.listener.JobExecutionListenerSupport;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.util.Set;
-
+@RequiredArgsConstructor
 @Component
 @Slf4j
 public class JobCompletionNotificationListener extends JobExecutionListenerSupport {
-    @Autowired
-    private JobOperator jobOperator;
 
+    private final JobOperator jobOperator;
 
     @Override
     public void beforeJob(JobExecution jobExecution) {
