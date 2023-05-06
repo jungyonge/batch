@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;
@@ -23,48 +24,35 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @Configuration
-@Controller
+@Component
 public class NamedBasketballUpdateMatchJobConfig {
 
 
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
 
-    private JobCompletionNotificationListener notificationListener;
-    private DummyReader dummyReader;
-    private NamedBasketballUpdateMatchProcessor namedBasketballUpdateMatchProcessor;
-    private NamedBasketballUpdateMatchWriter namedBasketballUpdateMatchWriter;
-
-
-    @Autowired
-    public NamedBasketballUpdateMatchJobConfig(JobBuilderFactory jobBuilderFactory, StepBuilderFactory stepBuilderFactory,
-                                               JobCompletionNotificationListener notificationListener, DummyReader dummyReader, NamedBasketballUpdateMatchProcessor namedBasketballUpdateMatchProcessor, NamedBasketballUpdateMatchWriter namedBasketballUpdateMatchWriter)
-    {
-        this.jobBuilderFactory = jobBuilderFactory;
-        this.stepBuilderFactory = stepBuilderFactory;
-        this.notificationListener = notificationListener;
-        this.dummyReader = dummyReader;
-        this.namedBasketballUpdateMatchProcessor = namedBasketballUpdateMatchProcessor;
-        this.namedBasketballUpdateMatchWriter = namedBasketballUpdateMatchWriter;
-    }
+    private final JobCompletionNotificationListener notificationListener;
+    private final DummyReader dummyReader;
+    private final NamedBasketballUpdateMatchProcessor namedBasketballUpdateMatchProcessor;
+    private final NamedBasketballUpdateMatchWriter namedBasketballUpdateMatchWriter;
 
     @Bean
-    public Job NamedBasketballUpdateMatchJob(){
+    public Job NamedBasketballUpdateMatchJob() {
         return jobBuilderFactory.get("namedBasketballUpdateMatchJob")
-                .preventRestart()
-                .listener(notificationListener)
-                .flow(NamedBasketballUpdateMatchStep())
-                .end()
-                .build();
+            .preventRestart()
+            .listener(notificationListener)
+            .flow(NamedBasketballUpdateMatchStep())
+            .end()
+            .build();
     }
 
     @Bean
-    public Step NamedBasketballUpdateMatchStep(){
+    public Step NamedBasketballUpdateMatchStep() {
         return stepBuilderFactory.get("namedBasketballUpdateMatchStep")
-                .<String, List<BasketballModel>> chunk(1)
-                .reader(dummyReader)
-                .processor(namedBasketballUpdateMatchProcessor)
-                .writer(namedBasketballUpdateMatchWriter)
-                .build();
+            .<String, List<BasketballModel>>chunk(1)
+            .reader(dummyReader)
+            .processor(namedBasketballUpdateMatchProcessor)
+            .writer(namedBasketballUpdateMatchWriter)
+            .build();
     }
 }

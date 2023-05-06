@@ -38,7 +38,11 @@ public class NamedBaseballPitcherJobConfig {
     private NamedBaseballPitcherWriter namedBaseballPitcherWriter;
 
     @Autowired
-    public NamedBaseballPitcherJobConfig(JobBuilderFactory jobBuilderFactory, StepBuilderFactory stepBuilderFactory, JobCompletionNotificationListener notificationListener, DummyReader dummyReader, namedBaseballPitcherProcessor namedBaseballPitcherProcessor, NamedBaseballPitcherWriter namedBaseballPitcherWriter) {
+    public NamedBaseballPitcherJobConfig(JobBuilderFactory jobBuilderFactory,
+        StepBuilderFactory stepBuilderFactory,
+        JobCompletionNotificationListener notificationListener, DummyReader dummyReader,
+        namedBaseballPitcherProcessor namedBaseballPitcherProcessor,
+        NamedBaseballPitcherWriter namedBaseballPitcherWriter) {
         this.jobBuilderFactory = jobBuilderFactory;
         this.stepBuilderFactory = stepBuilderFactory;
         this.notificationListener = notificationListener;
@@ -49,23 +53,23 @@ public class NamedBaseballPitcherJobConfig {
 
 
     @Bean
-    public Job NamedBaseballPitcherJob(){
+    public Job NamedBaseballPitcherJob() {
         return jobBuilderFactory.get("namedBaseballPitcherJob")
-                .preventRestart()
-                .listener(notificationListener)
-                .flow(NamedBaseballPitcherStep())
-                .end()
-                .build();
+            .preventRestart()
+            .listener(notificationListener)
+            .flow(NamedBaseballPitcherStep())
+            .end()
+            .build();
     }
 
     @Bean
-    public Step NamedBaseballPitcherStep(){
+    public Step NamedBaseballPitcherStep() {
         return stepBuilderFactory.get("namedBaseballPitcherStep")
-                .<String, List<BaseballModel>> chunk(1)
-                .reader(dummyReader)
-                .processor(namedBaseballPitcherProcessor)
-                .writer(namedBaseballPitcherWriter)
-                .build();
+            .<String, List<BaseballModel>>chunk(1)
+            .reader(dummyReader)
+            .processor(namedBaseballPitcherProcessor)
+            .writer(namedBaseballPitcherWriter)
+            .build();
     }
 
 }

@@ -1,0 +1,1606 @@
+create table sport.baseball_data
+
+(
+
+	idx int auto_increment,
+
+	GAME_ID varchar(30) default '0' not null,
+
+	LEAGUE varchar(30) default '0' null,
+
+	GROUND varchar(10) default '0' null,
+
+	STADIUM varchar(10) default '0' null,
+
+	MATCH_DATE varchar(30) default '0' null,
+
+	DAY_OF_WEEK varchar(30) default '0' null,
+
+	MATCH_TIME varchar(30) default '0' null,
+
+	A_TEAM_REST_DAY varchar(10) default '0' null,
+
+	A_TEAM_PITCHER varchar(20) default '0' null,
+
+	A_TEAM_PITCHER_HAND varchar(20) default '없음' null,
+
+	A_TEAM varchar(30) default '0' null,
+
+	A_TEAM_TOTAL_POINT smallint default 0 null,
+
+	B_TEAM_TOTAL_POINT smallint default 0 null,
+
+	B_TEAM varchar(30) default '0' null,
+
+	B_TEAM_PITCHER varchar(20) default '0' null,
+
+	B_TEAM_PITCHER_HAND varchar(20) default '없음' null,
+
+	B_TEAM_REST_DAY varchar(10) default '0' null,
+
+	HANDI_CAP varchar(30) default '0' null,
+
+	HANDI_CAP_RESULT varchar(30) default '0' null,
+
+	ODD varchar(10) default '0' null,
+
+	POINT_LINE varchar(30) default '0' null,
+
+	POINT_LINE_RESULT varchar(10) default '0' null,
+
+	A_TEAM_THIRD_POINT smallint default 0 null,
+
+	B_TEAM_THIRD_POINT smallint default 0 null,
+
+	THIRD_HANDI_CAP varchar(30) default '0' null,
+
+	THIRD_HANDI_CAP_RESULT varchar(10) default '0' null,
+
+	THIRD_POINT_LINE varchar(10) default '0' null,
+
+	THIRD_POINT_LINE_RESULT varchar(30) default '0' null,
+
+	A_TEAM_FOURTH_POINT smallint default 0 null,
+
+	B_TEAM_FOURTH_POINT smallint default 0 null,
+
+	FOURTH_HANDI_CAP varchar(30) default '0' null,
+
+	FOURTH_HANDI_CAP_RESULT varchar(10) default '0' null,
+
+	FOURTH_POINT_LINE varchar(30) default '0' null,
+
+	FOURTH_POINT_LINE_RESULT varchar(10) default '0' null,
+
+	A_TEAM_FIFTH_POINT smallint default 0 null,
+
+	B_TEAM_FIFTH_POINT smallint default 0 null,
+
+	FIFTH_HANDI_CAP varchar(30) default '0' null,
+
+	FIFTH_HANDI_CAP_RESULT varchar(10) default '0' null,
+
+	FIFTH_POINT_LINE varchar(30) default '0' null,
+
+	FIFTH_POINT_LINE_RESULT varchar(10) default '0' null,
+
+	FIRST_STRIKEOUT varchar(10) default '0' null,
+
+	FIRST_HOMERUN varchar(10) default '0' null,
+
+	FRIST_BASEONBALL varchar(10) default '0' null,
+
+	FRIST_POINT smallint default 0 null,
+
+	SECEND_POINT smallint default 0 null,
+
+	THRID_POINT smallint default 0 null,
+
+	FOURTH_POINT smallint default 0 null,
+
+	FIFTH_POINT smallint default 0 null,
+
+	SIXTH_POINT smallint default 0 null,
+
+	SEVENTH_POINT smallint default 0 null,
+
+	EIGHTH_POINT smallint default 0 null,
+
+	NINTH_POINT smallint default 0 null,
+
+	EXTEND_POINT smallint default 0 null,
+
+	EXTEND_YN tinyint(1) default 0 null,
+
+	UPDATE_YN tinyint(1) default 1 null,
+
+	constraint BASEBALL_DATA_idx_uindex
+
+		unique (idx)
+
+);
+
+
+
+create table sport.baseball_ground_summary
+
+(
+
+	LEAGUE varchar(20) null,
+
+	TEAM varchar(30) null,
+
+	GROUND varchar(30) null,
+
+	WIN_PER double null,
+
+	LOSE_PER double null,
+
+	HANDI_WIN_PER double null,
+
+	HANDI_LOSE_PER double null,
+
+	OVER_PER double null,
+
+	UNDER_PER double null,
+
+	THIRD_HANDI_WIN_PER double null,
+
+	THIRD_HANDI_LOSE_PER double null,
+
+	THIRD_OVER_PER double null,
+
+	THIRD_UNDER_PER double null,
+
+	FOURTH_HANDI_WIN_PER double null,
+
+	FOURTH_HANDI_LOSE_PER double null,
+
+	FOURTH_OVER_PER double null,
+
+	FOURTH_UNDER_PER double null,
+
+	FIFTH_HANDI_WIN_PER double null,
+
+	FIFTH_HANDI_LOSE_PER double null,
+
+	FIFTH_OVER_PER double null,
+
+	FIFTH_UNDER_PER double null,
+
+	FIRST_STRIKE_PER double null,
+
+	FIRST_BALL_PER double null,
+
+	FIRST_HOMERUN_PER double null
+
+);
+
+
+
+create table sport.baseball_pitcher_hand_data
+
+(
+
+	LEAGUE varchar(20) null,
+
+	TEAM varchar(20) null,
+
+	PITCHER varchar(20) null,
+
+	HAND varchar(20) null
+
+);
+
+
+
+create table sport.baseball_pitcher_summary
+
+(
+
+	LEAGUE varchar(20) null,
+
+	TEAM varchar(30) null,
+
+	PITCHER varchar(30) null,
+
+	WIN_PER double null,
+
+	LOSE_PER double null,
+
+	HANDI_WIN_PER double null,
+
+	HANDI_LOSE_PER double null,
+
+	OVER_PER double null,
+
+	UNDER_PER double null,
+
+	THIRD_HANDI_WIN_PER double null,
+
+	THIRD_HANDI_LOSE_PER double null,
+
+	THIRD_OVER_PER double null,
+
+	THIRD_UNDER_PER double null,
+
+	FOURTH_HANDI_WIN_PER double null,
+
+	FOURTH_HANDI_LOSE_PER double null,
+
+	FOURTH_OVER_PER double null,
+
+	FOURTH_UNDER_PER double null,
+
+	FIFTH_HANDI_WIN_PER double null,
+
+	FIFTH_HANDI_LOSE_PER double null,
+
+	FIFTH_OVER_PER double null,
+
+	FIFTH_UNDER_PER double null,
+
+	FIRST_STRIKE_PER double null,
+
+	FIRST_BALL_PER double null,
+
+	FIRST_HOMERUN_PER double null
+
+);
+
+
+
+create table sport.basketball_data
+
+(
+
+	idx int auto_increment,
+
+	GAME_ID varchar(30) default '0' not null,
+
+	LEAGUE varchar(30) default '0' null,
+
+	GROUND varchar(10) default '0' null,
+
+	MATCH_DATE varchar(30) default '0' null,
+
+	DAY_OF_WEEK varchar(30) default '0' null,
+
+	MATCH_TIME varchar(30) default '0' null,
+
+	A_TEAM_REST_DAY varchar(10) default '0' null,
+
+	A_TEAM varchar(30) default '0' null,
+
+	A_TEAM_TOTAL_POINT smallint default 0 null,
+
+	B_TEAM_TOTAL_POINT smallint default 0 null,
+
+	B_TEAM varchar(30) default '0' null,
+
+	B_TEAM_REST_DAY varchar(10) default '0' null,
+
+	HANDI_CAP varchar(30) default '0' null,
+
+	HANDI_CAP_RESULT varchar(30) default '0' null,
+
+	ODD varchar(10) default '0' null,
+
+	POINT_LINE varchar(30) default '0' null,
+
+	POINT_LINE_RESULT varchar(10) default '0' null,
+
+	A_TEAM_FIRSTQ_POINT smallint default 0 null,
+
+	B_TEAM_FIRSTQ_POINT smallint default 0 null,
+
+	FIRSTQ_HANDI_CAP varchar(30) default '0' null,
+
+	FIRSTQ_HANDI_CAP_RESULT varchar(10) default '0' null,
+
+	FIRSTQ_POINT_LINE varchar(30) default '0' null,
+
+	FIRSTQ_POINT_LINE_RESULT varchar(10) default '0' null,
+
+	A_TEAM_SECONDQ_POINT smallint default 0 null,
+
+	B_TEAM_SECONDQ_POINT smallint default 0 null,
+
+	SECONDQ_HANDI_CAP_RESULT varchar(10) default '0' null,
+
+	SECONDQ_POINT_LINE_RESULT varchar(10) default '0' null,
+
+	A_TEAM_THIRDQ_POINT smallint default 0 null,
+
+	B_TEAM_THIRDQ_POINT smallint default 0 null,
+
+	THIRDQ_HANDI_CAP_RESULT varchar(10) default '0' null,
+
+	THIRDQ_POINT_LINE_RESULT varchar(10) default '0' null,
+
+	A_TEAM_FOURTHQ_POINT smallint default 0 null,
+
+	B_TEAM_FOURTHQ_POINT smallint default 0 null,
+
+	FOURTHQ_HANDI_CAP_RESULT varchar(10) default '0' null,
+
+	FOURTHQ_POINT_LINE_RESULT varchar(10) default '0' null,
+
+	A_TEAM_FIRST_HALF_POINT smallint default 0 null,
+
+	B_TEAM_FIRST_HALF_POINT smallint default 0 null,
+
+	HALF_HANDI_CAP varchar(10) default '0' null,
+
+	FIRST_HALF_HANDI_CAP_RESULT varchar(10) default '0' null,
+
+	HALF_POINT_LINE varchar(10) default '0' null,
+
+	FIRST_HALF_POINT_LINE_RESULT varchar(10) default '0' null,
+
+	A_TEAM_SECOND_HALF_POINT smallint default 0 null,
+
+	B_TEAM_SECOND_HALF_POINT smallint default 0 null,
+
+	SECOND_HALF_HANDI_CAP_RESULT varchar(10) default '0' null,
+
+	SECOND_HALF_POINT_LINE_RESULT varchar(10) default '0' null,
+
+	FIRSTQ_FIRST_POINT varchar(10) default '0' null,
+
+	FIRSTQ_FIRST_FREE_TWO varchar(10) default '0' null,
+
+	FIRSTQ_FIRST_TWO_POINT varchar(10) default '0' null,
+
+	FIRSTQ_FIRST_THREE_POINT varchar(10) default '0' null,
+
+	SECONDQ_FIRST_POINT varchar(10) default '0' null,
+
+	SECONDQ_FIRST_FREE_TWO varchar(10) default '0' null,
+
+	SECONDQ_FIRST_TWO_POINT varchar(10) default '0' null,
+
+	SECONDQ_FIRST_THREE_POINT varchar(10) default '0' null,
+
+	THIRDQ_FIRST_POINT varchar(10) default '0' null,
+
+	THIRDQ_FIRST_FREE_TWO varchar(10) default '0' null,
+
+	THIRDQ_FIRST_TWO_POINT varchar(10) default '0' null,
+
+	THIRDQ_FIRST_THREE_POINT varchar(10) default '0' null,
+
+	FOURTHQ_FIRST_POINT varchar(10) default '0' null,
+
+	FOURTHQ_FIRST_FREE_TWO varchar(10) default '0' null,
+
+	FOURTHQ_FIRST_TWO_POINT varchar(10) default '0' null,
+
+	FOURTHQ_FIRST_THREE_POINT varchar(10) default '0' null,
+
+	FIRSTQ_TOTAL_POINT smallint default 0 null,
+
+	SECONDQ_TOTAL_POINT smallint default 0 null,
+
+	THIRDQ_TOTAL_POINT smallint default 0 null,
+
+	FOURTHQ_TOTAL_POINT smallint default 0 null,
+
+	EXTENDQ_TOTAL_POINT smallint default 0 null,
+
+	constraint BASKETBALL_DATA_idx_uindex
+
+		unique (idx)
+
+);
+
+
+
+alter table sport.basketball_data
+
+	add primary key (idx);
+
+
+
+create table sport.basketball_handi_over_ground_summary
+
+(
+
+	LEAGUE varchar(10) null,
+
+	TEAM varchar(20) null,
+
+	GROUND varchar(20) null,
+
+	HANDI_WIN_PER double null,
+
+	HANDI_LOSE_PER double null,
+
+	OVER_PER double null,
+
+	UNDER_PER double null,
+
+	RDATE timestamp null
+
+);
+
+
+
+create table sport.basketball_handi_over_odd_summary
+
+(
+
+	LEAGUE varchar(10) null,
+
+	TEAM varchar(20) null,
+
+	GROUND varchar(20) null,
+
+	HANDI_WIN_PER double null,
+
+	HANDI_LOSE_PER double null,
+
+	OVER_PER double null,
+
+	UNDER_PER double null,
+
+	RDATE timestamp null
+
+);
+
+
+
+create table sport.basketball_handi_over_rest_summary
+
+(
+
+	LEAGUE varchar(10) null,
+
+	TEAM varchar(20) null,
+
+	GROUND varchar(20) null,
+
+	HANDI_WIN_PER double null,
+
+	HANDI_LOSE_PER double null,
+
+	OVER_PER double null,
+
+	UNDER_PER double null,
+
+	RDATE timestamp null
+
+);
+
+
+
+create table sport.basketball_handi_over_summary
+
+(
+
+	LEAGUE varchar(10) null,
+
+	TEAM varchar(20) null,
+
+	GROUND varchar(20) default 'ALL' not null,
+
+	HANDI_WIN_PER double null,
+
+	HANDI_LOSE_PER double null,
+
+	OVER_PER double null,
+
+	UNDER_PER double null,
+
+	RDATE timestamp null
+
+);
+
+
+
+create table sport.basketball_handi_over_week_summary
+
+(
+
+	LEAGUE varchar(10) null,
+
+	TEAM varchar(20) null,
+
+	GROUND varchar(20) null,
+
+	HANDI_WIN_PER double null,
+
+	HANDI_LOSE_PER double null,
+
+	OVER_PER double null,
+
+	UNDER_PER double null,
+
+	RDATE timestamp null
+
+);
+
+
+
+create table sport.basketball_quarter_handi_combo_special
+
+(
+
+	LEAGUE varchar(10) null,
+
+	TEAM varchar(20) null,
+
+	FIRST_HANDI_WIN_OVER_PER double null,
+
+	FIRST_HANDI_WIN_UNDER_PER double null,
+
+	SECOND_HANDI_WIN_OVER_PER double null,
+
+	SECOND_HANDI_WIN_UNDER_PER double null,
+
+	THIRD_HANDI_WIN_OVER_PER double null,
+
+	THIRD_HANDI_WIN_UNDER_PER double null,
+
+	FOURTH_HANDI_WIN_OVER_PER double null,
+
+	FOURTH_HANDI_WIN_UNDER_PER double null,
+
+	FIRST_HANDI_LOSE_OVER_PER double null,
+
+	FIRST_HANDI_LOSE_UNDER_PER double null,
+
+	SECOND_HANDI_LOSE_OVER_PER double null,
+
+	SECOND_HANDI_LOSE_UNDER_PER double null,
+
+	THIRD_HANDI_LOSE_OVER_PER double null,
+
+	THIRD_HANDI_LOSE_UNDER_PER double null,
+
+	FOURTH_HANDI_LOSE_OVER_PER double null,
+
+	FOURTH_HANDI_LOSE_UNDER_PER double null,
+
+	RDATE timestamp null
+
+);
+
+
+
+create table sport.basketball_quarter_handi_over_ground_summary
+
+(
+
+	LEAGUE varchar(10) null,
+
+	TEAM varchar(20) null,
+
+	GROUND varchar(20) null,
+
+	FIRST_HANDI_WIN_PER double null,
+
+	FIRST_HANDI_LOSE_PER double null,
+
+	SECOND_HANDI_WIN_PER double null,
+
+	SECOND_HANDI_LOSE_PER double null,
+
+	THIRD_HANDI_WIN_PER double null,
+
+	HIRD_HANDI_LOSE_PER double null,
+
+	FOURTH_HANDI_WIN_PER double null,
+
+	OURTH_HANDI_LOSE_PER double null,
+
+	FIRST_OVER_PER double null,
+
+	FIRST_UNDER_PER double null,
+
+	SECOND_OVER_PER double null,
+
+	SECOND_UNDER_PER double null,
+
+	THIRD_OVER_PER double null,
+
+	THIRD_UNDER_PER double null,
+
+	FOURTH_OVER_PER double null,
+
+	FOURTH_UNDER_PER double null,
+
+	RDATE timestamp null
+
+);
+
+
+
+create table sport.basketball_quarter_handi_over_odd_summary
+
+(
+
+	LEAGUE varchar(10) null,
+
+	TEAM varchar(20) null,
+
+	GROUND varchar(20) null,
+
+	FIRST_HANDI_WIN_PER double null,
+
+	FIRST_HANDI_LOSE_PER double null,
+
+	SECOND_HANDI_WIN_PER double null,
+
+	SECOND_HANDI_LOSE_PER double null,
+
+	THIRD_HANDI_WIN_PER double null,
+
+	HIRD_HANDI_LOSE_PER double null,
+
+	FOURTH_HANDI_WIN_PER double null,
+
+	OURTH_HANDI_LOSE_PER double null,
+
+	FIRST_OVER_PER double null,
+
+	FIRST_UNDER_PER double null,
+
+	SECOND_OVER_PER double null,
+
+	SECOND_UNDER_PER double null,
+
+	THIRD_OVER_PER double null,
+
+	THIRD_UNDER_PER double null,
+
+	FOURTH_OVER_PER double null,
+
+	FOURTH_UNDER_PER double null,
+
+	RDATE timestamp null
+
+);
+
+
+
+create table sport.basketball_quarter_handi_over_rest_summary
+
+(
+
+	LEAGUE varchar(10) null,
+
+	TEAM varchar(20) null,
+
+	GROUND varchar(20) null,
+
+	FIRST_HANDI_WIN_PER double null,
+
+	FIRST_HANDI_LOSE_PER double null,
+
+	SECOND_HANDI_WIN_PER double null,
+
+	SECOND_HANDI_LOSE_PER double null,
+
+	THIRD_HANDI_WIN_PER double null,
+
+	HIRD_HANDI_LOSE_PER double null,
+
+	FOURTH_HANDI_WIN_PER double null,
+
+	OURTH_HANDI_LOSE_PER double null,
+
+	FIRST_OVER_PER double null,
+
+	FIRST_UNDER_PER double null,
+
+	SECOND_OVER_PER double null,
+
+	SECOND_UNDER_PER double null,
+
+	THIRD_OVER_PER double null,
+
+	THIRD_UNDER_PER double null,
+
+	FOURTH_OVER_PER double null,
+
+	FOURTH_UNDER_PER double null,
+
+	RDATE timestamp null
+
+);
+
+
+
+create table sport.basketball_quarter_handi_over_summary
+
+(
+
+	LEAGUE varchar(10) null,
+
+	TEAM varchar(20) null,
+
+	GROUND varchar(20) default 'ALL' not null,
+
+	FIRST_HANDI_WIN_PER double null,
+
+	FIRST_HANDI_LOSE_PER double null,
+
+	SECOND_HANDI_WIN_PER double null,
+
+	SECOND_HANDI_LOSE_PER double null,
+
+	THIRD_HANDI_WIN_PER double null,
+
+	HIRD_HANDI_LOSE_PER double null,
+
+	FOURTH_HANDI_WIN_PER double null,
+
+	OURTH_HANDI_LOSE_PER double null,
+
+	FIRST_OVER_PER double null,
+
+	FIRST_UNDER_PER double null,
+
+	SECOND_OVER_PER double null,
+
+	SECOND_UNDER_PER double null,
+
+	THIRD_OVER_PER double null,
+
+	THIRD_UNDER_PER double null,
+
+	FOURTH_OVER_PER double null,
+
+	FOURTH_UNDER_PER double null,
+
+	RDATE timestamp null
+
+);
+
+
+
+create table sport.basketball_quarter_handi_over_week_summary
+
+(
+
+	LEAGUE varchar(10) null,
+
+	TEAM varchar(20) null,
+
+	GROUND varchar(20) null,
+
+	FIRST_HANDI_WIN_PER double null,
+
+	FIRST_HANDI_LOSE_PER double null,
+
+	SECOND_HANDI_WIN_PER double null,
+
+	SECOND_HANDI_LOSE_PER double null,
+
+	THIRD_HANDI_WIN_PER double null,
+
+	HIRD_HANDI_LOSE_PER double null,
+
+	FOURTH_HANDI_WIN_PER double null,
+
+	OURTH_HANDI_LOSE_PER double null,
+
+	FIRST_OVER_PER double null,
+
+	FIRST_UNDER_PER double null,
+
+	SECOND_OVER_PER double null,
+
+	SECOND_UNDER_PER double null,
+
+	THIRD_OVER_PER double null,
+
+	THIRD_UNDER_PER double null,
+
+	FOURTH_OVER_PER double null,
+
+	FOURTH_UNDER_PER double null,
+
+	RDATE timestamp null
+
+);
+
+
+
+create table sport.basketball_special_combo_summary
+
+(
+
+	LEAGUE varchar(10) null,
+
+	TEAM varchar(20) null,
+
+	FIRST_HANDI_THREE_PER double null,
+
+	SECOND_HANDI_THREE_PER double null,
+
+	THIRD_HANDI_THREE_PER double null,
+
+	FOURTH_HANDI_THREE_PER double null,
+
+	FIRST_HANDI_FREE_PER double null,
+
+	SECOND_HANDI_FREE_PER double null,
+
+	THIRD_HANDI_FREE_PER double null,
+
+	FOURTH_HANDI_FREE_PER double null,
+
+	FIRST_THREE_FREE_PER double null,
+
+	SECOND_THREE_FREE_PER double null,
+
+	THIRD_THREE_FREE_PER double null,
+
+	FOURTH_THREE_FREE_PER double null,
+
+	RDATE timestamp null
+
+);
+
+
+
+create table sport.basketball_special_ground_summary
+
+(
+
+	LEAGUE varchar(10) null,
+
+	TEAM varchar(20) null,
+
+	GROUND varchar(20) null,
+
+	FIRST_FIRST_POINT_PER double null,
+
+	SECOND_FIRST_POINT_PER double null,
+
+	THIRD_FIRST_POINT_PER double null,
+
+	FOURTH_FIRST_POINT_PER double null,
+
+	FIRST_FIRST_TWO_POINT_PER double null,
+
+	SECOND_FIRST_TWO_POINT_PER double null,
+
+	THIRD_FIRST_TWO_POINT_PER double null,
+
+	FOURTH_FIRST_TWO_POINT_PER double null,
+
+	FIRST_FIRST_FREE_TWO_PER double null,
+
+	SECOND_FIRST_FREE_TWO_PER double null,
+
+	THIRD_FIRST_FREE_TWO_PER double null,
+
+	FOURTH_FIRST_FREE_TWO_PER double null,
+
+	FIRST_FIRST_THREE_POINT_PER double null,
+
+	SECOND_FIRST_THREE_POINT_PER double null,
+
+	THIRD_FIRST_THREE_POINT_PER double null,
+
+	FOURTH_FIRST_THREE_POINT_PER double null,
+
+	RDATE timestamp null
+
+);
+
+
+
+create table sport.basketball_special_odd_summary
+
+(
+
+	LEAGUE varchar(10) null,
+
+	TEAM varchar(20) null,
+
+	GROUND varchar(20) null,
+
+	FIRST_FIRST_POINT_PER double null,
+
+	SECOND_FIRST_POINT_PER double null,
+
+	THIRD_FIRST_POINT_PER double null,
+
+	FOURTH_FIRST_POINT_PER double null,
+
+	FIRST_FIRST_TWO_POINT_PER double null,
+
+	SECOND_FIRST_TWO_POINT_PER double null,
+
+	THIRD_FIRST_TWO_POINT_PER double null,
+
+	FOURTH_FIRST_TWO_POINT_PER double null,
+
+	FIRST_FIRST_FREE_TWO_PER double null,
+
+	SECOND_FIRST_FREE_TWO_PER double null,
+
+	THIRD_FIRST_FREE_TWO_PER double null,
+
+	FOURTH_FIRST_FREE_TWO_PER double null,
+
+	FIRST_FIRST_THREE_POINT_PER double null,
+
+	SECOND_FIRST_THREE_POINT_PER double null,
+
+	THIRD_FIRST_THREE_POINT_PER double null,
+
+	FOURTH_FIRST_THREE_POINT_PER double null,
+
+	RDATE timestamp null
+
+);
+
+
+
+create table sport.basketball_special_rest_summary
+
+(
+
+	LEAGUE varchar(10) null,
+
+	TEAM varchar(20) null,
+
+	GROUND varchar(20) null,
+
+	FIRST_FIRST_POINT_PER double null,
+
+	SECOND_FIRST_POINT_PER double null,
+
+	THIRD_FIRST_POINT_PER double null,
+
+	FOURTH_FIRST_POINT_PER double null,
+
+	FIRST_FIRST_TWO_POINT_PER double null,
+
+	SECOND_FIRST_TWO_POINT_PER double null,
+
+	THIRD_FIRST_TWO_POINT_PER double null,
+
+	FOURTH_FIRST_TWO_POINT_PER double null,
+
+	FIRST_FIRST_FREE_TWO_PER double null,
+
+	SECOND_FIRST_FREE_TWO_PER double null,
+
+	THIRD_FIRST_FREE_TWO_PER double null,
+
+	FOURTH_FIRST_FREE_TWO_PER double null,
+
+	FIRST_FIRST_THREE_POINT_PER double null,
+
+	SECOND_FIRST_THREE_POINT_PER double null,
+
+	THIRD_FIRST_THREE_POINT_PER double null,
+
+	FOURTH_FIRST_THREE_POINT_PER double null,
+
+	RDATE timestamp null
+
+);
+
+
+
+create table sport.basketball_special_summary
+
+(
+
+	LEAGUE varchar(10) null,
+
+	TEAM varchar(20) null,
+
+	GROUND varchar(20) default 'ALL' not null,
+
+	FIRST_FIRST_POINT_PER double null,
+
+	SECOND_FIRST_POINT_PER double null,
+
+	THIRD_FIRST_POINT_PER double null,
+
+	FOURTH_FIRST_POINT_PER double null,
+
+	FIRST_FIRST_TWO_POINT_PER double null,
+
+	SECOND_FIRST_TWO_POINT_PER double null,
+
+	THIRD_FIRST_TWO_POINT_PER double null,
+
+	FOURTH_FIRST_TWO_POINT_PER double null,
+
+	FIRST_FIRST_FREE_TWO_PER double null,
+
+	SECOND_FIRST_FREE_TWO_PER double null,
+
+	THIRD_FIRST_FREE_TWO_PER double null,
+
+	FOURTH_FIRST_FREE_TWO_PER double null,
+
+	FIRST_FIRST_THREE_POINT_PER double null,
+
+	SECOND_FIRST_THREE_POINT_PER double null,
+
+	THIRD_FIRST_THREE_POINT_PER double null,
+
+	FOURTH_FIRST_THREE_POINT_PER double null,
+
+	RDATE timestamp null
+
+);
+
+
+
+create table sport.basketball_special_week_summary
+
+(
+
+	LEAGUE varchar(10) null,
+
+	TEAM varchar(20) null,
+
+	GROUND varchar(20) null,
+
+	FIRST_FIRST_POINT_PER double null,
+
+	SECOND_FIRST_POINT_PER double null,
+
+	THIRD_FIRST_POINT_PER double null,
+
+	FOURTH_FIRST_POINT_PER double null,
+
+	FIRST_FIRST_TWO_POINT_PER double null,
+
+	SECOND_FIRST_TWO_POINT_PER double null,
+
+	THIRD_FIRST_TWO_POINT_PER double null,
+
+	FOURTH_FIRST_TWO_POINT_PER double null,
+
+	FIRST_FIRST_FREE_TWO_PER double null,
+
+	SECOND_FIRST_FREE_TWO_PER double null,
+
+	THIRD_FIRST_FREE_TWO_PER double null,
+
+	FOURTH_FIRST_FREE_TWO_PER double null,
+
+	FIRST_FIRST_THREE_POINT_PER double null,
+
+	SECOND_FIRST_THREE_POINT_PER double null,
+
+	THIRD_FIRST_THREE_POINT_PER double null,
+
+	FOURTH_FIRST_THREE_POINT_PER double null,
+
+	RDATE timestamp null
+
+);
+
+
+
+create table sport.hockey_data
+
+(
+
+	idx int auto_increment,
+
+	GAME_ID varchar(30) default '0' not null,
+
+	LEAGUE varchar(30) default '0' null,
+
+	GROUND varchar(10) default '0' null,
+
+	MATCH_DATE varchar(30) default '0' null,
+
+	DAY_OF_WEEK varchar(30) default '0' null,
+
+	MATCH_TIME varchar(30) default '0' null,
+
+	A_TEAM_REST_DAY varchar(10) default '0' null,
+
+	A_TEAM varchar(30) default '0' null,
+
+	A_TEAM_TOTAL_POINT smallint default 0 null,
+
+	B_TEAM_TOTAL_POINT smallint default 0 null,
+
+	B_TEAM varchar(30) default '0' null,
+
+	B_TEAM_REST_DAY varchar(10) default '0' null,
+
+	HANDI_CAP varchar(30) default '0' null,
+
+	HANDI_CAP_RESULT varchar(30) default '0' null,
+
+	ODD varchar(10) default '0' null,
+
+	POINT_LINE varchar(10) default '0' null,
+
+	POINT_LINE_RESULT varchar(10) default '0' null,
+
+	A_TEAM_FIRSTQ_POINT smallint default 0 null,
+
+	B_TEAM_FIRSTQ_POINT smallint default 0 null,
+
+	FIRSTQ_HANDI_CAP varchar(30) default '0' null,
+
+	FIRSTQ_HANDI_CAP_RESULT varchar(10) default '0' null,
+
+	FIRSTQ_POINT_LINE varchar(10) default '0' null,
+
+	FIRSTQ_POINT_LINE_RESULT varchar(30) default '0' null,
+
+	FIRST_POINT varchar(30) default '0' null,
+
+	FIRSTQ_POINT smallint default 0 null,
+
+	SECONDQ_POINT smallint default 0 null,
+
+	THIRDQ_POINT smallint default 0 null,
+
+	EXTENDQ_POINT smallint default 0 null,
+
+	SHOTOUTQ_POINT smallint default 0 null,
+
+	FIRSTQ_TOTAL_POINT smallint default 0 null,
+
+	SECONDQ_TOTAL_POINT smallint default 0 null,
+
+	THIRDQ_TOTAL_POINT smallint default 0 null,
+
+	EXTENDQ_TOTAL_POINT smallint default 0 null,
+
+	SHOTOUTQ_TOTAL_POINT smallint default 0 null,
+
+	constraint HOCKEY_DATA_idx_uindex
+
+		unique (idx)
+
+);
+
+
+
+alter table sport.hockey_data
+
+	add primary key (idx);
+
+
+
+create table sport.hockey_ground_summary
+
+(
+
+	LEAGUE varchar(10) null,
+
+	TEAM varchar(20) null,
+
+	GROUND varchar(20) not null,
+
+	HANDI_WIN_PER double null,
+
+	HANDI_LOSE_PER double null,
+
+	OVER_PER double null,
+
+	UNDER_PER double null,
+
+	FIRST_HANDI_WIN_PER double null,
+
+	FIRST_HANDI_LOSE_PER double null,
+
+	FIRST_OVER_PER double null,
+
+	FIRST_UNDER_PER double null,
+
+	SPECIAL_FIRST_POINT_WIN_PER double null,
+
+	SPECIAL_FIRST_POINT_LOSE_PER double null,
+
+	RDATE timestamp null
+
+);
+
+
+
+create table sport.hockey_odd_summary
+
+(
+
+	LEAGUE varchar(10) null,
+
+	TEAM varchar(20) null,
+
+	GROUND varchar(20) not null,
+
+	HANDI_WIN_PER double null,
+
+	HANDI_LOSE_PER double null,
+
+	OVER_PER double null,
+
+	UNDER_PER double null,
+
+	FIRST_HANDI_WIN_PER double null,
+
+	FIRST_HANDI_LOSE_PER double null,
+
+	FIRST_OVER_PER double null,
+
+	FIRST_UNDER_PER double null,
+
+	SPECIAL_FIRST_POINT_WIN_PER double null,
+
+	SPECIAL_FIRST_POINT_LOSE_PER double null,
+
+	RDATE timestamp null
+
+);
+
+
+
+create table sport.hockey_rest_summary
+
+(
+
+	LEAGUE varchar(10) null,
+
+	TEAM varchar(20) null,
+
+	GROUND varchar(20) not null,
+
+	HANDI_WIN_PER double null,
+
+	HANDI_LOSE_PER double null,
+
+	OVER_PER double null,
+
+	UNDER_PER double null,
+
+	FIRST_HANDI_WIN_PER double null,
+
+	FIRST_HANDI_LOSE_PER double null,
+
+	FIRST_OVER_PER double null,
+
+	FIRST_UNDER_PER double null,
+
+	SPECIAL_FIRST_POINT_WIN_PER double null,
+
+	SPECIAL_FIRST_POINT_LOSE_PER double null,
+
+	RDATE timestamp null
+
+);
+
+
+
+create table sport.hockey_summary
+
+(
+
+	LEAGUE varchar(10) null,
+
+	TEAM varchar(20) null,
+
+	GROUND varchar(20) default 'ALL' not null,
+
+	HANDI_WIN_PER double null,
+
+	HANDI_LOSE_PER double null,
+
+	OVER_PER double null,
+
+	UNDER_PER double null,
+
+	FIRST_HANDI_WIN_PER double null,
+
+	FIRST_HANDI_LOSE_PER double null,
+
+	FIRST_OVER_PER double null,
+
+	FIRST_UNDER_PER double null,
+
+	SPECIAL_FIRST_POINT_WIN_PER double null,
+
+	SPECIAL_FIRST_POINT_LOSE_PER double null,
+
+	RDATE timestamp null
+
+);
+
+
+
+create table sport.hockey_week_summary
+
+(
+
+	LEAGUE varchar(10) null,
+
+	TEAM varchar(20) null,
+
+	GROUND varchar(20) not null,
+
+	HANDI_WIN_PER double null,
+
+	HANDI_LOSE_PER double null,
+
+	OVER_PER double null,
+
+	UNDER_PER double null,
+
+	FIRST_HANDI_WIN_PER double null,
+
+	FIRST_HANDI_LOSE_PER double null,
+
+	FIRST_OVER_PER double null,
+
+	FIRST_UNDER_PER double null,
+
+	SPECIAL_FIRST_POINT_WIN_PER double null,
+
+	SPECIAL_FIRST_POINT_LOSE_PER double null,
+
+	RDATE timestamp null
+
+);
+
+
+
+create table sport.member
+
+(
+
+	NAME varchar(20) null,
+
+	EMAIL varchar(50) null,
+
+	START_DATE datetime null,
+
+	END_DATE datetime not null,
+
+	RDATE datetime null,
+
+	MDATE datetime not null
+
+);
+
+
+
+create table sport.soccer_data
+
+(
+
+	idx int auto_increment,
+
+	GAME_ID varchar(30) default '0' not null,
+
+	LEAGUE varchar(30) default '0' null,
+
+	GROUND varchar(10) default '0' null,
+
+	MATCH_DATE varchar(30) default '0' null,
+
+	DAY_OF_WEEK varchar(30) default '0' null,
+
+	MATCH_TIME varchar(30) default '0' null,
+
+	A_TEAM_REST_DAY varchar(10) default '0' null,
+
+	A_TEAM varchar(30) default '0' null,
+
+	A_TEAM_TOTAL_POINT smallint default 0 null,
+
+	B_TEAM_TOTAL_POINT smallint default 0 null,
+
+	B_TEAM varchar(30) default '0' null,
+
+	B_TEAM_REST_DAY varchar(10) default '0' null,
+
+	HANDI_CAP varchar(30) default '0' null,
+
+	HANDI_CAP_RESULT varchar(30) default '0' null,
+
+	ODD varchar(10) default '0' null,
+
+	POINT_LINE varchar(30) default '0' null,
+
+	POINT_LINE_RESULT varchar(10) default '0' null,
+
+	A_TEAM_FIRSTQ_POINT smallint default 0 null,
+
+	B_TEAM_FIRSTQ_POINT smallint default 0 null,
+
+	FIRSTQ_HANDI_CAP varchar(30) default '0' null,
+
+	FIRSTQ_HANDI_CAP_RESULT varchar(10) default '0' null,
+
+	FIRSTQ_POINT_LINE varchar(30) default '0' null,
+
+	FIRSTQ_POINT_LINE_RESULT varchar(10) default '0' null,
+
+	FIRSTQ_POINT smallint default 0 null,
+
+	SECONDQ_POINT smallint default 0 null,
+
+	THIRDQ_POINT smallint default 0 null,
+
+	FOURTHQ_POINT smallint default 0 null,
+
+	EXTENDQ_POINT smallint default 0 null,
+
+	FIRSTQ_TOTAL_POINT smallint default 0 null,
+
+	SECONDQ_TOTAL_POINT smallint default 0 null,
+
+	THIRDQ_TOTAL_POINT smallint default 0 null,
+
+	FOURTHQ_TOTAL_POINT smallint default 0 null,
+
+	EXTENDQ_TOTAL_POINT smallint default 0 null,
+
+	constraint SOCCER_DATA_idx_uindex
+
+		unique (idx)
+
+);
+
+
+
+alter table sport.soccer_data
+
+	add primary key (idx);
+
+
+
+create table sport.volleyball_data
+
+(
+
+	idx int auto_increment,
+
+	GAME_ID varchar(30) default '0' not null,
+
+	LEAGUE varchar(30) default '0' null,
+
+	GROUND varchar(10) default '0' null,
+
+	MATCH_DATE varchar(30) default '0' null,
+
+	DAY_OF_WEEK varchar(30) default '0' null,
+
+	MATCH_TIME varchar(30) default '0' null,
+
+	A_TEAM_REST_DAY varchar(10) default '0' null,
+
+	A_TEAM varchar(30) default '0' null,
+
+	A_TEAM_SET_POINT smallint default 0 null,
+
+	A_TEAM_TOTAL_POINT smallint default 0 null,
+
+	B_TEAM_TOTAL_POINT smallint default 0 null,
+
+	B_TEAM_SET_POINT smallint default 0 null,
+
+	B_TEAM varchar(30) default '0' null,
+
+	B_TEAM_REST_DAY varchar(10) default '0' null,
+
+	HANDI_CAP varchar(30) default '0' null,
+
+	HANDI_CAP_RESULT varchar(30) default '0' null,
+
+	ODD varchar(10) default '0' null,
+
+	SET_HANDI_CAP varchar(30) default '0' null,
+
+	SET_HANDI_CAP_RESULT varchar(30) default '0' null,
+
+	POINT_LINE varchar(30) default '0' null,
+
+	POINT_LINE_RESULT varchar(10) default '0' null,
+
+	A_TEAM_FIRSTQ_POINT smallint default 0 null,
+
+	B_TEAM_FIRSTQ_POINT smallint default 0 null,
+
+	FIRSTQ_RESULT varchar(30) default '0' null,
+
+	FIRSTQ_HANDI_CAP varchar(30) default '0' null,
+
+	FIRSTQ_HANDI_CAP_RESULT varchar(10) default '0' null,
+
+	FIRSTQ_POINT_LINE varchar(30) default '0' null,
+
+	FIRSTQ_POINT_LINE_RESULT varchar(30) default '0' null,
+
+	A_TEAM_SECONDQ_POINT smallint default 0 null,
+
+	B_TEAM_SECONDQ_POINT smallint default 0 null,
+
+	SECONDQ_RESULT varchar(30) default '0' null,
+
+	SECONDQ_HANDI_CAP_RESULT varchar(10) default '0' null,
+
+	SECONDQ_POINT_LINE_RESULT varchar(10) default '0' null,
+
+	A_TEAM_THIRDQ_POINT smallint default 0 null,
+
+	B_TEAM_THIRDQ_POINT smallint default 0 null,
+
+	THIRDQ_RESULT varchar(30) default '0' null,
+
+	THIRDQ_HANDI_CAP_RESULT varchar(10) default '0' null,
+
+	THIRDQ_POINT_LINE_RESULT varchar(10) default '0' null,
+
+	A_TEAM_FOURTHQ_POINT smallint default 0 null,
+
+	B_TEAM_FOURTHQ_POINT smallint default 0 null,
+
+	FOURTHQ_RESULT varchar(30) default '0' null,
+
+	FOURTHQ_HANDI_CAP_RESULT varchar(10) default '0' null,
+
+	FOURTHQ_POINT_LINE_RESULT varchar(10) default '0' null,
+
+	A_TEAM_FIFTHQ_POINT smallint default 0 null,
+
+	B_TEAM_FIFTHQ_POINT smallint default 0 null,
+
+	FIFTHQ_RESULT varchar(30) default '0' null,
+
+	FIFTHQ_HANDI_CAP_RESULT varchar(10) default '0' null,
+
+	FIRST_POINT varchar(30) default '0' null,
+
+	FIRST_BLOCK varchar(30) default '0' null,
+
+	FIRST_SERVE varchar(30) default '0' null,
+
+	FIRST_5POINT varchar(30) default '0' null,
+
+	FIRST_7POINT varchar(30) default '0' null,
+
+	FIRST_10POINT varchar(30) default '0' null,
+
+	FIRSTQ_POINT smallint default 0 null,
+
+	SECONDQ_POINT smallint default 0 null,
+
+	THIRDQ_POINT smallint default 0 null,
+
+	FOURTHQ_POINT smallint default 0 null,
+
+	FIFTHDQ_POINT smallint default 0 null,
+
+	FIRSTQ_TOTAL_POINT smallint default 0 null,
+
+	SECONDQ_TOTAL_POINT smallint default 0 null,
+
+	THIRDQ_TOTAL_POINT smallint default 0 null,
+
+	FOURTHQ_TOTAL_POINT smallint default 0 null,
+
+	FIFTHDQ_TOTAL_POINT smallint default 0 null,
+
+	constraint VOLLEYBALL_DATA_idx_uindex
+
+		unique (idx)
+
+);
+
+
+
+alter table sport.volleyball_data
+
+	add primary key (idx);
+

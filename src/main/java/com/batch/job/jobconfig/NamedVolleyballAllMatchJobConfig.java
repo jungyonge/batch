@@ -27,7 +27,6 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @Configuration
-@Controller
 public class NamedVolleyballAllMatchJobConfig {
 
 
