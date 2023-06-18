@@ -1,13 +1,14 @@
 package com.batch.model;
 
-import lombok.Data;
+import java.util.Date;
+import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 import org.springframework.batch.core.BatchStatus;
 
-import java.util.Date;
-import java.util.List;
-
-@Data
+@Getter
+@Setter
 @ToString
 public class JobScheduleModel extends CommonModel {
     private long jobScheduleId;
