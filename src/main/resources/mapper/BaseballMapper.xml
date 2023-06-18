@@ -109,7 +109,7 @@
 
     </update>
 
-    <select id="selectBaseballStat"  resultType="hashMap">
+    <select id="selectBaseballStat"  resultType="java.util.List">
             SELECT IDX,
                    GAME_ID,
                    LEAGUE,
@@ -2009,7 +2009,7 @@
             B_TEAM = #{bTeam}
     </update>
 
-    <select id="selectBaseballAllSummary" resultType="HashMap">
+    <select id="selectBaseballAllSummary" resultType="java.util.List">
    SELECT
               A.idx,
               A.MATCH_TIME,
