@@ -33,22 +33,22 @@ public class NamedVolleyballAllMatchJobConfig {
     private final NamedVolleyballAllMatchWriter namedVolleyballAllMatchWriter;
 
     @Bean
-    public Job namedVolleyballAllMatchJob(){
+    public Job namedVolleyballAllMatchJob() {
         return jobBuilderFactory.get("namedVolleyballAllMatchJob")
-                .preventRestart()
-                .listener(notificationListener)
-                .flow(namedVolleyballAllMatchStep())
-                .end()
-                .build();
+            .preventRestart()
+            .listener(notificationListener)
+            .flow(namedVolleyballAllMatchStep())
+            .end()
+            .build();
     }
 
     @Bean
-    public Step namedVolleyballAllMatchStep(){
+    public Step namedVolleyballAllMatchStep() {
         return stepBuilderFactory.get("namedVolleyballAllMatchStep")
-                .<String, List<VolleyballModel>> chunk(1)
-                .reader(dummyReader)
-                .processor(namedVolleyballAllMatchProcessor)
-                .writer(namedVolleyballAllMatchWriter)
-                .build();
+            .<String, List<VolleyballModel>>chunk(1)
+            .reader(dummyReader)
+            .processor(namedVolleyballAllMatchProcessor)
+            .writer(namedVolleyballAllMatchWriter)
+            .build();
     }
 }

@@ -34,23 +34,23 @@ public class NamedBaseballAllMatchJobConfig {
 
 
     @Bean
-    public Job namedBaseBallAllMatchJob(){
+    public Job namedBaseBallAllMatchJob() {
         return jobBuilderFactory.get("namedBaseBallAllMatchJob")
-                .preventRestart()
-                .listener(notificationListener)
-                .flow(namedBaseBallAllMatchStep())
-                .end()
-                .build();
+            .preventRestart()
+            .listener(notificationListener)
+            .flow(namedBaseBallAllMatchStep())
+            .end()
+            .build();
     }
 
     @Bean
-    public Step namedBaseBallAllMatchStep(){
+    public Step namedBaseBallAllMatchStep() {
         return stepBuilderFactory.get("namedBaseBallAllMatchStep")
-                .<String, List<BaseballModel>> chunk(1)
-                .reader(dummyReader)
-                .processor(namedBaseballAllMatchProcessor)
-                .writer(namedBaseballAllMatchWriter)
-                .build();
+            .<String, List<BaseballModel>>chunk(1)
+            .reader(dummyReader)
+            .processor(namedBaseballAllMatchProcessor)
+            .writer(namedBaseballAllMatchWriter)
+            .build();
     }
 
 }

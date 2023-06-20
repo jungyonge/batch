@@ -32,22 +32,22 @@ public class NamedHockeyAllMatchJobConfig {
     private final NamedHockeyAllMatchWriter namedHockeyAllMatchWriter;
 
     @Bean
-    public Job namedHockeyAllMatchJob(){
+    public Job namedHockeyAllMatchJob() {
         return jobBuilderFactory.get("namedHockeyAllMatchJob")
-                .preventRestart()
-                .listener(notificationListener)
-                .flow(namedHockeyAllMatchStep())
-                .end()
-                .build();
+            .preventRestart()
+            .listener(notificationListener)
+            .flow(namedHockeyAllMatchStep())
+            .end()
+            .build();
     }
 
     @Bean
-    public Step namedHockeyAllMatchStep(){
+    public Step namedHockeyAllMatchStep() {
         return stepBuilderFactory.get("namedHockeyAllMatchStep")
-                .<String, List<HockeyModel>> chunk(1)
-                .reader(dummyReader)
-                .processor(namedHockeyAllMatchProcessor)
-                .writer(namedHockeyAllMatchWriter)
-                .build();
+            .<String, List<HockeyModel>>chunk(1)
+            .reader(dummyReader)
+            .processor(namedHockeyAllMatchProcessor)
+            .writer(namedHockeyAllMatchWriter)
+            .build();
     }
 }

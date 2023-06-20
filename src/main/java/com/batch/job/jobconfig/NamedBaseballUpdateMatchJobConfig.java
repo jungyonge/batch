@@ -29,25 +29,25 @@ public class NamedBaseballUpdateMatchJobConfig {
     private final DummyReader dummyReader;
     private final NamedBaseballUpdateMatchProcessor namedBaseballUpdateMatchProcessor;
     private final NamedBaseballUpdateMatchWriter namedBaseballUpdateMatchWriter;
-    
+
     @Bean
-    public Job namedBaseballUpdateMatchJob(){
+    public Job namedBaseballUpdateMatchJob() {
         return jobBuilderFactory.get("namedBaseballUpdateMatchJob")
-                .preventRestart()
-                .listener(notificationListener)
-                .flow(namedBaseballUpdateMatchStep())
-                .end()
-                .build();
+            .preventRestart()
+            .listener(notificationListener)
+            .flow(namedBaseballUpdateMatchStep())
+            .end()
+            .build();
     }
 
     @Bean
-    public Step namedBaseballUpdateMatchStep(){
+    public Step namedBaseballUpdateMatchStep() {
         return stepBuilderFactory.get("namedBaseballUpdateMatchStep")
-                .<String, List<BaseballModel>> chunk(1)
-                .reader(dummyReader)
-                .processor(namedBaseballUpdateMatchProcessor)
-                .writer(namedBaseballUpdateMatchWriter)
-                .build();
+            .<String, List<BaseballModel>>chunk(1)
+            .reader(dummyReader)
+            .processor(namedBaseballUpdateMatchProcessor)
+            .writer(namedBaseballUpdateMatchWriter)
+            .build();
     }
 
 }

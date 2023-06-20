@@ -29,20 +29,20 @@ public class MakeExcelJobConfig {
 
 
     @Bean
-    public Job makeExcelJob(){
+    public Job makeExcelJob() {
         return jobBuilderFactory.get("makeExcelJob")
-                .preventRestart()
-                .listener(notificationListener)
-                .flow(makeExcelStep())
-                .end()
-                .build();
+            .preventRestart()
+            .listener(notificationListener)
+            .flow(makeExcelStep())
+            .end()
+            .build();
     }
 
     @Bean
-    public Step makeExcelStep(){
+    public Step makeExcelStep() {
         return stepBuilderFactory.get("makeExcelStep")
-                .tasklet(makeExcelTasklet)
-                .build();
+            .tasklet(makeExcelTasklet)
+            .build();
     }
 
 
