@@ -9,6 +9,7 @@ class NamedServiceTest {
 
     @Test
     void test() {
-        namedService.getBaseball();
+//        namedService.getBaseball();
+        namedService.getPitcher("11");
     }
 }

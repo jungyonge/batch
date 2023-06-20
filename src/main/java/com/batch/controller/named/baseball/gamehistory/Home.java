@@ -1,7 +1,11 @@
 package com.batch.controller.named.baseball.gamehistory;
 
 import java.util.ArrayList;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class Home {
 
     public int id;

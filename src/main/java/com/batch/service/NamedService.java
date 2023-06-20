@@ -33,17 +33,14 @@ public class NamedService {
         System.out.println(baseballModel);
     }
 
-    public void getPitcher() {
+    public NamedGameHistoryResponse getPitcher(String gameId) {
 
-        String reqUrl = BASEBALL_PITCHER_URL.replace("#gameId", "2023-06-17");
+        String reqUrl = BASEBALL_PITCHER_URL.replace("#gameId", gameId);
 
-        ResponseEntity<NamedGameHistoryResponse[]> res = restTemplate.getForEntity(reqUrl,
-            NamedGameHistoryResponse[].class);
+        ResponseEntity<NamedGameHistoryResponse> res = restTemplate.getForEntity(reqUrl,
+            NamedGameHistoryResponse.class);
 
-        NamedGameHistoryResponse[] resArr = res.getBody();
-        BaseballModel baseballModel = modelMapper.map(resArr[0], BaseballModel.class);
-
-        System.out.println(baseballModel);
+        return res.getBody();
     }
 
 

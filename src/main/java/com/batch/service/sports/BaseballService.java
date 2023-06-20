@@ -1,7 +1,11 @@
 package com.batch.service.sports;
 
 import com.batch.controller.named.baseball.NamedBaseballResponse;
+import com.batch.controller.named.baseball.gamehistory.Away;
+import com.batch.controller.named.baseball.gamehistory.Home;
+import com.batch.controller.named.baseball.gamehistory.NamedGameHistoryResponse;
 import com.batch.model.BaseballModel;
+import com.batch.service.NamedService;
 import com.batch.util.NamedUtil;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -23,18 +27,21 @@ public class BaseballService {
 
     private final NamedUtil namedUtil;
 
+    private final NamedService namedService;
+
     @Transactional
     public List<BaseballModel> convertBaseballModel(List<NamedBaseballResponse> baseballList) {
         return null;
     }
 
-    private List<BaseballModel> convertBaseballModel(NamedBaseballResponse baseball) {
+    private List<BaseballModel> convertBaseballModel(NamedBaseballResponse baseball)
+        throws ParseException {
         BaseballModel homeModel = new BaseballModel();
         BaseballModel awayModel = new BaseballModel();
         List<BaseballModel> reuslt = new ArrayList<>();
 
         parseBaseData(baseball, homeModel, awayModel);
-        parsePitcherData(baseball, homeModel, awayModel);
+//        parsePitcherData(baseball, homeModel, awayModel);
 
         reuslt.add(homeModel);
         reuslt.add(awayModel);
@@ -43,7 +50,8 @@ public class BaseballService {
 
 
 
-    private void parseBaseData(NamedBaseballResponse parseTarget, BaseballModel homeModel, BaseballModel awayModel){
+    private void parseBaseData(NamedBaseballResponse parseTarget, BaseballModel homeModel, BaseballModel awayModel)
+        throws ParseException {
 
         Calendar cal = Calendar.getInstance();
 
@@ -79,63 +87,47 @@ public class BaseballService {
 
     }
 
-    private void parsePitcherData(JSONObject parseTarget, BaseballModel aTeamModel, BaseballModel bTeamModel) throws JSONException, ParseException {
-        String locationType = parseTarget.getJSONArray("gameTeams").getJSONObject(0).getString("locationType");
-        JSONArray homeTeamPitcherList;
-        JSONArray awayTeamPitcherList;
-        if (locationType.equals("HOME")) {
-            homeTeamPitcherList = parseTarget.getJSONArray("gameTeams").getJSONObject(0).getJSONArray("pitchingPlayers");
-            awayTeamPitcherList = parseTarget.getJSONArray("gameTeams").getJSONObject(1).getJSONArray("pitchingPlayers");
-        } else {
-            homeTeamPitcherList = parseTarget.getJSONArray("gameTeams").getJSONObject(1).getJSONArray("pitchingPlayers");
-            awayTeamPitcherList = parseTarget.getJSONArray("gameTeams").getJSONObject(0).getJSONArray("pitchingPlayers");
-        }
+    private void parsePitcherData(String gameId, BaseballModel aTeamModel, BaseballModel bTeamModel) throws JSONException, ParseException {
 
-        JSONObject homeTeamStartPitcher = new JSONObject();
-        JSONObject awayTeamStartPitcher = new JSONObject();
+        NamedGameHistoryResponse historyResponse = namedService.getPitcher(gameId);
 
-        for (int i = 0; i < homeTeamPitcherList.length(); i++) {
-            homeTeamStartPitcher = homeTeamPitcherList.getJSONObject(i);
-            if (homeTeamStartPitcher.getBoolean("startingMember")) {
-                break;
-            }
-        }
-
-        for (int i = 0; i < awayTeamPitcherList.length(); i++) {
-            awayTeamStartPitcher = awayTeamPitcherList.getJSONObject(i);
-            if (awayTeamStartPitcher.getBoolean("startingMember")) {
-                break;
-            }
-        }
-
-        aTeamModel.setATeamPitcher(homeTeamStartPitcher.getJSONObject("player").getString("displayName"));
-        aTeamModel.setPitchCount(homeTeamStartPitcher.getInt("pitchCount"));
-        aTeamModel.setSeasonWins(homeTeamStartPitcher.getInt("seasonWins"));
-        aTeamModel.setSeasonLosses(homeTeamStartPitcher.getInt("seasonLosses"));
-        aTeamModel.setInningPitched(homeTeamStartPitcher.getDouble("inningPitched"));
-        aTeamModel.setHit(homeTeamStartPitcher.getInt("hit"));
-        aTeamModel.setHomeRun(homeTeamStartPitcher.getInt("homeRun"));
-        aTeamModel.setBaseOnBalls(homeTeamStartPitcher.getInt("baseOnBalls"));
-        aTeamModel.setStrikeOuts(homeTeamStartPitcher.getInt("strikeOuts"));
-        aTeamModel.setRun(homeTeamStartPitcher.getInt("run"));
-        aTeamModel.setEarnedRun(homeTeamStartPitcher.getInt("earnedRun"));
-        aTeamModel.setTodayEarnedRunAverage(homeTeamStartPitcher.getDouble("todayEarnedRunAverage"));
-        aTeamModel.setSeasonEarnedRunAverage(homeTeamStartPitcher.getDouble("seasonEarnedRunAverage"));
+        Home homeHistory = historyResponse.getHome();
+        Away awayHistory = historyResponse.getAway();
 
 
-        bTeamModel.setATeamPitcher(awayTeamStartPitcher.getJSONObject("player").getString("displayName"));
-        bTeamModel.setPitchCount(awayTeamStartPitcher.getInt("pitchCount"));
-        bTeamModel.setSeasonWins(awayTeamStartPitcher.getInt("seasonWins"));
-        bTeamModel.setSeasonLosses(awayTeamStartPitcher.getInt("seasonLosses"));
-        bTeamModel.setInningPitched(awayTeamStartPitcher.getDouble("inningPitched"));
-        bTeamModel.setHit(awayTeamStartPitcher.getInt("hit"));
-        bTeamModel.setHomeRun(awayTeamStartPitcher.getInt("homeRun"));
-        bTeamModel.setBaseOnBalls(awayTeamStartPitcher.getInt("baseOnBalls"));
-        bTeamModel.setStrikeOuts(awayTeamStartPitcher.getInt("strikeOuts"));
-        bTeamModel.setRun(awayTeamStartPitcher.getInt("run"));
-        bTeamModel.setEarnedRun(awayTeamStartPitcher.getInt("earnedRun"));
-        bTeamModel.setTodayEarnedRunAverage(awayTeamStartPitcher.getDouble("todayEarnedRunAverage"));
-        bTeamModel.setSeasonEarnedRunAverage(awayTeamStartPitcher.getDouble("seasonEarnedRunAverage"));
+        aTeamModel.setATeamPitcher(homeHistory.getPitchings().get(0).getPlayer().getDisplayName());
+        aTeamModel.setPitchCount(homeHistory.getPitchings().get(0).getPitchCount());
+        aTeamModel.setSeasonWins(homeHistory.getPitchings().get(0).getWins());
+        aTeamModel.setSeasonLosses(homeHistory.getPitchings().get(0).getLosses());
+        aTeamModel.setInningPitched(
+            Double.valueOf(homeHistory.getPitchings().get(0).getInningPitched()));
+        aTeamModel.setHit(homeHistory.getPitchings().get(0).getHit());
+        aTeamModel.setHomeRun(homeHistory.getPitchings().get(0).getHomeRun());
+        aTeamModel.setBaseOnBalls(homeHistory.getPitchings().get(0).getBaseOnBalls());
+        aTeamModel.setStrikeOuts(homeHistory.getPitchings().get(0).getStrikeOuts());
+        aTeamModel.setRun(homeHistory.getPitchings().get(0).getRun());
+        aTeamModel.setEarnedRun(homeHistory.getPitchings().get(0).getEarnedRun());
+        aTeamModel.setTodayEarnedRunAverage(
+            Double.valueOf(homeHistory.getPitchings().get(0).getTodayEarnedRunAverage()));
+        aTeamModel.setSeasonEarnedRunAverage(
+            Double.valueOf(homeHistory.getPitchings().get(0).getEarnedRunAverage()));
+
+        bTeamModel.setATeamPitcher(awayHistory.getPitchings().get(0).getPlayer().getDisplayName());
+        bTeamModel.setPitchCount(awayHistory.getPitchings().get(0).getPitchCount());
+        bTeamModel.setSeasonWins(awayHistory.getPitchings().get(0).getWins());
+        bTeamModel.setSeasonLosses(awayHistory.getPitchings().get(0).getLosses());
+        bTeamModel.setInningPitched(
+            Double.valueOf(awayHistory.getPitchings().get(0).getInningPitched()));
+        bTeamModel.setHit(awayHistory.getPitchings().get(0).getHit());
+        bTeamModel.setHomeRun(awayHistory.getPitchings().get(0).getHomeRun());
+        bTeamModel.setBaseOnBalls(awayHistory.getPitchings().get(0).getBaseOnBalls());
+        bTeamModel.setStrikeOuts(awayHistory.getPitchings().get(0).getStrikeOuts());
+        bTeamModel.setRun(awayHistory.getPitchings().get(0).getRun());
+        bTeamModel.setEarnedRun(awayHistory.getPitchings().get(0).getEarnedRun());
+        bTeamModel.setTodayEarnedRunAverage(
+            Double.valueOf(awayHistory.getPitchings().get(0).getTodayEarnedRunAverage()));
+        bTeamModel.setSeasonEarnedRunAverage(
+            Double.valueOf(awayHistory.getPitchings().get(0).getEarnedRunAverage()));
 
     }
 

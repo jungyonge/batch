@@ -1,5 +1,10 @@
 package com.batch.controller.named.baseball.gamehistory;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class Batter {
 
     public int battingSlot;
