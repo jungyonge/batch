@@ -1,0 +1,13 @@
+package com.batch.controller.named.baseball.gamehistory;
+
+import java.util.ArrayList;
+
+public class Home {
+
+    public int id;
+    public String name;
+    public String shortName;
+    public String imgPath;
+    public ArrayList<Pitching> pitchings;
+    public ArrayList<Batter> batters;
+}
