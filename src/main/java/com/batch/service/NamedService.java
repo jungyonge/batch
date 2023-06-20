@@ -21,9 +21,9 @@ public class NamedService {
 
     private static final String BASEBALL_PITCHER_URL = "https://sports-api.named.com/v1.0/sports/baseball/games/#gameId/lineup";
 
-    public void getBaseball() {
+    public void getBaseball(String matchDate) {
 
-        String reqUrl = BASEBALL_URL.replace("#matchDate", "2023-06-17");
+        String reqUrl = BASEBALL_URL.replace("#matchDate", matchDate);
         ResponseEntity<NamedBaseballResponse[]> res = restTemplate.getForEntity(reqUrl,
             NamedBaseballResponse[].class);
 
