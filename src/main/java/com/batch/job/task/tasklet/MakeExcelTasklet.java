@@ -25,7 +25,6 @@ public class MakeExcelTasklet implements Tasklet {
     private final MakeExcelUtil makeExcelUtil;
     private final EmailUtil emailUtil;
 
-
     public MakeExcelTasklet(BaseballMapper baseballMapper, BaseballPitcherMapper baseballPitcherMapper, BasketballMapper basketballMapper, VolleyballMapper volleyballMapper, HockeyMapper hockeyMapper, CommonMapper commonMapper, MakeExcelUtil makeExcelUtil, EmailUtil emailUtil) {
         this.baseballMapper = baseballMapper;
         this.baseballPitcherMapper = baseballPitcherMapper;

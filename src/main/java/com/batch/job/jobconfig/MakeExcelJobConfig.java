@@ -22,7 +22,6 @@ public class MakeExcelJobConfig {
 
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
-
     private final JobCompletionNotificationListener notificationListener;
     private final DummyReader dummyReader;
     private final MakeExcelTasklet makeExcelTasklet;

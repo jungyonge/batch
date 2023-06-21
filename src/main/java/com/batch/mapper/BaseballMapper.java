@@ -1,14 +1,12 @@
 package com.batch.mapper;
 
-import com.batch.annotation.MasterDb;
 import com.batch.model.BaseballModel;
 import com.batch.model.FilterConditionModel;
-import org.springframework.stereotype.Repository;
+import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
-@MasterDb
-@Repository
+@Mapper
 public interface BaseballMapper {
 
    void insertBaseballMatch(BaseballModel baseballModel);

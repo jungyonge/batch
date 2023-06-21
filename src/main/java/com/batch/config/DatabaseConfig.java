@@ -1,24 +1,35 @@
 package com.batch.config;
-
+import java.io.IOException;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 import javax.sql.DataSource;
-import java.io.IOException;
 
-public abstract class DatabaseConfig {
-    public static final String BASE_PACKAGE = "com.batch.mapper";
-    @Value("${mybatis.config-location}")
-    private String COMFIG_LOCATION_PATH;
-    @Value("${mybatis.mapper-locations}")
-    public String MAPPER_LOCATION_PATH;
+@Configuration
+public class DatabaseConfig {
 
-    protected void configureSqlSessionFactory(SqlSessionFactoryBean sessionFactoryBean, DataSource dataSource) throws
-            IOException {
-        sessionFactoryBean.setDataSource(dataSource);
-        PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
-        sessionFactoryBean.setConfigLocation(resolver.getResource(COMFIG_LOCATION_PATH));
-        sessionFactoryBean.setMapperLocations(resolver.getResources(MAPPER_LOCATION_PATH));
+    @Value("${jdbc.url}")
+    private String encryptedUrl;
+
+    @Value("${jdbc.username}")
+    private String encryptedUsername;
+
+    @Value("${jdbc.password}")
+    private String encryptedPassword;
+
+    @Bean
+    public DataSource dataSource() {
+        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        dataSource.setUrl(JasyptConfig.decrypt(encryptedUrl));
+        dataSource.setUsername(JasyptConfig.decrypt(encryptedUsername));
+        dataSource.setPassword(JasyptConfig.decrypt(encryptedPassword));
+        // 다른 DataSource 설정들...
+        return dataSource;
     }
+
+
 }

@@ -43,7 +43,7 @@ public class BaseballService {
 
         parseBaseData(baseball, homeModel, awayModel);
         parsePitcherData(String.valueOf(baseball.getId()), homeModel, awayModel);
-        parseInningScore(baseball, homeModel, awayModel);
+//        parseInningScore(baseball, homeModel, awayModel);
         reuslt.add(homeModel);
         reuslt.add(awayModel);
         return reuslt;
@@ -132,30 +132,30 @@ public class BaseballService {
 
     }
 
-    private void parseInningScore(NamedBaseballResponse parseTarget, BaseballModel aTeamModel, BaseballModel bTeamModel) throws JSONException {
-
-        Team home = parseTarget.getTeams().getHome();
-        Team away = parseTarget.getTeams().getAway();
-        aTeamModel.setFirstInningRun(awayTeamScore.getJSONObject(0).getInt("score"));
-        bTeamModel.setFirstInningRun(homeTeamScore.getJSONObject(0).getInt("score"));
-
-        for (int i = 0; i < 4; i++) {
-            homeFourthRun = homeFourthRun + homeTeamScore.getJSONObject(i).getInt("score");
-            awayFourthRun = awayFourthRun + awayTeamScore.getJSONObject(i).getInt("score");
-        }
-
-        aTeamModel.setFourthInningRun(awayFourthRun);
-        bTeamModel.setFourthInningRun(homeFourthRun);
-
-        if (aTeamModel.getFirstInningRun() > awayFourthRun) {
-            log.info(aTeamModel.toString());
-        }
-
-        if (bTeamModel.getFirstInningRun() > homeFourthRun) {
-            log.info(bTeamModel.toString());
-        }
-
-    }
+//    private void parseInningScore(NamedBaseballResponse parseTarget, BaseballModel aTeamModel, BaseballModel bTeamModel) throws JSONException {
+//
+//        Team home = parseTarget.getTeams().getHome();
+//        Team away = parseTarget.getTeams().getAway();
+//        aTeamModel.setFirstInningRun(awayTeamScore.getJSONObject(0).getInt("score"));
+//        bTeamModel.setFirstInningRun(homeTeamScore.getJSONObject(0).getInt("score"));
+//
+//        for (int i = 0; i < 4; i++) {
+//            homeFourthRun = homeFourthRun + homeTeamScore.getJSONObject(i).getInt("score");
+//            awayFourthRun = awayFourthRun + awayTeamScore.getJSONObject(i).getInt("score");
+//        }
+//
+//        aTeamModel.setFourthInningRun(awayFourthRun);
+//        bTeamModel.setFourthInningRun(homeFourthRun);
+//
+//        if (aTeamModel.getFirstInningRun() > awayFourthRun) {
+//            log.info(aTeamModel.toString());
+//        }
+//
+//        if (bTeamModel.getFirstInningRun() > homeFourthRun) {
+//            log.info(bTeamModel.toString());
+//        }
+//
+//    }
 
 //    private void parseBaseOnBall(NamedBaseballResponse parseTarget, BaseballModel aTeamModel, BaseballModel bTeamModel) {
 //        JSONArray broadCasts = parseTarget.getJSONArray("broadcasts");

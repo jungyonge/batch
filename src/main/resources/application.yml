@@ -8,9 +8,12 @@ spring:
     job:
       enabled: false
   datasource:
-    url: jdbc:mysql://localhost:3306/batch?autoReconnect=true&serverTimezone=UTC
-    username: root
-    password: wjddyd.1204
+    url: ENC(zk/Fc8WyhfkE1ffRs4T3wtC3d1SkVINepuxfTxOWtIpR2quOQx6MlRDmvFiRhP7q7U8zOC+NOSfUvY7SvYeO6oCxJ5Fp8Y4anr422G4qEGn5EaQhPm/OvA==)
+    username: ENC(Xgg3IP4bBX4B3KNrg60A3g==)
+    password: ENC(CMpj8ee6yEHqEVp7BZgXeA7dv14zkss4)
+#    url: jdbc:mysql://jungyongbox.cwpqs9pmrl3s.ap-northeast-2.rds.amazonaws.com:3306
+#    username: admin
+#    password: Wjddyd!0619
     driver-class-name: com.mysql.cj.jdbc.Driver
     initialize: false
     hikari:
@@ -31,6 +34,9 @@ spring:
       test-while-idle: true
       max-wait: 10000
 
+jasypt:
+  encryptor:
+    bean: jasyptStringEncryptor
 
 server:
   port: 8081
@@ -57,9 +63,9 @@ spring:
     job:
       enabled: false
   datasource:
-    url: jdbc:mysql://localhost:3306/batch?autoReconnect=true&serverTimezone=UTC
-    username: root
-    password: ghzkrp153
+    url: ENC(zk/Fc8WyhfkE1ffRs4T3wtC3d1SkVINepuxfTxOWtIpR2quOQx6MlRDmvFiRhP7q7U8zOC+NOSfUvY7SvYeO6oCxJ5Fp8Y4anr422G4qEGn5EaQhPm/OvA==)
+    username: ENC(Xgg3IP4bBX4B3KNrg60A3g==)
+    password: ENC(CMpj8ee6yEHqEVp7BZgXeA7dv14zkss4)
     driver-class-name: com.mysql.cj.jdbc.Driver
     initialize: false
     tomcat:
@@ -77,7 +83,7 @@ server:
 # MyBatis Configuration
 mybatis:
   config-location: classpath:mapper/mybatis-config.xml
-  mapper-locations: classpath:mapper/*Mapper.xml
+  mapper-locations: classpath:mapper/**
 
 excel:
   template-path: /Users/jungyong/IdeaProjects/batch/src/main/resources/excelTemplate/
@@ -111,7 +117,9 @@ spring:
 
 server:
   port: 8081
-
+jasypt:
+  encryptor:
+    bean: jasyptStringEncryptor
 # MyBatis Configuration
 mybatis:
   config-location: classpath:mapper/mybatis-config.xml

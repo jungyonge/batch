@@ -6,9 +6,10 @@ import com.batch.model.HockeyModel;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import org.apache.ibatis.annotations.Mapper;
 
-@MasterDb
-@Repository
+
+@Mapper
 public interface HockeyMapper {
 
    void insertHockeyMatch(HockeyModel hockeyModel);

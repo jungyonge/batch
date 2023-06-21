@@ -691,17 +691,14 @@ public class NamedBaseballUpdateMatchProcessor implements ItemProcessor<String, 
             aTeamModel.setFirstStrikeOut("적특");
             bTeamModel.setFirstStrikeOut("적특");
         }
-
     }
 
     private boolean validationData(BaseballModel item){
-
         if(item.getATeam().isEmpty()){
             return Boolean.TRUE;
         }else {
             return Boolean.FALSE;
         }
-
     }
 
 }

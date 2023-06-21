@@ -6,9 +6,10 @@ import com.batch.model.FilterConditionModel;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import org.apache.ibatis.annotations.Mapper;
 
-@MasterDb
-@Repository
+
+@Mapper
 public interface BasketballMapper {
 
     void insertBasketMatch(BasketballModel basketballModel);
