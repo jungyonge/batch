@@ -2,10 +2,8 @@ package com.batch.config;
 
 import org.jasypt.encryption.StringEncryptor;
 import org.jasypt.encryption.pbe.PooledPBEStringEncryptor;
-import org.jasypt.encryption.pbe.config.EnvironmentStringPBEConfig;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 
 
 @Configuration
