@@ -1,4 +1,5 @@
 spring:
+  onfig.activate.on-profile: company
   profiles: company
   mvc:
     view:
@@ -101,9 +102,9 @@ spring:
     job:
       enabled: false
   datasource:
-    url: jdbc:mysql://localhost:3306/batch?autoReconnect=true&serverTimezone=UTC
-    username: root
-    password: ghzkrp153
+    url: ENC(zk/Fc8WyhfkE1ffRs4T3wtC3d1SkVINepuxfTxOWtIpR2quOQx6MlRDmvFiRhP7q7U8zOC+NOSfUvY7SvYeO6oCxJ5Fp8Y4anr422G4qEGn5EaQhPm/OvA==)
+    username: ENC(Xgg3IP4bBX4B3KNrg60A3g==)
+    password: ENC(CMpj8ee6yEHqEVp7BZgXeA7dv14zkss4)
     driver-class-name: com.mysql.cj.jdbc.Driver
     initialize: false
     tomcat:

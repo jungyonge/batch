@@ -5,6 +5,7 @@ import com.batch.controller.named.baseball.Team;
 import com.batch.controller.named.baseball.gamehistory.Away;
 import com.batch.controller.named.baseball.gamehistory.Home;
 import com.batch.controller.named.baseball.gamehistory.NamedGameHistoryResponse;
+import com.batch.mapper.BaseballMapper;
 import com.batch.model.BaseballModel;
 import com.batch.service.NamedService;
 import com.batch.util.NamedUtil;
@@ -15,9 +16,7 @@ import java.util.Calendar;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,26 +29,52 @@ public class BaseballService {
 
     private final NamedService namedService;
 
+    private final ModelMapper modelMapper = new ModelMapper();
+
+    private final BaseballMapper baseballMapper;
+
+
     @Transactional
     public List<BaseballModel> convertBaseballModel(List<NamedBaseballResponse> baseballList) {
         return null;
     }
 
-    private List<BaseballModel> convertBaseballModel(NamedBaseballResponse baseball)
+    public List<BaseballModel> convertBaseballModel()
         throws ParseException {
-        BaseballModel homeModel = new BaseballModel();
-        BaseballModel awayModel = new BaseballModel();
-        List<BaseballModel> reuslt = new ArrayList<>();
 
-        parseBaseData(baseball, homeModel, awayModel);
-        parsePitcherData(String.valueOf(baseball.getId()), homeModel, awayModel);
-//        parseInningScore(baseball, homeModel, awayModel);
-        reuslt.add(homeModel);
-        reuslt.add(awayModel);
-        return reuslt;
+        NamedBaseballResponse[] responses = namedService.getBaseball("2022-06-21");
+        for(NamedBaseballResponse baseball : responses){
+            BaseballModel homeModel = new BaseballModel();
+            BaseballModel awayModel = new BaseballModel();
+            List<BaseballModel> reuslt = new ArrayList<>();
+
+            homeModel.setGameId(String.valueOf(baseball.getId()));
+            awayModel.setGameId(String.valueOf(baseball.getId()));
+            homeModel.setLeague(baseball.getLeague().getName());
+            awayModel.setLeague(baseball.getLeague().getName());
+            homeModel.setStadium(baseball.getVenueName());
+            awayModel.setStadium(baseball.getVenueName());
+
+            if(!homeModel.getLeague().equals("KBO") &&
+                !homeModel.getLeague().equals("NPB") &&
+                !homeModel.getLeague().equals("MLB") &&
+                !homeModel.getLeague().equals("퓨처스") ){
+                return null;
+            }
+
+            parseBaseData(baseball, homeModel, awayModel);
+            parsePitcherData(String.valueOf(baseball.getId()), homeModel, awayModel);
+            parseInningScore(baseball, homeModel, awayModel);
+            reuslt.add(homeModel);
+            reuslt.add(awayModel);
+
+            for(BaseballModel model : reuslt){
+                baseballMapper.insertBaseballMatch(model);
+            }
+        }
+
+        return null;
     }
-
-
 
     private void parseBaseData(NamedBaseballResponse parseTarget, BaseballModel homeModel, BaseballModel awayModel)
         throws ParseException {
@@ -88,7 +113,7 @@ public class BaseballService {
 
     }
 
-    private void parsePitcherData(String gameId, BaseballModel aTeamModel, BaseballModel bTeamModel) {
+    private void parsePitcherData(String gameId, BaseballModel homeModel, BaseballModel awayModel) {
 
         NamedGameHistoryResponse historyResponse = namedService.getPitcher(gameId);
 
@@ -96,68 +121,224 @@ public class BaseballService {
         Away awayHistory = historyResponse.getAway();
 
 
-        aTeamModel.setATeamPitcher(homeHistory.getPitchings().get(0).getPlayer().getDisplayName());
-        aTeamModel.setPitchCount(homeHistory.getPitchings().get(0).getPitchCount());
-        aTeamModel.setSeasonWins(homeHistory.getPitchings().get(0).getWins());
-        aTeamModel.setSeasonLosses(homeHistory.getPitchings().get(0).getLosses());
-        aTeamModel.setInningPitched(
+        homeModel.setATeamPitcher(homeHistory.getPitchings().get(0).getPlayer().getDisplayName());
+        homeModel.setPitchCount(homeHistory.getPitchings().get(0).getPitchCount());
+        homeModel.setSeasonWins(homeHistory.getPitchings().get(0).getWins());
+        homeModel.setSeasonLosses(homeHistory.getPitchings().get(0).getLosses());
+        homeModel.setInningPitched(
             Double.valueOf(homeHistory.getPitchings().get(0).getInningPitched()));
-        aTeamModel.setHit(homeHistory.getPitchings().get(0).getHit());
-        aTeamModel.setHomeRun(homeHistory.getPitchings().get(0).getHomeRun());
-        aTeamModel.setBaseOnBalls(homeHistory.getPitchings().get(0).getBaseOnBalls());
-        aTeamModel.setStrikeOuts(homeHistory.getPitchings().get(0).getStrikeOuts());
-        aTeamModel.setRun(homeHistory.getPitchings().get(0).getRun());
-        aTeamModel.setEarnedRun(homeHistory.getPitchings().get(0).getEarnedRun());
-        aTeamModel.setTodayEarnedRunAverage(
+        homeModel.setHit(homeHistory.getPitchings().get(0).getHit());
+        homeModel.setHomeRun(homeHistory.getPitchings().get(0).getHomeRun());
+        homeModel.setBaseOnBalls(homeHistory.getPitchings().get(0).getBaseOnBalls());
+        homeModel.setStrikeOuts(homeHistory.getPitchings().get(0).getStrikeOuts());
+        homeModel.setRun(homeHistory.getPitchings().get(0).getRun());
+        homeModel.setEarnedRun(homeHistory.getPitchings().get(0).getEarnedRun());
+        homeModel.setTodayEarnedRunAverage(
             Double.valueOf(homeHistory.getPitchings().get(0).getTodayEarnedRunAverage()));
-        aTeamModel.setSeasonEarnedRunAverage(
+        homeModel.setSeasonEarnedRunAverage(
             Double.valueOf(homeHistory.getPitchings().get(0).getEarnedRunAverage()));
 
-        bTeamModel.setATeamPitcher(awayHistory.getPitchings().get(0).getPlayer().getDisplayName());
-        bTeamModel.setPitchCount(awayHistory.getPitchings().get(0).getPitchCount());
-        bTeamModel.setSeasonWins(awayHistory.getPitchings().get(0).getWins());
-        bTeamModel.setSeasonLosses(awayHistory.getPitchings().get(0).getLosses());
-        bTeamModel.setInningPitched(
+        awayModel.setATeamPitcher(awayHistory.getPitchings().get(0).getPlayer().getDisplayName());
+        awayModel.setPitchCount(awayHistory.getPitchings().get(0).getPitchCount());
+        awayModel.setSeasonWins(awayHistory.getPitchings().get(0).getWins());
+        awayModel.setSeasonLosses(awayHistory.getPitchings().get(0).getLosses());
+        awayModel.setInningPitched(
             Double.valueOf(awayHistory.getPitchings().get(0).getInningPitched()));
-        bTeamModel.setHit(awayHistory.getPitchings().get(0).getHit());
-        bTeamModel.setHomeRun(awayHistory.getPitchings().get(0).getHomeRun());
-        bTeamModel.setBaseOnBalls(awayHistory.getPitchings().get(0).getBaseOnBalls());
-        bTeamModel.setStrikeOuts(awayHistory.getPitchings().get(0).getStrikeOuts());
-        bTeamModel.setRun(awayHistory.getPitchings().get(0).getRun());
-        bTeamModel.setEarnedRun(awayHistory.getPitchings().get(0).getEarnedRun());
-        bTeamModel.setTodayEarnedRunAverage(
+        awayModel.setHit(awayHistory.getPitchings().get(0).getHit());
+        awayModel.setHomeRun(awayHistory.getPitchings().get(0).getHomeRun());
+        awayModel.setBaseOnBalls(awayHistory.getPitchings().get(0).getBaseOnBalls());
+        awayModel.setStrikeOuts(awayHistory.getPitchings().get(0).getStrikeOuts());
+        awayModel.setRun(awayHistory.getPitchings().get(0).getRun());
+        awayModel.setEarnedRun(awayHistory.getPitchings().get(0).getEarnedRun());
+        awayModel.setTodayEarnedRunAverage(
             Double.valueOf(awayHistory.getPitchings().get(0).getTodayEarnedRunAverage()));
-        bTeamModel.setSeasonEarnedRunAverage(
+        awayModel.setSeasonEarnedRunAverage(
             Double.valueOf(awayHistory.getPitchings().get(0).getEarnedRunAverage()));
 
     }
 
-//    private void parseInningScore(NamedBaseballResponse parseTarget, BaseballModel aTeamModel, BaseballModel bTeamModel) throws JSONException {
+    private void parseInningScore(NamedBaseballResponse parseTarget, BaseballModel homeModel, BaseballModel awayModel)  {
+
+        Team home = parseTarget.getTeams().getHome();
+        Team away = parseTarget.getTeams().getAway();
+        homeModel.setFirstInningRun(home.getPeriodData().get(0).getScore());
+        awayModel.setFirstInningRun(away.getPeriodData().get(0).getScore());
+
+        int homeFourthRun = 0;
+        int awayFourthRun = 0;
+        for (int i = 0; i < 4; i++) {
+            homeFourthRun = homeFourthRun + home.getPeriodData().get(i).getScore();
+            awayFourthRun = awayFourthRun + away.getPeriodData().get(i).getScore();
+        }
+
+        homeModel.setFourthInningRun(awayFourthRun);
+        awayModel.setFourthInningRun(homeFourthRun);
+
+        if (homeModel.getFirstInningRun() > awayFourthRun) {
+            log.info(homeModel.toString());
+        }
+
+        if (awayModel.getFirstInningRun() > homeFourthRun) {
+            log.info(awayModel.toString());
+        }
+
+    }
+
+//    private void parsePitcherAndOdd(NamedBaseballResponse matchObject , BaseballModel homeModel , BaseballModel awayModel) throws JSONException {
 //
-//        Team home = parseTarget.getTeams().getHome();
-//        Team away = parseTarget.getTeams().getAway();
-//        aTeamModel.setFirstInningRun(awayTeamScore.getJSONObject(0).getInt("score"));
-//        bTeamModel.setFirstInningRun(homeTeamScore.getJSONObject(0).getInt("score"));
+//        Team home = matchObject.getTeams().getHome();
+//        Team away = matchObject.getTeams().getAway();
 //
-//        for (int i = 0; i < 4; i++) {
-//            homeFourthRun = homeFourthRun + homeTeamScore.getJSONObject(i).getInt("score");
-//            awayFourthRun = awayFourthRun + awayTeamScore.getJSONObject(i).getInt("score");
+//
+//
+//        homeModel.setATeamPitcher(home.getStartPitcher().getName());
+//        awayModel.setBTeamPitcher(home.getStartPitcher().getName());
+//
+//        homeModel.setBTeamPitcher(away.getStartPitcher().getName());
+//        awayModel.setATeamPitcher(away.getStartPitcher().getName());
+//
+//        double handi = 0.0;
+//        double unOver = 0.0;
+//        double firstInningPointLine = 0.0;
+//
+//        JSONArray internationalHandicapOdds = matchObject.getJSONObject("odds").getJSONArray("internationalHandicapOdds");
+//        JSONArray internationalUnderOverOdds = matchObject.getJSONObject("odds").getJSONArray("internationalUnderOverOdds");
+//        JSONArray domesticHandicapOdds = matchObject.getJSONObject("odds").getJSONArray("domesticHandicapOdds");
+//        JSONArray domesticUnderOverOdds = matchObject.getJSONObject("odds").getJSONArray("domesticUnderOverOdds");
+//
+//        if(internationalHandicapOdds.length() > 0 ){
+//            handi = internationalHandicapOdds.getJSONObject(0).getDouble("optionValue");
+//        }else if (domesticHandicapOdds.length() > 0) {
+//            handi = domesticHandicapOdds.getJSONObject(0).getDouble("optionValue");
 //        }
 //
-//        aTeamModel.setFourthInningRun(awayFourthRun);
-//        bTeamModel.setFourthInningRun(homeFourthRun);
-//
-//        if (aTeamModel.getFirstInningRun() > awayFourthRun) {
-//            log.info(aTeamModel.toString());
+//        if(internationalUnderOverOdds.length() > 0 ){
+//            unOver = internationalUnderOverOdds.getJSONObject(0).getDouble("optionValue");
+//            firstInningPointLine = unOver / 9;
+//        }else if (domesticUnderOverOdds.length() > 0  ){
+//            unOver = domesticUnderOverOdds.getJSONObject(0).getDouble("optionValue");
+//            firstInningPointLine = unOver / 9;
 //        }
 //
-//        if (bTeamModel.getFirstInningRun() > homeFourthRun) {
-//            log.info(bTeamModel.toString());
+//        aTeamModel.setHandiCap(handi);
+//        bTeamModel.setHandiCap(handi * -1);
+//
+//        aTeamModel.setPointLine(unOver);
+//        bTeamModel.setPointLine(unOver);
+//
+//        if (aTeamModel.getHandiCap() > 0) {
+//            aTeamModel.setOdd("역배");
+//            bTeamModel.setOdd("정배");
+//
+//            aTeamModel.setThirdHandiCap(0.5);
+//            bTeamModel.setThirdHandiCap(-0.5);
+//
+//            aTeamModel.setFourthHandiCap(0.5);
+//            bTeamModel.setFourthHandiCap(-0.5);
+//
+//            aTeamModel.setFifthHandiCap(0.5);
+//            bTeamModel.setFifthHandiCap(-0.5);
+//
+//        } else if (aTeamModel.getHandiCap() < 0) {
+//            aTeamModel.setOdd("정배");
+//            bTeamModel.setOdd("역배");
+//
+//            aTeamModel.setThirdHandiCap(-0.5);
+//            bTeamModel.setThirdHandiCap(0.5);
+//
+//            aTeamModel.setFourthHandiCap(-0.5);
+//            bTeamModel.setFourthHandiCap(0.5);
+//
+//            aTeamModel.setFifthHandiCap(-0.5);
+//            bTeamModel.setFifthHandiCap(0.5);
+//        } else {
+//            aTeamModel.setOdd("없음");
+//            bTeamModel.setOdd("없음");
+//
+//            aTeamModel.setThirdHandiCap(0.0);
+//            bTeamModel.setThirdHandiCap(0.0);
+//
+//            aTeamModel.setFourthHandiCap(0.0);
+//            bTeamModel.setFourthHandiCap(0.0);
+//
+//            aTeamModel.setFifthHandiCap(0.0);
+//            bTeamModel.setFifthHandiCap(0.0);
 //        }
+//
+//        if(unOver == 0){
+//
+//        }
+//        double thirdPointLine = firstInningPointLine * 4;
+//        int thirdPointLineInt = (int) thirdPointLine;
+//        double pointLine = thirdPointLine - thirdPointLineInt;
+//
+//        if ((pointLine <= 0.333 && pointLine >= 0.001)) {
+//            aTeamModel.setThirdPointLine((double) thirdPointLineInt - 0.5);
+//            bTeamModel.setThirdPointLine((double) thirdPointLineInt - 0.5);
+//
+//        } else if ((pointLine <= 0.999 && pointLine >= 0.666)) {
+//            aTeamModel.setThirdPointLine((double) (thirdPointLineInt + 1) - 0.5);
+//            bTeamModel.setThirdPointLine((double) (thirdPointLineInt + 1) - 0.5);
+//
+//        } else if ((pointLine <= 0.665 && pointLine >= 0.334)) {
+//            aTeamModel.setThirdPointLine((double) thirdPointLineInt);
+//            bTeamModel.setThirdPointLine((double) thirdPointLineInt);
+//
+//        } else {
+//            aTeamModel.setThirdPointLine((double) round(thirdPointLineInt));
+//            bTeamModel.setThirdPointLine((double) round(thirdPointLineInt));
+//
+//        }
+//
+//        double forthPointLine = firstInningPointLine * 4;
+//        int forthPointLineInt = (int) forthPointLine;
+//        pointLine = forthPointLine - forthPointLineInt;
+//
+//        if ((pointLine <= 0.333 && pointLine >= 0.001)) {
+//            aTeamModel.setFourthPointLine((double) forthPointLineInt);
+//            bTeamModel.setFourthPointLine((double) forthPointLineInt);
+//
+//        } else if ((pointLine <= 0.999 && pointLine >= 0.666)) {
+//            aTeamModel.setFourthPointLine((double) (forthPointLineInt + 1));
+//            bTeamModel.setFourthPointLine((double) (forthPointLineInt + 1));
+//
+//        } else if ((pointLine <= 0.665 && pointLine >= 0.334)) {
+//            aTeamModel.setFourthPointLine(forthPointLineInt + 0.5);
+//            bTeamModel.setFourthPointLine(forthPointLineInt + 0.5);
+//
+//        } else {
+//            aTeamModel.setFourthPointLine((double) round(forthPointLine));
+//            bTeamModel.setFourthPointLine((double) round(forthPointLine));
+//
+//        }
+//
+//        double fifthPointLine = firstInningPointLine * 5;
+//        int fifthPointLineInt = (int) fifthPointLine;
+//        pointLine = fifthPointLine - fifthPointLineInt;
+//
+//        if ((pointLine <= 0.333 && pointLine >= 0.001)) {
+//            aTeamModel.setFifthPointLine((double) fifthPointLineInt);
+//            bTeamModel.setFifthPointLine((double) fifthPointLineInt);
+//
+//        } else if ((pointLine <= 0.999 && pointLine >= 0.666)) {
+//            aTeamModel.setFifthPointLine((double) (fifthPointLineInt + 1));
+//            bTeamModel.setFifthPointLine((double) (fifthPointLineInt + 1));
+//
+//        } else if ((pointLine <= 0.665 && pointLine >= 0.334)) {
+//            aTeamModel.setFifthPointLine(fifthPointLineInt + 0.5);
+//            bTeamModel.setFifthPointLine(fifthPointLineInt + 0.5);
+//
+//        } else {
+//            aTeamModel.setFifthPointLine((double) round(fifthPointLine));
+//            bTeamModel.setFifthPointLine((double) round(fifthPointLine));
+//
+//        }
+//
+//
 //
 //    }
 
-//    private void parseBaseOnBall(NamedBaseballResponse parseTarget, BaseballModel aTeamModel, BaseballModel bTeamModel) {
+//    private void parseBaseOnBall(NamedBaseballResponse parseTarget, BaseballModel homeModel, BaseballModel awayModel) {
 //        JSONArray broadCasts = parseTarget.getJSONArray("broadcasts");
 //        int currentInning = 0;
 //        String playText;
@@ -175,7 +356,7 @@ public class BaseballService {
 //            teamLocationType = broadCastObject.getString("teamLocationType");
 //
 //            if (playText.contains("경기종료")) {
-//                aTeamModel.setBaseOnBallTexts(homeBaseOnBallTexts.toString());
+//                homeModel.setBaseOnBallTexts(homeBaseOnBallTexts.toString());
 //                break;
 //            }
 //
@@ -184,7 +365,7 @@ public class BaseballService {
 //            }
 //
 //            if ((playText.contains("투수") && playText.contains("교체"))) {
-//                aTeamModel.setBaseOnBallTexts(homeBaseOnBallTexts.toString());
+//                homeModel.setBaseOnBallTexts(homeBaseOnBallTexts.toString());
 //                break;
 //            }
 //
@@ -211,9 +392,9 @@ public class BaseballService {
 //                homeBaseOnBallTexts.append(currentInning).append("(I),");
 //            }
 //
-//            if (playText.contains("몸에 맞는 볼") && aTeamModel.getLeague().equals("NPB")) {
-//                int tempBaseOnBall = aTeamModel.getBaseOnBalls() - 1;
-//                aTeamModel.setBaseOnBalls(tempBaseOnBall);
+//            if (playText.contains("몸에 맞는 볼") && homeModel.getLeague().equals("NPB")) {
+//                int tempBaseOnBall = homeModel.getBaseOnBalls() - 1;
+//                homeModel.setBaseOnBalls(tempBaseOnBall);
 //            }
 //
 //        }
@@ -227,7 +408,7 @@ public class BaseballService {
 //            teamLocationType = broadCastObject.getString("teamLocationType");
 //
 //            if (playText.contains("경기종료")) {
-//                bTeamModel.setBaseOnBallTexts(awayBaseOnBallTexts.toString());
+//                awayModel.setBaseOnBallTexts(awayBaseOnBallTexts.toString());
 //                break;
 //            }
 //
@@ -236,7 +417,7 @@ public class BaseballService {
 //            }
 //
 //            if ((playText.contains("투수") && playText.contains("교체"))) {
-//                bTeamModel.setBaseOnBallTexts(awayBaseOnBallTexts.toString());
+//                awayModel.setBaseOnBallTexts(awayBaseOnBallTexts.toString());
 //                break;
 //            }
 //
@@ -261,9 +442,9 @@ public class BaseballService {
 //                awayBaseOnBallTexts.append(currentInning).append("(I),");
 //            }
 //
-//            if (playText.contains("몸에 맞는 볼") && bTeamModel.getLeague().equals("NPB")) {
-//                int tempBaseOnBall = bTeamModel.getBaseOnBalls() - 1;
-//                bTeamModel.setBaseOnBalls(tempBaseOnBall);
+//            if (playText.contains("몸에 맞는 볼") && awayModel.getLeague().equals("NPB")) {
+//                int tempBaseOnBall = awayModel.getBaseOnBalls() - 1;
+//                awayModel.setBaseOnBalls(tempBaseOnBall);
 //            }
 //
 //        }

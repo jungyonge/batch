@@ -1,15 +1,19 @@
 package com.batch.service;
 
+import java.text.ParseException;
 import org.junit.jupiter.api.Test;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
+@SpringBootTest
 class NamedServiceTest {
 
-    private final NamedService namedService = new NamedService(new RestTemplate());
+    @Autowired
+    private NamedService namedService;
 
     @Test
-    void test() {
+    void test() throws ParseException {
 //        namedService.getBaseball();
-        namedService.getPitcher("11");
+        namedService.getBaseball("2022-06-21");
     }
 }
