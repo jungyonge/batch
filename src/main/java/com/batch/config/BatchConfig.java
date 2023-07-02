@@ -11,9 +11,11 @@ import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.launch.support.SimpleJobLauncher;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.repository.support.JobRepositoryFactoryBean;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
@@ -21,12 +23,13 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 @Configuration
 @EnableBatchProcessing
+@DependsOn(value = {"DatasourceCustom"})
 @ComponentScan(basePackages = {"com.batch.job.jobconfig"})
 public class BatchConfig implements BatchConfigurer {
 
     private final DataSource dataSource;
 
-    public BatchConfig(DataSource dataSource) {
+    public BatchConfig(@Qualifier("DatasourceCustom") DataSource dataSource) {
         this.dataSource = dataSource;
     }
 

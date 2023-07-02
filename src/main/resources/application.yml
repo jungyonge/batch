@@ -46,7 +46,7 @@ server:
 # MyBatis Configuration
 mybatis:
   config-location: classpath:mapper/mybatis-config.xml
-  mapper-locations: classpath:mapper/*Mapper.xml
+  mapper-locations: classpath:mapper/*.xml
 
 excel:
   template-path: /Users/imc053/IdeaProjects/batch/src/main/resources/excelTemplate/
