@@ -87,14 +87,14 @@
             SIXTH_POINT     =IFNULL(#{sixthScore},0),
             SEVENTH_POINT       =IFNULL(#{seventhScore},0),
             EIGHTH_POINT        =IFNULL(#{eighthScore},0),
-            NINTH_POINT     =IFNULL(#{ninthScore},0),
+            NINTH_POINT     =IFNULL(#{ninthScore},0)
 
-            HIT_COUNT       =IFNULL(#{hitCount},0),
-            BASEONBALL_COUNT        =IFNULL(#{baseOnBallCount},0),
-            ERROR_COUNT     =IFNULL(#{errorCount},0),
+#             HIT_COUNT       =IFNULL(#{hitCount},0),
+#             BASEONBALL_COUNT        =IFNULL(#{baseOnBallCount},0),
+#             ERROR_COUNT     =IFNULL(#{errorCount},0),
 
-            EXTEND_POINT     =IFNULL(#{extendScore},0),
-            EXTEND_YN       =IFNULL(#{extendYn},0 )
+#             EXTEND_POINT     =IFNULL(#{extendScore},0),
+#             EXTEND_YN       =IFNULL(#{extendYn},0 )
 
         WHERE
             GAME_ID   =     IFNULL(#{gameId},'') AND
